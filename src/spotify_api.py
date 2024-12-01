@@ -32,8 +32,12 @@ def get_new_releases(sp, artist, days=1):
 
     for track in results['tracks']['items']:
         release_date = track['album']['release_date']
+        album_type = track['album']['album_type']
 
-        if start_date_iso <= release_date <= today.isoformat():
+        is_in_range = start_date_iso <= release_date <= today.isoformat()
+        is_from_compilation = album_type == 'compilation'
+
+        if is_in_range and not is_from_compilation:
             new_tracks.append(track)
 
     return new_tracks
