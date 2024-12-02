@@ -27,7 +27,6 @@ const HomePage = () => {
 
         const data = await response.json();
         setUserData(data);
-        console.log('User data', data);
       }
 
       fetchUserData();
