@@ -59,9 +59,9 @@ const HomePage = () => {
   return (
     <div className='user'>
       {userData ? (
-        <div>
+        <div className='profile'>
           <h1>Bienvenido a Trackify, {userData.display_name}!</h1>
-          <img src={userData.images[0]?.url} alt='Imagen de perfil' width={100} />
+          <img src={userData.images[0]?.url} alt='Imagen de perfil' width={100} className='profile__image' />
         </div>
       ) : (
         <p>Cargando...</p>
