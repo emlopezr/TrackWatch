@@ -13,14 +13,6 @@ const CallbackPage = () => {
     const urlParams = new URLSearchParams(location.search);
     const code = urlParams.get('code');
 
-    const localStorageAccessToken = localStorage.getItem('spotify_access_token');
-
-    if (localStorageAccessToken) {
-      setAccessToken(localStorageAccessToken);
-      setLoading(false);
-      navigate('/');
-    }
-
     if (code) {
       const usedCode = localStorage.getItem('spotify_callback_code');
       if (usedCode === code) {
@@ -42,6 +34,9 @@ const CallbackPage = () => {
           setLoading(false);
           navigate('/');
         });
+    } else {
+      setLoading(false);
+      navigate('/');
     }
   }, [location, navigate]);
 
