@@ -30,3 +30,29 @@ export const getAccessToken = async (code: string): Promise<string | null> => {
   localStorage.setItem('spotify_refresh_token', data.refresh_token || '');
   return data.access_token || null;
 };
+
+export const refreshAccessToken = async (): Promise<string | null> => {
+  const authString = getAuthString();
+
+  const headers = {
+    'Authorization': `Basic ${authString}`,
+    'Content-Type': 'application/x-www-form-urlencoded'
+  }
+
+  const body = new URLSearchParams({
+    'grant_type': 'refresh_token',
+    'refresh_token': localStorage.getItem('spotify_refresh_token') || '',
+    'client_id': SPOTIFY_CLIENT_ID,
+  });
+
+  const response = await fetch(`${SPOTIFY_BASE_URL}/api/token`, { method: 'POST', headers, body });
+  const data: SpotifyAuthResponse = await response.json();
+
+  if (data.error) {
+    throw new Error(data.error_description);
+  }
+
+  localStorage.setItem('spotify_access_token', data.access_token || '');
+  localStorage.setItem('spotify_refresh_token', data.refresh_token || '');
+  return data.access_token || null;
+}
