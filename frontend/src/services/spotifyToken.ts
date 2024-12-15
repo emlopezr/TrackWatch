@@ -1,4 +1,4 @@
-import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI, SPOTIFY_BASE_URL } from "../common/constants";
+import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI, SPOTIFY_BASE_URL, SPOTIFY_API_URL } from "../common/constants";
 import { SpotifyAuthResponse } from "../types/SpotifyAuthResponse";
 
 const getAuthString = (): string => {
@@ -56,3 +56,18 @@ export const refreshAccessToken = async (): Promise<string | null> => {
   localStorage.setItem('spotify_refresh_token', data.refresh_token || '');
   return data.access_token || null;
 }
+
+export const verifyToken = async (token: string): Promise<boolean> => {
+  try {
+    const response = await fetch(`${SPOTIFY_API_URL}/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (response.status === 401) {
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error('Error verifying token:', error);
+    return false;
+  }
+};

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { getSpotifyAuthUrl } from '../../services/spotifyAuth';
-import { SPOTIFY_API_URL } from '../../common/constants';
-import { refreshAccessToken } from '../../services/spotifyToken';
+import { refreshAccessToken, verifyToken } from '../../services/spotifyToken';
+import { fetchUserData } from '../../services/spotifyUserData';
+import { SpotifyUserResponse } from '../../types/SpotifyUserResponse';
 import spotifyLogo from '../../assets/spotify.svg';
 import './HomePage.css';
-import { SpotifyUserResponse } from '../../types/SpotifyUserResponse';
 
 const HomePage = () => {
   const [loading, setLoading] = useState(true);
@@ -19,12 +19,13 @@ const HomePage = () => {
     if (token) {
       // Intenta verificar el token
       const isValid = await verifyToken(token);
+
       if (isValid) {
         setAccessToken(token);
       } else if (refreshToken) {
         // Si el token no es válido, intenta renovarlo
         try {
-          const newToken = await refreshAccessToken(refreshToken);
+          const newToken = await refreshAccessToken();
           if (newToken) {
             localStorage.setItem('spotify_access_token', newToken);
             setAccessToken(newToken);
@@ -38,7 +39,7 @@ const HomePage = () => {
     } else if (refreshToken) {
       // No hay token, pero hay refresh token: renueva directamente
       try {
-        const newToken = await refreshAccessToken(refreshToken);
+        const newToken = await refreshAccessToken();
         if (newToken) {
           localStorage.setItem('spotify_access_token', newToken);
           setAccessToken(newToken);
@@ -51,63 +52,14 @@ const HomePage = () => {
     setLoading(false);
   };
 
-  // Función para verificar si un token es válido
-  const verifyToken = async (token: string): Promise<boolean> => {
-    try {
-      const response = await fetch(`${SPOTIFY_API_URL}/me`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (response.status === 401) {
-        return false;
-      }
-      return true;
-    } catch (error) {
-      console.error('Error verifying token:', error);
-      return false;
-    }
-  };
+  useEffect(() => { checkAndRefreshToken(); });
 
   useEffect(() => {
-    checkAndRefreshToken();
-  }, []);
-
-  useEffect(() => {
-    if (accessToken) {
-      const fetchUserData = async () => {
-        try {
-          const response = await fetch(`${SPOTIFY_API_URL}/me`, {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          });
-
-          if (response.status === 401) {
-            // Si obtenemos un 401 aquí, intentamos renovar el token
-            const refreshToken = localStorage.getItem('spotify_refresh_token');
-            if (refreshToken) {
-              const newToken = await refreshAccessToken(refreshToken);
-              if (newToken) {
-                localStorage.setItem('spotify_access_token', newToken);
-                setAccessToken(newToken);
-              }
-            }
-          } else {
-            const data = await response.json();
-            setUserData(data);
-          }
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-        }
-      };
-
-      fetchUserData();
-    }
-  }, [accessToken]);
+    if (accessToken) { fetchUserData(accessToken, setAccessToken, setUserData); }
+}, [accessToken]);
 
   if (loading) {
-    return (
-      <div>
-        <p>Cargando...</p>
-      </div>
-    );
+    return ( <div> <p>Cargando...</p> </div> );
   }
 
   if (!accessToken) {
@@ -126,16 +78,21 @@ const HomePage = () => {
 
   return (
     <div className='user'>
-      {userData ? (
-        <div className='profile'>
-          <h1>Bienvenido a Trackify, {userData.display_name}!</h1>
-          <a href={userData.external_urls.spotify}>
-            <img src={userData.images[0]?.url} alt='Imagen de perfil' width={100} className='profile__image' />
-          </a>
-        </div>
-      ) : (
-        <p>Cargando datos...</p>
-      )}
+      {userData ?
+        (
+          <div className='profile'>
+            <h1>Bienvenido a Trackify, {userData.display_name}!</h1>
+            <a href={userData.external_urls.spotify}>
+              <img
+                src={userData.images[0]?.url}
+                alt='Imagen de perfil'
+                width={100}
+                className='profile__image'
+              />
+            </a>
+          </div>
+        ) : ( <p>Cargando datos...</p> )
+      }
     </div>
   );
 };
