@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { batchGetArtists } from '../../services/spotify/spotifyArtists';
 import { SpotifyArtistResponse } from '../../types/spotify/SpotifyArtistResponse';
-import FollowedArtist from './FollowedArtist/FollowedArtist';
+import Artist from '../Artist/Artist';
 import './FollowedArtists.css';
 
 interface FollowedArtistsProps {
@@ -28,8 +28,10 @@ const FollowedArtists = ({ accessToken, artists }: FollowedArtistsProps) => {
         <ul className="followed-artists__list">
           {artistsData.map((artist) => (
             <li key={artist.id} className="followed-artists__item">
-              <FollowedArtist
+              <Artist
                 data={artist}
+                allowedActions={['unfollow']}
+                onFollow={() => {}}
                 onUnfollow={handleUnfollow}
               />
             </li>

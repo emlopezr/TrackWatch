@@ -3,8 +3,8 @@ import { getSpotifyAuthUrl } from '../../services/spotify/spotifyAuth';
 import { refreshAccessToken, verifyToken } from '../../services/spotify/spotifyToken';
 import { getSpotifyUserData } from '../../services/spotify/spotifyUserData';
 import { getFollowedArtists } from '../../services/trackify/trackifyArtists';
+import SearchArtists from '../../components/SearchArtists/SearchArtists';
 import FollowedArtists from '../../components/FollowedArtists/FollowedArtists';
-
 import { SpotifyUserResponse } from '../../types/spotify/SpotifyUserResponse';
 import spotifyLogo from '../../assets/svg/spotify.svg';
 import './HomePage.css';
@@ -14,6 +14,7 @@ const HomePage = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [userData, setUserData] = useState<SpotifyUserResponse | null>(null);
   const [followedArtists, setFollowedArtists] = useState<string[]>([]);
+  const [searching, setSearching] = useState(false)
 
   // Función para verificar y renovar el token si es necesario
   const checkAndRefreshToken = async () => {
@@ -84,7 +85,7 @@ const HomePage = () => {
   }
 
   return (
-    <div className='user'>
+    <div className='home'>
       {userData ?
         (
           <>
@@ -101,10 +102,20 @@ const HomePage = () => {
                 />
               </a>
             </div>
-            <FollowedArtists
+            <SearchArtists
               accessToken={accessToken}
-              artists={followedArtists}
+              followedArtists={followedArtists}
+              setFollowedArtists={setFollowedArtists}
+              searching={searching}
+              setSearching={setSearching}
             />
+            {!searching && (
+              <FollowedArtists
+                accessToken={accessToken}
+                artists={followedArtists}
+              />
+            )
+            }
           </>
         ) : (<p>Cargando datos...</p>)
       }

@@ -1,3 +1,10 @@
+.home {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
 .login {
   display: flex;
   flex-direction: column;
@@ -19,11 +26,11 @@
 .login__button {
   display: flex;
   gap: 0.5rem;
+  padding: 1rem 1.5rem;
   align-items: center;
   background-color: #1DB954;
   color: white;
   border: none;
-  padding: 1rem 2rem;
   cursor: pointer;
 
   border-radius: 50px;
@@ -54,7 +61,6 @@
 }
 
 .profile {
-  padding: 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;

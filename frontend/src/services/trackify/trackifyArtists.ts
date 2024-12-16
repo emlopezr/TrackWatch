@@ -10,17 +10,33 @@ export const getFollowedArtists = async (accessToken: string, setFollowedArtists
     id: 1234,
     followed_artists: [
       {
-        spotify_id: '2CIMQHirSU0MQqyYHq0eOx',
+        spotify_id: '1bAftSH8umNcGZ0uyV7LMg',
         name: 'Artist 1',
       },
       {
-        spotify_id: '57dN52uHvrHOxijzpIgu3E',
+        spotify_id: '4q3ewBCX7sLwd24euuV69X',
         name: 'Artist 2',
       },
       {
-        spotify_id: '1vCWHaC5f2uS3yhpwWbIA6',
+        spotify_id: '2LRoIwlKmHjgvigdNGBHNo',
         name: 'Artist 3',
       },
+      {
+        spotify_id: '5XJDexmWFLWOkjOEjOVX3e',
+        name: 'Artist 4',
+      },
+      {
+        spotify_id: '6nVcHLIgY5pE2YCl8ubca1',
+        name: 'Artist 5',
+      },
+      {
+        spotify_id: '0GM7qgcRCORpGnfcN2tCiB',
+        name: 'Artist 6',
+      },
+      {
+        spotify_id: '19HM5j0ULGSmEoRcrSe5x3',
+        name: 'Artist 7',
+      }
     ]
   };
 

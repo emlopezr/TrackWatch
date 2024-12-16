@@ -1,6 +1,6 @@
-import { SpotifyArtistResponse } from "../../../types/spotify/SpotifyArtistResponse";
+import { SpotifyArtistResponse } from "../../types/spotify/SpotifyArtistResponse";
 import unlike from '../../../assets/png/unlike.png';
-import Tag from "../../common/Tag/Tag";
+import Tag from "../common/Tag/Tag";
 import './FollowedArtist.css';
 
 interface FollowedArtistProps {

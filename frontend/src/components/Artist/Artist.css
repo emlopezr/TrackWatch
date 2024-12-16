@@ -1,4 +1,4 @@
-.followed-artist {
+.artist {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -12,13 +12,13 @@
   background-color: rgba(255, 255, 255, 0.05);
 }
 
-.followed-artist__content {
+.artist__content {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.followed-artist__image {
+.artist__image {
   display: flex;
   width: 5rem;
   height: 5rem;
@@ -26,33 +26,32 @@
   object-fit: cover;
 }
 
-.followed-artist__info {
+.artist__info {
   display: flex;
   flex-direction: column;
   gap: 0.1rem;
 }
 
-.followed-artist__name {
+.artist__name {
   font-size: 1.5rem;
   font-weight: bold;
   color: #fff;
   margin: 0;
 }
 
-.followed-artist__tags {
+.artist__tags {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
 
-.followed-artist__button {
+.artist__button {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0.5rem;
   font-weight: bold;
   color: #fff;
-  background-color: rgb(255, 77, 77);
   border: none;
   cursor: pointer;
   border-radius:50%;
@@ -67,12 +66,24 @@
   -o-transition: background-color 0.2s ease;
 }
 
-.followed-artist__icon {
+.artist__button--unfollow {
+  background-color: rgb(255, 77, 77, 0.75);
+}
+
+.artist__button--unfollow:hover {
+  background-color: rgba(255, 77, 77, 0.5);
+}
+
+.artist__button--follow {
+  background-color: rgba(77, 255, 77, 0.5);
+}
+
+.artist__button--follow:hover {
+  background-color: rgba(77, 255, 77, 0.25);
+}
+
+.artist__icon {
   width: 1.5rem;
   height: 1.5rem;
   object-fit: contain;
-}
-
-.followed-artist__button:hover {
-  background-color: rgba(255, 77, 77, 0.8);
 }
