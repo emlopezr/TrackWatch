@@ -1,8 +1,8 @@
-import { SPOTIFY_API_URL } from '../common/constants';
+import { SPOTIFY_API_URL } from '../../common/constants';
 import { refreshAccessToken } from './spotifyToken';
-import { SpotifyUserResponse } from '../types/SpotifyUserResponse';
+import { SpotifyUserResponse } from '../../types/spotify/SpotifyUserResponse';
 
-export const fetchUserData = async (
+export const getSpotifyUserData = async (
   accessToken: string,
   setAccessToken: (token: string) => void,
   setUserData: (data: SpotifyUserResponse | null) => void

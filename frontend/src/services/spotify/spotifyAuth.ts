@@ -1,4 +1,4 @@
-import { SPOTIFY_CLIENT_ID, SPOTIFY_REDIRECT_URI, SPOTIFY_SCOPES, SPOTIFY_BASE_URL } from '../common/constants';
+import { SPOTIFY_CLIENT_ID, SPOTIFY_REDIRECT_URI, SPOTIFY_SCOPES, SPOTIFY_BASE_URL } from '../../common/constants';
 
 const generateState = (length: number): string => {
   let text = '';

@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react';
-import { getSpotifyAuthUrl } from '../../services/spotifyAuth';
-import { refreshAccessToken, verifyToken } from '../../services/spotifyToken';
-import { fetchUserData } from '../../services/spotifyUserData';
-import { SpotifyUserResponse } from '../../types/SpotifyUserResponse';
-import spotifyLogo from '../../assets/spotify.svg';
+import { getSpotifyAuthUrl } from '../../services/spotify/spotifyAuth';
+import { refreshAccessToken, verifyToken } from '../../services/spotify/spotifyToken';
+import { getSpotifyUserData } from '../../services/spotify/spotifyUserData';
+import { getFollowedArtists } from '../../services/trackify/trackifyArtists';
+import FollowedArtists from '../../components/FollowedArtists/FollowedArtists';
+
+import { SpotifyUserResponse } from '../../types/spotify/SpotifyUserResponse';
+import spotifyLogo from '../../assets/svg/spotify.svg';
 import './HomePage.css';
 
 const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [userData, setUserData] = useState<SpotifyUserResponse | null>(null);
+  const [followedArtists, setFollowedArtists] = useState<string[]>([]);
 
   // Función para verificar y renovar el token si es necesario
   const checkAndRefreshToken = async () => {
@@ -55,11 +59,14 @@ const HomePage = () => {
   useEffect(() => { checkAndRefreshToken(); });
 
   useEffect(() => {
-    if (accessToken) { fetchUserData(accessToken, setAccessToken, setUserData); }
-}, [accessToken]);
+    if (accessToken) {
+      getSpotifyUserData(accessToken, setAccessToken, setUserData);
+      getFollowedArtists(accessToken, setFollowedArtists);
+    }
+  }, [accessToken]);
 
   if (loading) {
-    return ( <div> <p>Cargando...</p> </div> );
+    return (<div> <p>Cargando...</p> </div>);
   }
 
   if (!accessToken) {
@@ -80,18 +87,26 @@ const HomePage = () => {
     <div className='user'>
       {userData ?
         (
-          <div className='profile'>
-            <h1>Bienvenido a Trackify, {userData.display_name}!</h1>
-            <a href={userData.external_urls.spotify}>
-              <img
-                src={userData.images[0]?.url}
-                alt='Imagen de perfil'
-                width={100}
-                className='profile__image'
-              />
-            </a>
-          </div>
-        ) : ( <p>Cargando datos...</p> )
+          <>
+            <div className='profile'>
+              <h1 className='profile__title'>
+                Bienvenido a Trackify, {userData.display_name}!
+              </h1>
+              <a href={userData.external_urls.spotify}>
+                <img
+                  src={userData.images[0]?.url}
+                  alt='Imagen de perfil'
+                  width={100}
+                  className='profile__image'
+                />
+              </a>
+            </div>
+            <FollowedArtists
+              accessToken={accessToken}
+              artists={followedArtists}
+            />
+          </>
+        ) : (<p>Cargando datos...</p>)
       }
     </div>
   );

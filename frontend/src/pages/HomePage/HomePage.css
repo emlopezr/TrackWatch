@@ -60,6 +60,10 @@
   align-items: center;
 }
 
+.profile__title {
+  margin: 0;
+}
+
 .profile__image {
   width: 3rem;
   height: 3rem;

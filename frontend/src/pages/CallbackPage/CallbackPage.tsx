@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getAccessToken } from '../../services/spotifyToken';
+import { getAccessToken } from '../../services/spotify/spotifyToken';
 
 const CallbackPage = () => {
   const [, setAccessToken] = useState<string | null>(null);
