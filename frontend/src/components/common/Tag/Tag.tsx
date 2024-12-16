@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import './Tag.css'
 
 interface TagProps {
@@ -6,7 +7,8 @@ interface TagProps {
 
 const Tag = ({ text }: TagProps) => {
 
-  const randomColor = Math.floor(Math.random()* 360);
+
+  const randomColor = useMemo(() => Math.floor(Math.random()* 360), []);
   const hslColor = `hsl(${randomColor}, 80%, 35%)`;
 
   return (
