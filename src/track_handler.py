@@ -24,7 +24,8 @@ def add_track_to_list(track, all_new_tracks, ARTISTS):
         'name': track_name,
         'artists': track_artists,
         'release_date': track_release_date,
-        'order_in_album': track_album_order
+        'order_in_album': track_album_order,
+        'image': track['album']['images'][-1]['url'] # Get the tiniest image
     }
 
 def sort_tracks(tracks_list):

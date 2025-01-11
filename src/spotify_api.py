@@ -4,6 +4,7 @@ from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
 from config import SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI
 from track_handler import sort_tracks
+from emails import send_email
 
 def authenticate():
     scope = "playlist-modify-public playlist-modify-private"
@@ -56,11 +57,11 @@ def get_playlist_tracks(sp, playlist_id):
 
     return tracks
 
-def add_tracks_to_playlist(sp, playlist_id, track_uris):
+def add_tracks_to_playlist(sp, playlist_id, tracks_data):
     existing_tracks = get_playlist_tracks(sp, playlist_id)
 
-    new_tracks = [track for track in track_uris if track['uri'] not in existing_tracks]
-    skipped_tracks = [track for track in track_uris if track['uri'] in existing_tracks]
+    new_tracks = [track for track in tracks_data if track['uri'] not in existing_tracks]
+    skipped_tracks = [track for track in tracks_data if track['uri'] in existing_tracks]
 
     new_tracks = sort_tracks(new_tracks)
     new_tracks_uri = [track['uri'] for track in new_tracks]
@@ -75,6 +76,8 @@ def add_tracks_to_playlist(sp, playlist_id, track_uris):
 
         if skipped_tracks:
             print(f"Skipped {len(skipped_tracks)} track(s) that were already in the playlist.")
+        
+        send_email(new_tracks)
 
     else:
         if skipped_tracks:
