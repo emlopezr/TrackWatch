@@ -59,4 +59,12 @@ ARTISTS = [
   "Hades66",
   "Dillom",
   "Paulo Londra",
+  "Alejo",
+  "Sech",
+  "De La Ghetto",
+  "De La Rose",
+  "RaiNao",
+  "Cris Mj",
+  "Yandel",
+  "Don Omar",
 ]
