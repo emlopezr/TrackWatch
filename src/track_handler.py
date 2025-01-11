@@ -1,6 +1,8 @@
-def add_track_to_list(track, all_new_tracks, ARTISTS, found_tracks=[]):
+def add_track_to_list(track, all_new_tracks, ARTISTS):
     track_artists = [artist['name'] for artist in track['artists']]
     track_name = track['name']
+    track_release_date = track['album']['release_date']
+    track_album_order = track['track_number']
     track_uri = track['uri']
 
     if not any(artist in ARTISTS for artist in track_artists):
@@ -17,5 +19,13 @@ def add_track_to_list(track, all_new_tracks, ARTISTS, found_tracks=[]):
 
         return
 
-    all_new_tracks[track_id] = track_uri
-    found_tracks.append({'name': track_name, 'artists': track_artists, 'uri': track_uri})
+    all_new_tracks[track_id] = {
+        'uri': track_uri,
+        'name': track_name,
+        'artists': track_artists,
+        'release_date': track_release_date,
+        'order_in_album': track_album_order
+    }
+
+def sort_tracks(tracks_list):
+    return sorted(tracks_list, key=lambda x: (x['release_date'], x['artists'], x['order_in_album']))

@@ -3,6 +3,7 @@ import datetime
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
 from config import SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI
+from track_handler import sort_tracks
 
 def authenticate():
     scope = "playlist-modify-public playlist-modify-private"
@@ -55,18 +56,16 @@ def get_playlist_tracks(sp, playlist_id):
 
     return tracks
 
-def add_tracks_to_playlist(sp, playlist_id, track_uris, found_tracks):
+def add_tracks_to_playlist(sp, playlist_id, track_uris):
     existing_tracks = get_playlist_tracks(sp, playlist_id)
 
-    new_tracks_uri = [uri for uri in track_uris if uri not in existing_tracks]
-    skipped_tracks_uri = [uri for uri in track_uris if uri in existing_tracks]
+    new_tracks = [track for track in track_uris if track['uri'] not in existing_tracks]
+    skipped_tracks = [track for track in track_uris if track['uri'] in existing_tracks]
 
-    new_tracks = [track for track in found_tracks if track['uri'] in new_tracks_uri]
+    new_tracks = sort_tracks(new_tracks)
+    new_tracks_uri = [track['uri'] for track in new_tracks]
 
-    new_tracks.sort(key=lambda track: track['uri'])
-    new_tracks_uri.sort()
-
-    if new_tracks_uri:
+    if new_tracks:
         sp.playlist_add_items(playlist_id, new_tracks_uri)
 
         for track in new_tracks:
@@ -74,11 +73,11 @@ def add_tracks_to_playlist(sp, playlist_id, track_uris, found_tracks):
 
         print(f"\nAdded {len(new_tracks_uri)} track(s) to the playlist.")
 
-        if skipped_tracks_uri:
-            print(f"Skipped {len(skipped_tracks_uri)} track(s) that were already in the playlist.")
+        if skipped_tracks:
+            print(f"Skipped {len(skipped_tracks)} track(s) that were already in the playlist.")
 
     else:
-        if skipped_tracks_uri:
-            print(f"Skipped {len(skipped_tracks_uri)} track(s) that were already in the playlist.")
+        if skipped_tracks:
+            print(f"Skipped {len(skipped_tracks)} track(s) that were already in the playlist.")
         else:
             print("No new tracks were found.")
