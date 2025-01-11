@@ -4,7 +4,7 @@ ARTISTS = [
   "Duki",
   "JHAYCO",
   "Rauw Alejandro",
-  "Anuel AA",	
+  "Anuel AA",
   "Myke Towers",
   "Feid",
   "Quevedo",
@@ -56,5 +56,7 @@ ARTISTS = [
   "Maluma",
   "Trueno",
   "Karol G",
-  "Hades66" 
+  "Hades66",
+  "Dillom",
+  "Paulo Londra",
 ]
