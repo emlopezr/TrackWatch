@@ -21,7 +21,7 @@ def loop_get_new_releases(sp, artist, pages=2):
     new_tracks_all = []
 
     for page in range(pages):
-        new_tracks = get_new_releases(sp, artist, days=9, page=page)
+        new_tracks = get_new_releases(sp, artist, days=1, page=page)
         new_tracks_all += new_tracks
 
     return new_tracks_all
