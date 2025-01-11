@@ -81,7 +81,7 @@ def generate_email_body(new_tracks):
     <body>
         <div class="email-container">
             <div class="header">
-                📡 {len(new_tracks)} Nuevos lanzamientos 🎵
+                {len(new_tracks) == 1 and f'📡 Nuevo lanzamiento! 🎵' or f'📡 {len(new_tracks)} Nuevos lanzamientos! 🎵'}
                 <div class="header-subtitle">{today}</div>
             </div>
             <div class="content">
