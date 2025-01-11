@@ -8,7 +8,7 @@ def main():
     all_new_tracks = {}
 
     for artist in ARTISTS:
-        new_tracks = get_new_releases(sp, artist, 10)
+        new_tracks = get_new_releases(sp, artist)
 
         for track in new_tracks:
             add_track_to_list(track, all_new_tracks, ARTISTS)
