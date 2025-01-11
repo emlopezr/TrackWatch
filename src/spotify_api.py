@@ -17,7 +17,7 @@ def authenticate():
 
     return sp
 
-def get_new_releases(sp, artist, days=1):
+def get_new_releases(sp, artist, days=1, page=0):
     today = datetime.date.today()
     start_date = today - datetime.timedelta(days=days)
     start_date_iso = start_date.isoformat()
@@ -25,7 +25,8 @@ def get_new_releases(sp, artist, days=1):
     results = sp.search(
         q = f"artist:{artist} year:{start_date.year}",
         type = "track",
-        limit = 50
+        limit = 50,
+        offset = page * 50
     )
 
     new_tracks = []
@@ -61,6 +62,9 @@ def add_tracks_to_playlist(sp, playlist_id, track_uris, found_tracks):
     skipped_tracks_uri = [uri for uri in track_uris if uri in existing_tracks]
 
     new_tracks = [track for track in found_tracks if track['uri'] in new_tracks_uri]
+
+    new_tracks.sort(key=lambda track: track['uri'])
+    new_tracks_uri.sort()
 
     if new_tracks_uri:
         sp.playlist_add_items(playlist_id, new_tracks_uri)

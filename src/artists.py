@@ -1,5 +1,5 @@
 ARTISTS = [
-  "Bad Bunny"
+  "Bad Bunny",
   "Milo j",
   "Duki",
   "JHAYCO",
@@ -59,7 +59,6 @@ ARTISTS = [
   "Hades66",
   "Dillom",
   "Paulo Londra",
-  "Alejo",
   "Sech",
   "De La Ghetto",
   "De La Rose",

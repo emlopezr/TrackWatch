@@ -11,12 +11,21 @@ def main():
     print(f"Searching new releases for {len(ARTISTS)} followed artists...\n")
 
     for artist in ARTISTS:
-        new_tracks = get_new_releases(sp, artist)
+        new_tracks = loop_get_new_releases(sp, artist, 2)
 
         for track in new_tracks:
             add_track_to_list(track, all_new_tracks, ARTISTS, found_tracks)
 
     add_tracks_to_playlist(sp, PLAYLIST_ID, list(all_new_tracks.values()), found_tracks)
+
+def loop_get_new_releases(sp, artist, pages=2):
+    new_tracks_all = []
+
+    for page in range(pages):
+        new_tracks = get_new_releases(sp, artist, days=9, page=page)
+        new_tracks_all += new_tracks
+
+    return new_tracks_all
 
 if __name__ == "__main__":
     main()
