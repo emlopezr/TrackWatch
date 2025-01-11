@@ -1,4 +1,4 @@
-def add_track_to_list(track, all_new_tracks, ARTISTS):
+def add_track_to_list(track, all_new_tracks, ARTISTS, found_tracks=[]):
     track_artists = [artist['name'] for artist in track['artists']]
     track_name = track['name']
     track_uri = track['uri']
@@ -18,11 +18,4 @@ def add_track_to_list(track, all_new_tracks, ARTISTS):
         return
 
     all_new_tracks[track_id] = track_uri
-    print(f"Added: {track_name} by {', '.join(track_artists)}")
-
-def add_tracks_to_playlist(sp, playlist_id, track_uris):
-    if track_uris:
-        sp.playlist_add_items(playlist_id, track_uris)
-        print(f"\nAdded {len(track_uris)} track(s) to the playlist.")
-    else:
-        print("No new tracks were added to the playlist.")
+    found_tracks.append({'name': track_name, 'artists': track_artists, 'uri': track_uri})

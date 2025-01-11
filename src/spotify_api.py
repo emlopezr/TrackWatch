@@ -41,3 +41,40 @@ def get_new_releases(sp, artist, days=1):
             new_tracks.append(track)
 
     return new_tracks
+
+def get_playlist_tracks(sp, playlist_id):
+    tracks = []
+    results = sp.playlist_items(playlist_id)
+
+    while results:
+        for item in results['items']:
+            tracks.append(item['track']['uri'])
+
+        results = sp.next(results) if results['next'] else None
+
+    return tracks
+
+def add_tracks_to_playlist(sp, playlist_id, track_uris, found_tracks):
+    existing_tracks = get_playlist_tracks(sp, playlist_id)
+
+    new_tracks_uri = [uri for uri in track_uris if uri not in existing_tracks]
+    skipped_tracks_uri = [uri for uri in track_uris if uri in existing_tracks]
+
+    new_tracks = [track for track in found_tracks if track['uri'] in new_tracks_uri]
+
+    if new_tracks_uri:
+        sp.playlist_add_items(playlist_id, new_tracks_uri)
+
+        for track in new_tracks:
+            print(f"Added: {track['name']} by {', '.join(track['artists'])}")
+
+        print(f"\nAdded {len(new_tracks_uri)} track(s) to the playlist.")
+
+        if skipped_tracks_uri:
+            print(f"Skipped {len(skipped_tracks_uri)} track(s) that were already in the playlist.")
+
+    else:
+        if skipped_tracks_uri:
+            print(f"Skipped {len(skipped_tracks_uri)} track(s) that were already in the playlist.")
+        else:
+            print("No new tracks were found.")
