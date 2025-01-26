@@ -23,13 +23,13 @@ class UserServiceImpl(
         val user = User(
             id = spotifyUser.id,
             email = spotifyUser.email,
-            displayName = spotifyUser.display_name,
+            displayName = spotifyUser.displayName,
             userAuth = UserAuth(
                 accessToken = spotifyAccessToken,
                 refreshToken = spotifyRefreshToken
             ),
             userSettings = UserSettings(
-                blockedExplicitContent = spotifyUser.explicit_content.filter_enabled,
+                blockedExplicitContent = spotifyUser.blockedExplicitContent
             )
         )
 

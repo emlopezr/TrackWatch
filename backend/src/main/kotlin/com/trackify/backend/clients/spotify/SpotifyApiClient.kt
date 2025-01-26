@@ -13,13 +13,23 @@ class SpotifyApiClient {
         .build()
 
     fun getUser(spotifyAccessToken: String): SpotifyUserDTO {
-        return try {
-            webClient.get()
+        try {
+            val response = webClient.get()
                 .uri("/me")
                 .header("Authorization", "Bearer $spotifyAccessToken")
                 .retrieve()
-                .bodyToMono(SpotifyUserDTO::class.java)
+                .bodyToMono(Map::class.java)
                 .block() ?: throw IllegalArgumentException("Invalid Spotify token")
+
+            val explicitContent = response["explicit_content"] as Map<*, *>
+
+            return SpotifyUserDTO(
+                id = response["id"] as String,
+                email = response["email"] as String,
+                displayName = response["display_name"] as String,
+                blockedExplicitContent = explicitContent["filter_enabled"] as Boolean
+            )
+
         } catch (e: WebClientResponseException) {
             when (e.statusCode.value()) {
                 401 -> throw IllegalArgumentException("Unauthorized: Invalid Spotify token")
