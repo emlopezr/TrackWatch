@@ -1,0 +1,89 @@
+.artist {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  -webkit-border-radius: 1rem;
+  -moz-border-radius: 1rem;
+  -ms-border-radius: 1rem;
+  -o-border-radius: 1rem;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.artist__content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.artist__image {
+  display: flex;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.artist__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.artist__name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+  margin: 0;
+}
+
+.artist__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.artist__button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  font-weight: bold;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius:50%;
+  -webkit-border-radius:50%;
+  -moz-border-radius:50%;
+  -ms-border-radius:50%;
+  -o-border-radius:50%;
+  transition: background-color 0.2s ease;
+  -webkit-transition: background-color 0.2s ease;
+  -moz-transition: background-color 0.2s ease;
+  -ms-transition: background-color 0.2s ease;
+  -o-transition: background-color 0.2s ease;
+}
+
+.artist__button--unfollow {
+  background-color: rgb(255, 77, 77, 0.75);
+}
+
+.artist__button--unfollow:hover {
+  background-color: rgba(255, 77, 77, 0.5);
+}
+
+.artist__button--follow {
+  background-color: rgba(77, 255, 77, 0.5);
+}
+
+.artist__button--follow:hover {
+  background-color: rgba(77, 255, 77, 0.25);
+}
+
+.artist__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: contain;
+}
