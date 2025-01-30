@@ -5,6 +5,7 @@ import com.trackify.backend.model.core.Artist
 import com.trackify.backend.service.contract.ArtistService
 import com.trackify.backend.service.implementation.UserServiceImpl
 import com.trackify.backend.utils.ApiEndpoint
+import com.trackify.backend.utils.CustomHeader
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -13,24 +14,26 @@ import org.springframework.web.bind.annotation.*
 class ArtistControllerImpl(private val artistService: ArtistService): ArtistController {
 
     // TODO: Add access token validation
-    // TODO: Validate Request Body - Check if all fields are present and valid
+    // TODO: Validate Request Body DTO
     @PostMapping(ApiEndpoint.ARTIST_CONTROLLER_FOLLOW)
     override fun followArtist(
         @RequestParam userId: String,
-        @RequestBody artist: Artist
+        @RequestBody artist: Artist,
+        @RequestHeader(CustomHeader.ACCESS_TOKEN) accessToken: String
     ): ResponseEntity<MutableList<Artist>> {
-        val response = artistService.followArtist(userId, artist)
+        val response = artistService.followArtist(userId, artist, accessToken)
         return ResponseEntity.ok(response)
     }
 
     // TODO: Add access token validation
-    // TODO: Validate that artistId param is present
+    // TODO: Validate Request Body DTO
     @PostMapping(ApiEndpoint.ARTIST_CONTROLLER_UNFOLLOW)
     override fun unfollowArtist(
         @RequestParam userId: String,
-        @RequestParam artistId: String
+        @RequestParam artistId: String,
+        @RequestHeader(CustomHeader.ACCESS_TOKEN) accessToken: String
     ): ResponseEntity<MutableList<Artist>> {
-        val response = artistService.unfollowArtist(userId, artistId)
+        val response = artistService.unfollowArtist(userId, artistId, accessToken)
         return ResponseEntity.ok(response)
     }
 }

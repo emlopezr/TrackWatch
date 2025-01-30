@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping(ApiEndpoint.USER_CONTROLLER_BASE)
 class UserControllerImpl(private val userService: UserService): UserController {
 
+    // TODO: Add access token validation
     @PostMapping(ApiEndpoint.USER_CONTROLLER_REGISTER)
     override fun registerUser(
         @RequestHeader(CustomHeader.ACCESS_TOKEN)  accessToken: String,
@@ -22,7 +23,7 @@ class UserControllerImpl(private val userService: UserService): UserController {
         return ResponseEntity.ok(response)
     }
 
-    // TODO: Exception handling - Maybe have a class that handles all exceptions
+    // TODO: Add access token validation
     @GetMapping(ApiEndpoint.USER_CONTROLLER_GET_BY_ID)
     override fun getUserById(
         @PathVariable userId: String,

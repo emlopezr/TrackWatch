@@ -13,9 +13,11 @@ class ArtistServiceImpl(
     private val userRepository: UserRepository
 ): ArtistService {
 
-    override fun followArtist(userId: String, artist: Artist): MutableList<Artist> {
+    override fun followArtist(userId: String, artist: Artist, accessToken: String): MutableList<Artist> {
         val user = userRepository.findById(userId)
             .orElseThrow { NotFoundException(ErrorCode.USER_NOT_FOUND) }
+
+        user.validateToken(accessToken)
 
         if (user.followedArtists.any { it.id == artist.id }) {
             throw BadRequestException(ErrorCode.USER_ALREADY_FOLLOWS_THIS_ARTIST)
@@ -26,9 +28,11 @@ class ArtistServiceImpl(
         return user.followedArtists
     }
 
-    override fun unfollowArtist(userId: String, artistId: String): MutableList<Artist> {
+    override fun unfollowArtist(userId: String, artistId: String, accessToken: String): MutableList<Artist> {
         val user = userRepository.findById(userId)
             .orElseThrow { NotFoundException(ErrorCode.USER_NOT_FOUND) }
+
+        user.validateToken(accessToken)
 
         val artist = user.followedArtists.find { it.id == artistId }
             ?: throw BadRequestException(ErrorCode.USER_DOES_NOT_FOLLOW_THIS_ARTIST)

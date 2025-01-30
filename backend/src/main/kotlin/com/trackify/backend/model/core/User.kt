@@ -1,6 +1,8 @@
 package com.trackify.backend.model.core
 
 import com.trackify.backend.clients.spotify.dto.SpotifyUserDTO
+import com.trackify.backend.exception.UnauthorizedException
+import com.trackify.backend.utils.ErrorCode
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
@@ -29,6 +31,17 @@ data class User(
         settings = UserSettings(dto.blockedExplicitContent),
         images = dto.images.map { UserImages(it.url, it.height, it.width) }
     )
+
+    fun validateToken(accessToken: String) {
+        if (auth.current.accessToken != accessToken || auth.last.accessToken != accessToken) {
+            throw UnauthorizedException(ErrorCode.USER_INVALID_CREDENTIALS)
+        }
+    }
+
+    fun updateTokens(accessToken: String, refreshToken: String) {
+        auth.last = auth.current
+        auth.current = UserTokens(accessToken, refreshToken)
+    }
 }
 
 data class UserAuth(
