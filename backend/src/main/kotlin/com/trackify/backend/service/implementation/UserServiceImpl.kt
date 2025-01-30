@@ -6,6 +6,10 @@ import com.trackify.backend.model.core.User
 import com.trackify.backend.model.core.UserTokens
 import com.trackify.backend.model.dto.UserResponseDTO
 import com.trackify.backend.clients.spotify.SpotifyApiClient
+import com.trackify.backend.exception.BadRequestException
+import com.trackify.backend.exception.NotFoundException
+import com.trackify.backend.exception.UnauthorizedException
+import com.trackify.backend.utils.ErrorCode
 
 import org.springframework.stereotype.Service
 
@@ -18,24 +22,28 @@ class UserServiceImpl(
 
     override fun registerUser(accessToken: String, refreshToken: String): UserResponseDTO {
         val spotifyUser = spotifyApiClient.getUser(accessToken)
-
         var user = User(spotifyUser, accessToken, refreshToken)
-        user = userRepository.save(user)
 
+        if (userRepository.existsById(user.id)) {
+            throw BadRequestException(ErrorCode.USER_ALREADY_EXISTS)
+        }
+
+        user = userRepository.save(user)
         return UserResponseDTO(user)
     }
 
     override fun getUserById(userId: String, accessToken: String, refreshToken: String): UserResponseDTO {
-        var user = userRepository.findById(userId).orElseThrow { IllegalArgumentException("User not found") }
+        var user = userRepository.findById(userId)
+            .orElseThrow { NotFoundException(ErrorCode.USER_NOT_FOUND) }
 
         if (user.auth.current.accessToken != accessToken || user.auth.last.accessToken != accessToken) {
-            throw IllegalArgumentException("Invalid access token")
+            throw UnauthorizedException(ErrorCode.USER_INVALID_CREDENTIALS)
         }
 
         user.auth.last = user.auth.current
         user.auth.current = UserTokens(accessToken, refreshToken)
-
         user = userRepository.save(user)
+
         return UserResponseDTO(user)
     }
 
