@@ -46,33 +46,4 @@ class UserServiceImpl(
 
         return UserResponseDTO(user)
     }
-
-//
-//    // TODO: Migrate to ArtistService getting user by the auth token
-//    // TODO: Exception handling (custom exceptions)
-//    fun followArtist(userId: String, artistId: String, artistName: String): MutableList<Artist> {
-//        val user = userRepository.findById(userId) ?: throw IllegalArgumentException("User not found")
-//        val artist = Artist(artistId, artistName)
-//
-//        if (user.followedArtists.any { it.id == artistId }) {
-//            throw IllegalArgumentException("User already follows this artist")
-//        }
-//
-//        user.followedArtists.add(artist)
-//        userRepository.save(user)
-//
-//        return user.followedArtists
-//    }
-//
-//    // TODO: Migrate to ArtistService getting user by the auth token
-//    // TODO: Exception handling (custom exceptions)
-//    fun unfollowArtist(userId: String, artistId: String): MutableList<Artist> {
-//        val user = userRepository.findById(userId) ?: throw IllegalArgumentException("User not found")
-//        val artist = user.followedArtists.find { it.id == artistId } ?: throw IllegalArgumentException("User does not follow this artist")
-//
-//        user.followedArtists.remove(artist)
-//        userRepository.save(user)
-//
-//        return user.followedArtists
-//    }
 }

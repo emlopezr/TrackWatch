@@ -4,6 +4,6 @@ import com.trackify.backend.model.core.Artist
 import org.springframework.http.ResponseEntity
 
 interface ArtistController {
-    fun followArtist(id: String, artist: Artist): ResponseEntity<MutableList<Artist>>
-    fun unfollowArtist(id: String, artistId: String): ResponseEntity<MutableList<Artist>>
+    fun followArtist(userId: String, artist: Artist): ResponseEntity<MutableList<Artist>>
+    fun unfollowArtist(userId: String, artistId: String): ResponseEntity<MutableList<Artist>>
 }
