@@ -1,11 +1,12 @@
 package com.trackify.backend.service.implementation
 
-import com.trackify.backend.clients.spotify.SpotifyApiClient
-import com.trackify.backend.model.core.user.User
-import com.trackify.backend.model.core.user.UserAuth
-import com.trackify.backend.model.core.user.UserSettings
-import com.trackify.backend.model.dto.UserResponseDTO
 import com.trackify.backend.repository.UserRepository
+import com.trackify.backend.service.contract.UserService
+import com.trackify.backend.model.core.User
+import com.trackify.backend.model.core.UserTokens
+import com.trackify.backend.model.dto.UserResponseDTO
+import com.trackify.backend.clients.spotify.SpotifyApiClient
+
 import org.springframework.stereotype.Service
 
 // TODO: Use interface for userRepository - InMemoryUserRepository for certain profiles, and MongoUserRepository for others
@@ -13,48 +14,29 @@ import org.springframework.stereotype.Service
 class UserServiceImpl(
     private val userRepository: UserRepository,
     private val spotifyApiClient: SpotifyApiClient
-) {
+): UserService {
 
-    fun registerUser(spotifyAccessToken: String, spotifyRefreshToken: String): UserResponseDTO {
-        // Validate the access token while getting the user data
-        val spotifyUser = spotifyApiClient.getUser(spotifyAccessToken)
+    override fun registerUser(accessToken: String, refreshToken: String): UserResponseDTO {
+        val spotifyUser = spotifyApiClient.getUser(accessToken)
 
-        // Create the user object and save it to the database
-        val user = User(
-            id = spotifyUser.id,
-            email = spotifyUser.email,
-            displayName = spotifyUser.displayName,
-            userAuth = UserAuth(
-                accessToken = spotifyAccessToken,
-                refreshToken = spotifyRefreshToken
-            ),
-            userSettings = UserSettings(
-                blockedExplicitContent = spotifyUser.blockedExplicitContent
-            )
-        )
+        var user = User(spotifyUser, accessToken, refreshToken)
+        user = userRepository.save(user)
 
-        val savedUser = userRepository.save(user)
-
-        // Return the user filtered for the response
-        return UserResponseDTO(
-            id = savedUser.id,
-            email = savedUser.email,
-            displayName = savedUser.displayName,
-            userSettings = user.userSettings,
-            followedArtists = savedUser.followedArtists
-        )
+        return UserResponseDTO(user)
     }
 
-    fun getUserById(userId: String): UserResponseDTO {
-        val user = userRepository.findById(userId).orElseThrow { IllegalArgumentException("User not found") }
+    override fun getUserById(userId: String, accessToken: String, refreshToken: String): UserResponseDTO {
+        var user = userRepository.findById(userId).orElseThrow { IllegalArgumentException("User not found") }
 
-        return UserResponseDTO(
-            id = user.id,
-            email = user.email,
-            displayName = user.displayName,
-            userSettings = user.userSettings,
-            followedArtists = user.followedArtists
-        )
+        if (user.auth.current.accessToken != accessToken || user.auth.last.accessToken != accessToken) {
+            throw IllegalArgumentException("Invalid access token")
+        }
+
+        user.auth.last = user.auth.current
+        user.auth.current = UserTokens(accessToken, refreshToken)
+
+        user = userRepository.save(user)
+        return UserResponseDTO(user)
     }
 
 //
