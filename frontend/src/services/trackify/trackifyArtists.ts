@@ -1,7 +1,7 @@
-import { TrackifyFollowedArtist } from '../../types/trackify/TrackifyFollowedArtist';
+import { TrackifyArtist } from "../../types/trackify/TrackifyArtist";
 
-const flatFollowedArtists = (followedArtists: TrackifyFollowedArtist[]): string[] => {
-  return followedArtists.map((artist: TrackifyFollowedArtist) => artist.spotify_id);
+const flatFollowedArtists = (followedArtists: TrackifyArtist[]): string[] => {
+  return followedArtists.map((artist: TrackifyArtist) => artist.id);
 }
 
 export const getFollowedArtists = async (accessToken: string, setFollowedArtists: (artists: string[]) => void) => {

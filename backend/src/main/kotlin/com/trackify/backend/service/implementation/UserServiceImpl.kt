@@ -20,21 +20,22 @@ class UserServiceImpl(
 
     override fun registerUser(accessToken: String, refreshToken: String): UserResponseDTO {
         val spotifyUser = spotifyApiClient.getUser(accessToken)
-        var user = User(spotifyUser, accessToken, refreshToken)
 
-        if (userRepository.existsById(user.id)) {
+        if (userRepository.existsById(spotifyUser.id)) {
             throw BadRequestException(ErrorCode.USER_ALREADY_EXISTS)
         }
 
-        user = userRepository.save(user)
-        return UserResponseDTO(user)
+        val user = User(spotifyUser, accessToken, refreshToken)
+        val savedUser = userRepository.save(user)
+
+        return UserResponseDTO(savedUser)
     }
 
-    override fun getUserById(userId: String, accessToken: String, refreshToken: String): UserResponseDTO {
-        var user = userRepository.findById(userId)
-            .orElseThrow { NotFoundException(ErrorCode.USER_NOT_FOUND) }
+    override fun getCurrentUser(accessToken: String, refreshToken: String): UserResponseDTO {
+        var user = userRepository.findByAuthCurrentAccessToken(accessToken)
+            ?: userRepository.findByAuthLastAccessToken(accessToken)
+            ?: throw NotFoundException(ErrorCode.USER_NOT_FOUND)
 
-        user.validateToken(accessToken)
         user.updateTokens(accessToken, refreshToken)
 
         user = userRepository.save(user)

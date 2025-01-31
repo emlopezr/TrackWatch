@@ -1,19 +1,18 @@
 import { useEffect, useState } from 'react';
+import { useUser } from '../../context/useUser';
 import { getSpotifyAuthUrl } from '../../services/spotify/spotifyAuth';
 import { refreshAccessToken, verifyToken } from '../../services/spotify/spotifyToken';
-import { getSpotifyUserData } from '../../services/spotify/spotifyUserData';
-import { getFollowedArtists } from '../../services/trackify/trackifyArtists';
+import { getTrackifyUserData } from '../../services/trackify/trackifyUser';
 import SearchArtists from '../../components/SearchArtists/SearchArtists';
 import FollowedArtists from '../../components/FollowedArtists/FollowedArtists';
-import { SpotifyUserResponse } from '../../types/spotify/SpotifyUserResponse';
 import spotifyLogo from '../../assets/svg/spotify.svg';
 import './HomePage.css';
 
 const HomePage = () => {
+  const { userData, setUserData } = useUser();
+
   const [loading, setLoading] = useState(true);
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [userData, setUserData] = useState<SpotifyUserResponse | null>(null);
-  const [followedArtists, setFollowedArtists] = useState<string[]>([]);
   const [searching, setSearching] = useState(false)
 
   // Función para verificar y renovar el token si es necesario
@@ -60,11 +59,10 @@ const HomePage = () => {
   useEffect(() => { checkAndRefreshToken(); });
 
   useEffect(() => {
-    if (accessToken) {
-      getSpotifyUserData(accessToken, setAccessToken, setUserData);
-      getFollowedArtists(accessToken, setFollowedArtists);
+    if (accessToken && !userData) {
+      getTrackifyUserData(setAccessToken, setUserData);
     }
-  }, [accessToken]);
+  }, [accessToken, setUserData, userData]);
 
   if (loading) {
     return (<div> <p>Cargando...</p> </div>);
@@ -91,9 +89,9 @@ const HomePage = () => {
           <>
             <div className='profile'>
               <h1 className='profile__title'>
-                Bienvenido a Trackify, {userData.display_name}!
+                Bienvenido a Trackify, {userData.name}!
               </h1>
-              <a href={userData.external_urls.spotify}>
+              <a href="/">
                 <img
                   src={userData.images[0]?.url}
                   alt='Imagen de perfil'
@@ -104,15 +102,15 @@ const HomePage = () => {
             </div>
             <SearchArtists
               accessToken={accessToken}
-              followedArtists={followedArtists}
-              setFollowedArtists={setFollowedArtists}
+              followedArtists={userData.followedArtists}
+              setUserData={setUserData}
               searching={searching}
               setSearching={setSearching}
             />
             {!searching && (
               <FollowedArtists
                 accessToken={accessToken}
-                artists={followedArtists}
+                followedArtists={userData.followedArtists}
               />
             )
             }

@@ -4,12 +4,14 @@ import { searchArtists } from "../../services/spotify/spotifySearch";
 import searchIcon from "../../assets/svg/search.svg";
 import './SearchArtists.css';
 import Artist from "../Artist/Artist";
+import { TrackifyArtist } from "../../types/trackify/TrackifyArtist";
+import { TrackifyUser } from "../../types/trackify/TrackifyUser";
 
 interface SearchArtistsProps {
   accessToken: string;
-  followedArtists: string[];
+  followedArtists: TrackifyArtist[];
   searching: boolean;
-  setFollowedArtists: (value: SetStateAction<string[]>) => void;
+  setUserData: (value: TrackifyUser) => void;
   setSearching: (value: SetStateAction<boolean>) => void;
 }
 

@@ -7,6 +7,11 @@ export const searchArtists = async (
   setArtistsData: (data: SpotifyArtistResponse[]) => void
 ): Promise<SpotifyArtistResponse[]> => {
   try {
+    if (!searchQuery || searchQuery.length === 0) {
+      setArtistsData([]);
+      return [];
+    }
+
     const params = new URLSearchParams({
       q: searchQuery,
       type: 'artist',

@@ -1,12 +1,20 @@
 import { SPOTIFY_API_URL } from '../../common/constants';
 import { SpotifyArtistResponse } from "../../types/spotify/SpotifyArtistResponse";
+import { TrackifyArtist } from '../../types/trackify/TrackifyArtist';
 
 export const batchGetArtists = async (
   accessToken: string,
-  artistIds: string[],
+  artists: TrackifyArtist[],
   setArtistsData: (data: SpotifyArtistResponse[]) => void
 ): Promise<SpotifyArtistResponse[]> => {
   try {
+    const artistIds = artists.map(artist => artist.id);
+
+    if (!artistIds.length || artistIds.length == 0) {
+      setArtistsData([]);
+      return [];
+    }
+
     const artistIdsParam = artistIds.join(',');
 
     const response = await fetch(`${SPOTIFY_API_URL}/artists?ids=${artistIdsParam}`, {

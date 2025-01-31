@@ -3,7 +3,6 @@ package com.trackify.backend.controller.implementation
 import com.trackify.backend.controller.contract.ArtistController
 import com.trackify.backend.model.core.Artist
 import com.trackify.backend.service.contract.ArtistService
-import com.trackify.backend.service.implementation.UserServiceImpl
 import com.trackify.backend.utils.ApiEndpoint
 import com.trackify.backend.utils.CustomHeader
 import org.springframework.http.ResponseEntity

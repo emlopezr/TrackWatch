@@ -33,6 +33,7 @@ export const getAccessToken = async (code: string): Promise<string | null> => {
 
 export const refreshAccessToken = async (): Promise<string | null> => {
   const authString = getAuthString();
+  const refreshToken = localStorage.getItem('spotify_refresh_token');
 
   const headers = {
     'Authorization': `Basic ${authString}`,
@@ -41,7 +42,7 @@ export const refreshAccessToken = async (): Promise<string | null> => {
 
   const body = new URLSearchParams({
     'grant_type': 'refresh_token',
-    'refresh_token': localStorage.getItem('spotify_refresh_token') || '',
+    'refresh_token': refreshToken || '',
     'client_id': SPOTIFY_CLIENT_ID,
   });
 
@@ -53,7 +54,7 @@ export const refreshAccessToken = async (): Promise<string | null> => {
   }
 
   localStorage.setItem('spotify_access_token', data.access_token || '');
-  localStorage.setItem('spotify_refresh_token', data.refresh_token || '');
+  localStorage.setItem('spotify_refresh_token', data.refresh_token || refreshToken || '');
   return data.access_token || null;
 }
 

@@ -3,13 +3,14 @@ import { batchGetArtists } from '../../services/spotify/spotifyArtists';
 import { SpotifyArtistResponse } from '../../types/spotify/SpotifyArtistResponse';
 import Artist from '../Artist/Artist';
 import './FollowedArtists.css';
+import { TrackifyArtist } from '../../types/trackify/TrackifyArtist';
 
 interface FollowedArtistsProps {
   accessToken: string;
-  artists: string[];
+  followedArtists: TrackifyArtist[];
 }
 
-const FollowedArtists = ({ accessToken, artists }: FollowedArtistsProps) => {
+const FollowedArtists = ({ accessToken, followedArtists }: FollowedArtistsProps) => {
   const [artistsData, setArtistsData] = useState<SpotifyArtistResponse[] | null>(null);
 
   const handleUnfollow = (artistId: string) => {
@@ -18,8 +19,8 @@ const FollowedArtists = ({ accessToken, artists }: FollowedArtistsProps) => {
   };
 
   useEffect(() => {
-    batchGetArtists(accessToken, artists, setArtistsData);
-  }, [accessToken, artists]);
+    batchGetArtists(accessToken, followedArtists, setArtistsData);
+  }, [accessToken, followedArtists]);
 
   return (
     <div className="followed-artists">

@@ -2,10 +2,7 @@ package com.trackify.backend.clients.spotify
 
 import com.trackify.backend.clients.spotify.dto.SpotifyImageDTO
 import com.trackify.backend.clients.spotify.dto.SpotifyUserDTO
-import com.trackify.backend.exception.ForbiddenException
-import com.trackify.backend.exception.InternalServerErrorException
-import com.trackify.backend.exception.NotFoundException
-import com.trackify.backend.exception.UnauthorizedException
+import com.trackify.backend.exception.*
 import com.trackify.backend.utils.ErrorCode
 
 import org.springframework.stereotype.Component
@@ -60,7 +57,7 @@ class SpotifyApiClient {
         return when (e.statusCode.value()) {
             401 -> UnauthorizedException(ErrorCode.SPOTIFY_INVALID_ACCESS_TOKEN, details = e.message)
             403 -> ForbiddenException(ErrorCode.SPOTIFY_FORBIDDEN_REQUEST, details = e.message)
-            404 -> NotFoundException(ErrorCode.SPOTIFY_USER_NOT_FOUND)
+            404 -> BadRequestException(ErrorCode.SPOTIFY_USER_NOT_FOUND)
             else -> RuntimeException("Error while calling Spotify API: ${e.message}")
         }
     }
