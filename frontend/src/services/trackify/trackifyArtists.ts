@@ -1,44 +1,60 @@
 import { TrackifyArtist } from "../../types/trackify/TrackifyArtist";
+import { TRACKIFY_API_BASE_URL } from "../../common/constants";
+import { TrackifyUser } from "../../types/trackify/TrackifyUser";
 
-const flatFollowedArtists = (followedArtists: TrackifyArtist[]): string[] => {
-  return followedArtists.map((artist: TrackifyArtist) => artist.id);
-}
-
-export const getFollowedArtists = async (accessToken: string, setFollowedArtists: (artists: string[]) => void) => {
-  // Temporary mock data
-  const mockData = {
-    id: 1234,
-    followed_artists: [
+export const followArtist = async (userData: TrackifyUser, setUserData: (value: TrackifyUser) => void, artist: TrackifyArtist) => {
+  try {
+    const response = await fetch(
+      `${TRACKIFY_API_BASE_URL}/artists/follow?userId=${userData.id}`,
       {
-        spotify_id: '1bAftSH8umNcGZ0uyV7LMg',
-        name: 'Artist 1',
-      },
-      {
-        spotify_id: '4q3ewBCX7sLwd24euuV69X',
-        name: 'Artist 2',
-      },
-      {
-        spotify_id: '2LRoIwlKmHjgvigdNGBHNo',
-        name: 'Artist 3',
-      },
-      {
-        spotify_id: '5XJDexmWFLWOkjOEjOVX3e',
-        name: 'Artist 4',
-      },
-      {
-        spotify_id: '6nVcHLIgY5pE2YCl8ubca1',
-        name: 'Artist 5',
-      },
-      {
-        spotify_id: '0GM7qgcRCORpGnfcN2tCiB',
-        name: 'Artist 6',
-      },
-      {
-        spotify_id: '19HM5j0ULGSmEoRcrSe5x3',
-        name: 'Artist 7',
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Spotify-Access-Token": localStorage.getItem("spotify_access_token") || "",
+        },
+        body: JSON.stringify({
+          id: artist.id,
+          name: artist.name,
+        }),
       }
-    ]
-  };
+    );
 
-  setFollowedArtists(flatFollowedArtists(mockData.followed_artists));
-}
+    if (!response.ok) throw new Error("Error al seguir al artista");
+
+    setUserData({
+      ...userData,
+      followedArtists: [...userData.followedArtists, artist],
+    });
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
+export const unfollowArtist = async (artistId: string, userData: TrackifyUser, setUserData: (value: TrackifyUser) => void) => {
+  try {
+    const response = await fetch(
+      `${TRACKIFY_API_BASE_URL}/artists/unfollow?userId=${userData.id}&artistId=${artistId}`,
+      {
+        method: "POST",
+        headers: {
+          "X-Spotify-Access-Token": localStorage.getItem("spotify_access_token") || "",
+        },
+      }
+    );
+
+    if (!response.ok) throw new Error("Error al dejar de seguir al artista");
+
+    setUserData({
+      ...userData,
+      followedArtists: userData.followedArtists.filter( (artist) => artist.id !== artistId ),
+    });
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};

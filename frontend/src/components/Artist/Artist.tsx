@@ -7,16 +7,12 @@ import './Artist.css';
 
 interface ArtistProps {
   data: SpotifyArtistResponse;
-  allowedActions?: string[];
-  onFollow: (id: string) => void | null;
-  onUnfollow: (id: string) => void | null;
+  isFollowed: boolean;
+  onFollow: () => void;
+  onUnfollow: () => void;
 }
 
-const Artist = ({ data, allowedActions, onFollow, onUnfollow }: ArtistProps) => {
-
-  const handleUnfollow = () => {
-    onUnfollow(data.id);
-  }
+const Artist = ({ data, isFollowed, onFollow, onUnfollow }: ArtistProps) => {
 
   return (
     <div className="artist">
@@ -38,18 +34,18 @@ const Artist = ({ data, allowedActions, onFollow, onUnfollow }: ArtistProps) => 
         </div>
       </div>
 
-      {allowedActions?.includes('unfollow') && (
+      {isFollowed && (
         <button
-          onClick={handleUnfollow}
+          onClick={onUnfollow}
           className="artist__button artist__button--unfollow"
         >
           <img src={unlike} alt="Unfollow" className="artist__icon" />
         </button>
       )}
 
-      {allowedActions?.includes('follow') && (
+      {!isFollowed && (
         <button
-          onClick={() => onFollow(data.id)}
+          onClick={onFollow} 
           className="artist__button artist__button--follow"
         >
           <img src={like} alt="Follow" className="artist__icon" />

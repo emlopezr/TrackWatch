@@ -6,6 +6,8 @@ import './SearchArtists.css';
 import Artist from "../Artist/Artist";
 import { TrackifyArtist } from "../../types/trackify/TrackifyArtist";
 import { TrackifyUser } from "../../types/trackify/TrackifyUser";
+import { followArtist, unfollowArtist } from "../../services/trackify/trackifyArtists";
+import { useUser } from "../../context/useUser";
 
 interface SearchArtistsProps {
   accessToken: string;
@@ -16,6 +18,7 @@ interface SearchArtistsProps {
 }
 
 const SearchArtists = ({ accessToken, searching, setSearching }: SearchArtistsProps) => {
+  const { userData, setUserData } = useUser();
 
   const [searchQuery, setSearchQuery] = useState('')
   const [searchTimer, setSearchTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
@@ -62,9 +65,9 @@ const SearchArtists = ({ accessToken, searching, setSearching }: SearchArtistsPr
             <li key={artist.id} className="followed-artists__item">
               <Artist
                 data={artist}
-                allowedActions={['follow']}
-                onFollow={() => {}}
-                onUnfollow={() => {}}
+                isFollowed={userData?.followedArtists.some((followedArtist) => followedArtist.id === artist.id) || false}
+                onFollow={() => userData && followArtist(userData, setUserData, artist) }
+                onUnfollow={() => userData && unfollowArtist(artist.id, userData, setUserData) }
               />
             </li>
           ))}

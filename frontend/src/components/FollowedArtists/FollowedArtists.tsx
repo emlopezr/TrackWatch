@@ -4,6 +4,8 @@ import { SpotifyArtistResponse } from '../../types/spotify/SpotifyArtistResponse
 import Artist from '../Artist/Artist';
 import './FollowedArtists.css';
 import { TrackifyArtist } from '../../types/trackify/TrackifyArtist';
+import { useUser } from '../../context/useUser';
+import { followArtist, unfollowArtist } from '../../services/trackify/trackifyArtists';
 
 interface FollowedArtistsProps {
   accessToken: string;
@@ -11,12 +13,9 @@ interface FollowedArtistsProps {
 }
 
 const FollowedArtists = ({ accessToken, followedArtists }: FollowedArtistsProps) => {
-  const [artistsData, setArtistsData] = useState<SpotifyArtistResponse[] | null>(null);
+  const { userData, setUserData } = useUser();
 
-  const handleUnfollow = (artistId: string) => {
-    const updatedArtistsData = artistsData?.filter(artist => artist.id !== artistId) || [];
-    setArtistsData(updatedArtistsData);
-  };
+  const [artistsData, setArtistsData] = useState<SpotifyArtistResponse[] | null>(null);
 
   useEffect(() => {
     batchGetArtists(accessToken, followedArtists, setArtistsData);
@@ -31,9 +30,9 @@ const FollowedArtists = ({ accessToken, followedArtists }: FollowedArtistsProps)
             <li key={artist.id} className="followed-artists__item">
               <Artist
                 data={artist}
-                allowedActions={['unfollow']}
-                onFollow={() => {}}
-                onUnfollow={handleUnfollow}
+                isFollowed={true}
+                onFollow={() => userData && followArtist(userData, setUserData, artist) }
+                onUnfollow={() => userData && unfollowArtist(artist.id, userData, setUserData) }
               />
             </li>
           ))}
