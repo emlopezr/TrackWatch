@@ -5,5 +5,5 @@ import org.springframework.http.ResponseEntity
 
 interface UserController {
     fun registerUser(accessToken: String, refreshToken: String): ResponseEntity<UserResponseDTO>
-    fun getCurrentUser(accessToken: String, refreshToken: String, userId: String?): ResponseEntity<UserResponseDTO>
+    fun getCurrentUser(accessToken: String, refreshToken: String): ResponseEntity<UserResponseDTO>
 }

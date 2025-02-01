@@ -26,40 +26,20 @@ class UserServiceImpl(
         }
 
         val user = User(spotifyUser, accessToken, refreshToken)
-        val savedUser = userRepository.save(user)
 
+        val savedUser = userRepository.save(user)
         return UserResponseDTO(savedUser)
     }
 
-    override fun getCurrentUser(accessToken: String, refreshToken: String, userId: String?): UserResponseDTO {
-        val isUserIdProvided = userId != null
+    override fun getCurrentUser(accessToken: String, refreshToken: String): UserResponseDTO {
+        val spotifyUser = spotifyApiClient.getUser(accessToken)
 
-        var user: User?
-
-        if (isUserIdProvided) {
-            val userIdValue = userId!!
-
-            user = userRepository.findById(userIdValue)
-                .orElseThrow { NotFoundException(ErrorCode.USER_NOT_FOUND) }
-
-            val spotifyUser = spotifyApiClient.getUser(accessToken)
-
-            if (user.id != spotifyUser.id) {
-                throw BadRequestException(ErrorCode.USER_ID_MISMATCH)
-            }
-
-        } else {
-            user = userRepository.findByAuthCurrentAccessToken(accessToken)
-                ?: userRepository.findByAuthLastAccessToken(accessToken)
-                ?: throw NotFoundException(ErrorCode.USER_NOT_FOUND)
-        }
-
-        if (user == null) {
-            throw NotFoundException(ErrorCode.USER_NOT_FOUND)
-        }
+        val user = userRepository.findById(spotifyUser.id)
+            .orElseThrow { NotFoundException(ErrorCode.USER_NOT_FOUND) }
 
         user.updateTokens(accessToken, refreshToken)
-        user = userRepository.save(user)
-        return UserResponseDTO(user)
+
+        val savedUser = userRepository.save(user)
+        return UserResponseDTO(savedUser)
     }
 }
