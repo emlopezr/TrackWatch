@@ -29,8 +29,10 @@ class UserControllerImpl(private val userService: UserService): UserController {
     override fun getCurrentUser(
         @RequestHeader(CustomHeader.ACCESS_TOKEN)  accessToken: String,
         @RequestHeader(CustomHeader.REFRESH_TOKEN) refreshToken: String,
+
+        @RequestParam(value = "userId", required = false) userId: String?
     ): ResponseEntity<UserResponseDTO> {
-        val response = userService.getCurrentUser(accessToken, refreshToken)
+        val response = userService.getCurrentUser(accessToken, refreshToken, userId)
         return ResponseEntity.ok(response)
     }
 

@@ -39,7 +39,7 @@ const CallbackPage = () => {
         setAccessToken(token);
         localStorage.removeItem('spotify_callback_code');
 
-        const userData = await registerTrackifyUser(setAccessToken);
+        const userData = await registerTrackifyUser(setAccessToken, setUserData);
         setUserData(userData);
         navigate('/');
 

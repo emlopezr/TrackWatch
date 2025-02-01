@@ -3,10 +3,13 @@ import { useUser } from '../../context/useUser';
 import { getSpotifyAuthUrl } from '../../services/spotify/spotifyAuth';
 import { refreshAccessToken, verifyToken } from '../../services/spotify/spotifyToken';
 import { getTrackifyUserData } from '../../services/trackify/trackifyUser';
-import SearchArtists from '../../components/SearchArtists/SearchArtists';
 import FollowedArtists from '../../components/FollowedArtists/FollowedArtists';
 import spotifyLogo from '../../assets/svg/spotify.svg';
 import './HomePage.css';
+// import { TrackifyArtist } from '../../types/trackify/TrackifyArtist';
+import SearchBar from '../../components/SearchBar/SearchBar';
+import SearchResults from '../../components/SearchResults/SearchResults';
+import { SpotifyArtistResponse } from '../../types/spotify/SpotifyArtistResponse';
 
 const HomePage = () => {
   const { userData, setUserData } = useUser();
@@ -14,6 +17,7 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [searching, setSearching] = useState(false)
+  const [artistsData, setArtistsData] = useState<SpotifyArtistResponse[]>([]);
 
   // Función para verificar y renovar el token si es necesario
   const checkAndRefreshToken = async () => {
@@ -21,7 +25,6 @@ const HomePage = () => {
     const refreshToken = localStorage.getItem('spotify_refresh_token');
 
     if (token) {
-      // Intenta verificar el token
       const isValid = await verifyToken(token);
 
       if (isValid) {
@@ -87,26 +90,29 @@ const HomePage = () => {
       {userData ?
         (
           <>
-            <div className='profile'>
-              <h1 className='profile__title'>
-                Bienvenido a Trackify, {userData.name}!
-              </h1>
-              <a href="/">
-                <img
-                  src={userData.images[0]?.url}
-                  alt='Imagen de perfil'
-                  width={100}
-                  className='profile__image'
-                />
-              </a>
+            <div className="header">
+              <div className='profile'>
+                <h1 className='profile__title'>
+                  Bienvenido a Trackify, {userData.name}!
+                </h1>
+                <a href="/">
+                  <img
+                    src={userData.images[0]?.url}
+                    alt='Imagen de perfil'
+                    width={100}
+                    className='profile__image'
+                  />
+                </a>
+              </div>
+              <SearchBar
+                accessToken={accessToken}
+                setArtistsData={setArtistsData}
+                setSearching={setSearching}
+              />
             </div>
-            <SearchArtists
-              accessToken={accessToken}
-              followedArtists={userData.followedArtists}
-              setUserData={setUserData}
-              searching={searching}
-              setSearching={setSearching}
-            />
+
+            {searching && <SearchResults artistsData={artistsData} />}
+
             {!searching && (
               <FollowedArtists
                 accessToken={accessToken}

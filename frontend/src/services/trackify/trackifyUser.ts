@@ -5,6 +5,7 @@ import { refreshAccessToken } from '../spotify/spotifyToken';
 
 export const registerTrackifyUser = async (
   setAccessToken: (token: string) => void,
+  setUserData: (data: TrackifyUser) => void,
   retryNumber: number = 0
 ) => {
   try {
@@ -15,6 +16,8 @@ export const registerTrackifyUser = async (
         'X-Spotify-Refresh-Token': localStorage.getItem('spotify_refresh_token') || '',
       }
     });
+
+    const data = await response.json();
 
     if (response.status === 401) {
       // Si obtenemos un 401 aquí, intentamos renovar el token
@@ -29,7 +32,7 @@ export const registerTrackifyUser = async (
 
           // Retry the request
           if (retryNumber < 1) {
-            registerTrackifyUser(setAccessToken, retryNumber + 1);
+            registerTrackifyUser(setAccessToken, setUserData, retryNumber + 1);
             return;
           }
         }
@@ -40,15 +43,19 @@ export const registerTrackifyUser = async (
       throw new Error('Failed to register user');
     }
 
+    if (response.status == 400 && data.code === 'USER_ALREADY_EXISTS') {
+      const registeredUser = await getTrackifyUserData(setAccessToken, setUserData);
+      return registeredUser;
+    }
+
     if (response.status !== 201) {
       localStorage.removeItem('spotify_access_token');
       localStorage.removeItem('spotify_refresh_token');
 
-      console.error('Failed to register user:', response.json());
-      throw new Error('Failed to register user');
+      const error = await response.json();
+      throw new Error(error.code);
     }
 
-    const data = await response.json();
     return data;
   } catch (error) {
     console.error('Error registering user:', error);
@@ -60,11 +67,19 @@ export const getTrackifyUserData = async (
   setUserData: (data: TrackifyUser) => void
 ) => {
   try {
-    const response = await fetch(`${TRACKIFY_API_BASE_URL}/users/me`, {
+    let url = `${TRACKIFY_API_BASE_URL}/users/me`;
+
+    const userId = localStorage.getItem('trackify_user_id');
+    if (userId) {
+      // Use query param userId if available
+      url = `${url}?userId=${userId}`;
+    }
+
+    const response = await fetch(url, {
       headers: {
         'X-Spotify-Access-Token': localStorage.getItem('spotify_access_token') || '',
         'X-Spotify-Refresh-Token': localStorage.getItem('spotify_refresh_token') || '',
-      }
+      },
     });
 
     if (response.status === 401) {
@@ -90,7 +105,9 @@ export const getTrackifyUserData = async (
 
     const data = await response.json();
     setUserData(data);
+    localStorage.setItem('trackify_user_id', data.id);
 
+    return data;
   } catch (error) {
     console.error('Error fetching user data:', error);
   }

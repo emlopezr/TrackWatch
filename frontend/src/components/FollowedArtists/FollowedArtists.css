@@ -21,3 +21,89 @@
   text-align: center;
   font-size: 1rem;
 }
+
+.followed-artists__empty {
+  text-align: center;
+  font-size: 1rem;
+}
+
+.followed-artists-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Distribuye el espacio: el título a la izquierda y el bloque de controles a la derecha */
+  margin-bottom: 1rem; /* Espacio inferior para separar del listado */
+}
+
+.followed-artists-header__left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.pagination-inline {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* Espacio entre botones y el indicador de página */
+}
+
+/* Opcional: estilos para botones y select */
+.pagination-inline button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  font-weight: bold;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  background-color: rgba(77, 255, 77, 0.5);
+  transition: background-color 0.2s ease;
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
+  -ms-border-radius: 0.5rem;
+  -o-border-radius: 0.5rem;
+}
+
+.pagination-inline button:hover {
+  background-color: rgba(77, 255, 77, 0.25);
+}
+
+.pagination-inline button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.records-per-page {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.records-per-page label {
+  font-size: 0.9rem;
+  color: #fff; /* Suponiendo que el fondo del contenedor (header o similar) es oscuro */
+  font-weight: bold;
+}
+
+.records-per-page select {
+  background-color: #242424;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 0.3rem 0.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.2s ease;
+}
+
+.records-per-page select:hover {
+  background-color: #1e1e1e;
+}
+
+.pagination-inline__icon {
+  width: 1rem;
+  height: 1rem;
+  object-fit: contain;
+}

@@ -33,7 +33,7 @@ data class User(
     )
 
     fun validateToken(accessToken: String) {
-        if (auth.current.accessToken != accessToken || auth.last.accessToken != accessToken) {
+        if (auth.current.accessToken != accessToken && auth.last.accessToken != accessToken) {
             throw UnauthorizedException(ErrorCode.USER_INVALID_CREDENTIALS)
         }
     }

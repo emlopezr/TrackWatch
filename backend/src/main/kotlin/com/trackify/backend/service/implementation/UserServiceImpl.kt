@@ -31,13 +31,27 @@ class UserServiceImpl(
         return UserResponseDTO(savedUser)
     }
 
-    override fun getCurrentUser(accessToken: String, refreshToken: String): UserResponseDTO {
-        var user = userRepository.findByAuthCurrentAccessToken(accessToken)
-            ?: userRepository.findByAuthLastAccessToken(accessToken)
-            ?: throw NotFoundException(ErrorCode.USER_NOT_FOUND)
+    override fun getCurrentUser(accessToken: String, refreshToken: String, userId: String?): UserResponseDTO {
+        val isUserIdProvided = userId != null
+
+        var user: User?
+
+        if (isUserIdProvided) {
+            val userIdValue = userId!!
+
+            user = userRepository.findById(userIdValue)
+                .orElseThrow { NotFoundException(ErrorCode.USER_NOT_FOUND) }
+        } else {
+            user = userRepository.findByAuthCurrentAccessToken(accessToken)
+                ?: userRepository.findByAuthLastAccessToken(accessToken)
+                ?: throw NotFoundException(ErrorCode.USER_NOT_FOUND)
+        }
+
+        if (user == null) {
+            throw NotFoundException(ErrorCode.USER_NOT_FOUND)
+        }
 
         user.updateTokens(accessToken, refreshToken)
-
         user = userRepository.save(user)
         return UserResponseDTO(user)
     }
