@@ -5,11 +5,11 @@ import { refreshAccessToken, verifyToken } from '../../services/spotify/spotifyT
 import { getTrackifyUserData } from '../../services/trackify/trackifyUser';
 import FollowedArtists from '../../components/FollowedArtists/FollowedArtists';
 import spotifyLogo from '../../assets/svg/spotify.svg';
-import './HomePage.css';
-// import { TrackifyArtist } from '../../types/trackify/TrackifyArtist';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import SearchResults from '../../components/SearchResults/SearchResults';
 import { SpotifyArtistResponse } from '../../types/spotify/SpotifyArtistResponse';
+import Spinner from '../../components/Spinner/Spinner';
+import './HomePage.css';
 
 const HomePage = () => {
   const { userData, setUserData } = useUser();
@@ -121,7 +121,7 @@ const HomePage = () => {
             )
             }
           </>
-        ) : (<p>Cargando datos...</p>)
+        ) : <Spinner/>
       }
     </div>
   );

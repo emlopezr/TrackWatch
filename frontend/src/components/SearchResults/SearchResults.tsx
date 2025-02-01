@@ -3,6 +3,7 @@ import Artist from "../Artist/Artist";
 import './SearchResults.css';
 import { useUser } from "../../context/useUser";
 import { followArtist, unfollowArtist } from "../../services/trackify/trackifyArtists";
+import Spinner from "../Spinner/Spinner";
 
 interface SearchResultsProps {
   artistsData: SpotifyArtistResponse[] | null;
@@ -12,7 +13,7 @@ const SearchResults = ({ artistsData }: SearchResultsProps) => {
   const { userData, setUserData } = useUser();
 
   if (!artistsData || artistsData.length === 0) {
-    return null;
+    return <Spinner />;
   }
 
   return (

@@ -8,6 +8,7 @@ import { useUser } from '../../context/useUser';
 import { followArtist, unfollowArtist } from '../../services/trackify/trackifyArtists';
 import left from '../../assets/png/left.png';
 import right from '../../assets/png/right.png';
+import Spinner from '../Spinner/Spinner';
 
 interface FollowedArtistsProps {
   accessToken: string;
@@ -115,7 +116,7 @@ const FollowedArtists = ({ accessToken, followedArtists }: FollowedArtistsProps)
           </ul>
         </>
       ) : (
-        <p className="followed-artists__loading">Cargando...</p>
+        <Spinner/>
       )}
     </div>
   );
