@@ -17,6 +17,7 @@ export const batchGetArtists = async (
 
     const artistIdsParam = artistIds.join(',');
 
+    console.log("[SpotifyAPI] Batch fetching artists");
     const response = await fetch(`${SPOTIFY_API_URL}/artists?ids=${artistIdsParam}`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });

@@ -4,6 +4,7 @@ import { TrackifyUser } from "../../types/trackify/TrackifyUser";
 
 export const followArtist = async (userData: TrackifyUser, setUserData: (value: TrackifyUser) => void, artist: TrackifyArtist) => {
   try {
+    console.log("[TrackifyAPI] Following artist", artist.id);
     const response = await fetch(
       `${TRACKIFY_API_BASE_URL}/artists/follow?userId=${userData.id}`,
       {
@@ -35,6 +36,7 @@ export const followArtist = async (userData: TrackifyUser, setUserData: (value: 
 
 export const unfollowArtist = async (artistId: string, userData: TrackifyUser, setUserData: (value: TrackifyUser) => void) => {
   try {
+    console.log("[TrackifyAPI] Unfollowing artist", artistId);
     const response = await fetch(
       `${TRACKIFY_API_BASE_URL}/artists/unfollow?userId=${userData.id}&artistId=${artistId}`,
       {

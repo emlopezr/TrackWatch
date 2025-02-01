@@ -41,6 +41,13 @@ class UserServiceImpl(
 
             user = userRepository.findById(userIdValue)
                 .orElseThrow { NotFoundException(ErrorCode.USER_NOT_FOUND) }
+
+            val spotifyUser = spotifyApiClient.getUser(accessToken)
+
+            if (user.id != spotifyUser.id) {
+                throw BadRequestException(ErrorCode.USER_ID_MISMATCH)
+            }
+
         } else {
             user = userRepository.findByAuthCurrentAccessToken(accessToken)
                 ?: userRepository.findByAuthLastAccessToken(accessToken)

@@ -9,6 +9,7 @@ export const registerTrackifyUser = async (
   retryNumber: number = 0
 ) => {
   try {
+    console.log('{TrackifyAPI] Registering user');
     const response = await fetch(`${TRACKIFY_API_BASE_URL}/users/register`, {
       method: 'POST',
       headers: {
@@ -75,6 +76,7 @@ export const getTrackifyUserData = async (
       url = `${url}?userId=${userId}`;
     }
 
+    console.log('[TrackifyAPI] Fetching user data');
     const response = await fetch(url, {
       headers: {
         'X-Spotify-Access-Token': localStorage.getItem('spotify_access_token') || '',

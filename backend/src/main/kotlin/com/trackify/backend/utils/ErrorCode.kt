@@ -4,6 +4,7 @@ enum class ErrorCode(val description: String) {
     UNHANDLED_EXCEPTION("Unhandled exception"),
     USER_NOT_FOUND("User not found"),
     USER_ALREADY_EXISTS("User already exists"),
+    USER_ID_MISMATCH("User ID mismatch"),
 
     USER_ALREADY_FOLLOWS_THIS_ARTIST("User already follows this artist"),
     USER_DOES_NOT_FOLLOW_THIS_ARTIST("User does not follow this artist"),

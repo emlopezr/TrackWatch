@@ -15,9 +15,10 @@ export const searchArtists = async (
     const params = new URLSearchParams({
       q: searchQuery,
       type: 'artist',
-      limit: '10',
+      limit: '50',
     });
 
+    console.log("[SpotifyAPI] Searching artists");
     const response = await fetch(`${SPOTIFY_API_URL}/search?${params}`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
