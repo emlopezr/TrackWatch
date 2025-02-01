@@ -59,7 +59,9 @@ const HomePage = () => {
     setLoading(false);
   };
 
-  useEffect(() => { checkAndRefreshToken(); });
+  useEffect(() => {
+    checkAndRefreshToken();
+  }, []);
 
   useEffect(() => {
     if (accessToken && !userData) {
