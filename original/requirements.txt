@@ -1,0 +1,11 @@
+async-timeout==5.0.1
+certifi==2024.8.30
+charset-normalizer==3.4.0
+idna==3.10
+python-dotenv==1.0.1
+redis==5.2.0
+requests==2.32.3
+resend==2.5.1
+spotipy==2.24.0
+typing_extensions==4.12.2
+urllib3==2.2.3
