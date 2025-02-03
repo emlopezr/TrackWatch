@@ -10,7 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.WebClientResponseException
 
 @Component
-class SpotifyApiClient {
+class SpotifyUserApiClient {
 
     private val webClient: WebClient = WebClient.builder()
         .baseUrl("https://api.spotify.com/v1").build()

@@ -4,7 +4,7 @@ import com.trackify.backend.repository.UserRepository
 import com.trackify.backend.service.contract.UserService
 import com.trackify.backend.model.core.User
 import com.trackify.backend.model.dto.UserResponseDTO
-import com.trackify.backend.clients.spotify.SpotifyApiClient
+import com.trackify.backend.clients.spotify.SpotifyUserApiClient
 import com.trackify.backend.exception.BadRequestException
 import com.trackify.backend.exception.NotFoundException
 import com.trackify.backend.utils.ErrorCode
@@ -15,11 +15,11 @@ import org.springframework.stereotype.Service
 @Service
 class UserServiceImpl(
     private val userRepository: UserRepository,
-    private val spotifyApiClient: SpotifyApiClient
+    private val spotifyUserApiClient: SpotifyUserApiClient
 ): UserService {
 
     override fun registerUser(accessToken: String, refreshToken: String): UserResponseDTO {
-        val spotifyUser = spotifyApiClient.getUser(accessToken)
+        val spotifyUser = spotifyUserApiClient.getUser(accessToken)
 
         if (userRepository.existsById(spotifyUser.id)) {
             throw BadRequestException(ErrorCode.USER_ALREADY_EXISTS)
@@ -32,7 +32,7 @@ class UserServiceImpl(
     }
 
     override fun getCurrentUser(accessToken: String, refreshToken: String): UserResponseDTO {
-        val spotifyUser = spotifyApiClient.getUser(accessToken)
+        val spotifyUser = spotifyUserApiClient.getUser(accessToken)
 
         val user = userRepository.findById(spotifyUser.id)
             .orElseThrow { NotFoundException(ErrorCode.USER_NOT_FOUND) }

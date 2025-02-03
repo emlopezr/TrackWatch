@@ -2,6 +2,7 @@ package com.trackify.backend.utils
 
 object ApiEndpoint {
     const val PING = "/ping"
+    const val RUN_CORE_TASK = "/run"
 
     const val USER_CONTROLLER_BASE = "/users"
     const val USER_CONTROLLER_REGISTER = "/register"

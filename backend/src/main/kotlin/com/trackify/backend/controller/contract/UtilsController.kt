@@ -4,4 +4,5 @@ import org.springframework.http.ResponseEntity
 
 interface UtilsController {
     fun ping(): ResponseEntity<String>
+    fun run(): ResponseEntity<String>
 }

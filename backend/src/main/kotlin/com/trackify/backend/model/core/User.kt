@@ -1,5 +1,6 @@
 package com.trackify.backend.model.core
 
+import com.trackify.backend.clients.spotify.SpotifyAuthApiClient
 import com.trackify.backend.clients.spotify.dto.SpotifyUserDTO
 import com.trackify.backend.exception.UnauthorizedException
 import com.trackify.backend.utils.ErrorCode
@@ -10,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 data class User(
     @Id
     var id: String,
+    var playlistId: String,
 
     var email: String,
     var name: String,
@@ -22,6 +24,7 @@ data class User(
 ) {
     constructor(dto: SpotifyUserDTO, accessToken: String, refreshToken: String): this(
         id = dto.id,
+        playlistId = "3Z9YJMtIdhwtmxmYqRMAKv",
         email = dto.email,
         name = dto.name,
         auth = UserAuth(
@@ -41,6 +44,16 @@ data class User(
     fun updateTokens(accessToken: String, refreshToken: String) {
         auth.last = auth.current
         auth.current = UserTokens(accessToken, refreshToken)
+    }
+
+    fun getValidAccessToken(): String {
+        val refreshToken = auth.current.refreshToken
+
+        val spotifyAuthApiClient = SpotifyAuthApiClient()
+        val newTokens = spotifyAuthApiClient.refreshAccessToken(refreshToken)
+
+        updateTokens(newTokens.accessToken, newTokens.refreshToken)
+        return auth.current.accessToken
     }
 }
 
