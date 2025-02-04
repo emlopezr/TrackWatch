@@ -4,45 +4,48 @@ import { TrackifyArtist } from '../../types/trackify/TrackifyArtist';
 
 const artistCache: { [artistId: string]: SpotifyArtistResponse } = {};
 
+const chunkArray = <T>(array: T[], chunkSize: number): T[][] => {
+  const chunks: T[][] = [];
+  for (let i = 0; i < array.length; i += chunkSize) {
+    chunks.push(array.slice(i, i + chunkSize));
+  }
+  return chunks;
+};
+
 export const batchGetArtists = async (
   accessToken: string,
-  artists: TrackifyArtist[],
-  setArtistsData: (data: SpotifyArtistResponse[]) => void
+  artists: TrackifyArtist[]
 ): Promise<SpotifyArtistResponse[]> => {
   try {
     const allArtistIds = artists.map(artist => artist.id);
     const idsToFetch = allArtistIds.filter(id => !artistCache[id]);
 
-    // Si no hay nuevos artistas, usamos la caché directamente.
     if (idsToFetch.length === 0) {
-      const result = allArtistIds.map(id => artistCache[id]);
-      setArtistsData(result);
-      return result;
+      return allArtistIds.map(id => artistCache[id]).filter(Boolean);
     }
 
-    const artistIdsParam = idsToFetch.join(',');
+    const batches = chunkArray(idsToFetch, 50);
 
-    console.log("[SpotifyAPI] Batch fetching artists");
-    const response = await fetch(`${SPOTIFY_API_URL}/artists?ids=${artistIdsParam}`, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
+    for (const batch of batches) {
+      const idsParam = batch.join(',');
+      console.log("[SpotifyAPI] Batch fetching artists");
+      const response = await fetch(`${SPOTIFY_API_URL}/artists?ids=${idsParam}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      if (response.status === 401) {
+        console.error('Invalid access token');
+        return [];
+      }
+      const data = await response.json();
 
-    if (response.status === 401) {
-      console.error('Invalid access token');
-      return [];
+      data.artists.forEach((artist: SpotifyArtistResponse) => {
+        artistCache[artist.id] = artist;
+      });
     }
 
-    const data = await response.json();
-
-    data.artists.forEach((artist: SpotifyArtistResponse) => {
-      artistCache[artist.id] = artist;
-    });
-
-    const result = allArtistIds.map(id => artistCache[id]).filter(Boolean);
-    setArtistsData(result);
-    return result;
+    return allArtistIds.map(id => artistCache[id]).filter(Boolean);
   } catch (error) {
     console.error('Error fetching artists:', error);
     return [];
   }
-}
+};

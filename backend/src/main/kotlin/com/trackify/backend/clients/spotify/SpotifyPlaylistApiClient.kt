@@ -97,6 +97,67 @@ class SpotifyPlaylistApiClient {
         return filteredUris
     }
 
+    fun createPlaylist(user: User): User {
+        val body = mapOf(
+            "name" to "Your Trackify Playlist",
+            "description" to "Your latest releases from your favorite artists - Powered by Trackify",
+            "public" to false
+        )
+
+        try {
+            val response = webClient.post()
+                .uri("/users/${user.id}/playlists")
+                .bodyValue(body)
+                .header("Authorization", "Bearer ${user.auth.current.accessToken}")
+                .retrieve()
+                .bodyToMono(Map::class.java)
+                .block() ?: throw RuntimeException("Failed to create playlist")
+
+            val playlistId = response["id"] as String
+            user.playlistId = playlistId
+
+            return user
+        } catch (e: Exception) {
+            throw RuntimeException(e)
+        }
+    }
+
+    fun checkPlaylistExists(user: User): Boolean {
+        val userPlaylistId = user.playlistId
+        var offset = 0
+        val limit = 50
+
+        try {
+            do {
+                val response = webClient.get()
+                    .uri { uriBuilder ->
+                        uriBuilder.path("/me/playlists")
+                            .queryParam("limit", limit)
+                            .queryParam("offset", offset)
+                            .build()
+                    }
+                    .header("Authorization", "Bearer ${user.auth.current.accessToken}")
+                    .retrieve()
+                    .bodyToMono(Map::class.java)
+                    .block() ?: throw RuntimeException("Failed to get user playlists")
+
+                val items = response["items"] as List<*>
+                val playlistIds = items.map { (it as Map<*, *>)["id"] as String }
+
+                if (playlistIds.contains(userPlaylistId)) {
+                    return true
+                }
+
+                offset += limit
+                val total = (response["total"] as Int?) ?: 0
+            } while (offset < total)
+
+            return false
+        } catch (e: Exception) {
+            throw RuntimeException(e)
+        }
+    }
+
     private fun mapResponseToTrackUris(response: Map<*, *>): List<String> {
         val items = response["items"] as List<*>
         val tracks = items.map { it as Map<*, *> }

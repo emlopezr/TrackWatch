@@ -24,7 +24,7 @@ data class User(
 ) {
     constructor(dto: SpotifyUserDTO, accessToken: String, refreshToken: String): this(
         id = dto.id,
-        playlistId = "3Z9YJMtIdhwtmxmYqRMAKv",
+        playlistId = "",
         email = dto.email,
         name = dto.name,
         auth = UserAuth(

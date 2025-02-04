@@ -21,7 +21,15 @@ class ScheduledService(
     fun runCoreTask() {
         val users = userRepository.findAll()
         log.info("Running core task for ${users.size} users")
-        users.forEach { user -> runCoreTask(user) }
+        
+        users.forEach { user ->
+            try {
+                runCoreTask(user)
+            } catch (e: Exception) {
+                log.error("Error while running core task for user ${user.id}", e)
+            }
+        }
+
         log.info("Core task finished")
     }
 
@@ -38,6 +46,8 @@ class ScheduledService(
         }
 
         val userSortedTracks = trackService.sortTracks(userAddedTracks)
+
+        playlistService.checkPlaylist(user)
         playlistService.addTracksToPlaylist(user, userSortedTracks)
     }
 }

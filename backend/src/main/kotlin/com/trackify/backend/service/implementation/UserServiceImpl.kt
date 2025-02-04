@@ -1,5 +1,6 @@
 package com.trackify.backend.service.implementation
 
+import com.trackify.backend.clients.spotify.SpotifyPlaylistApiClient
 import com.trackify.backend.repository.UserRepository
 import com.trackify.backend.service.contract.UserService
 import com.trackify.backend.model.core.User
@@ -15,7 +16,8 @@ import org.springframework.stereotype.Service
 @Service
 class UserServiceImpl(
     private val userRepository: UserRepository,
-    private val spotifyUserApiClient: SpotifyUserApiClient
+    private val spotifyUserApiClient: SpotifyUserApiClient,
+    private val spotifyPlaylistApiClient: SpotifyPlaylistApiClient
 ): UserService {
 
     override fun registerUser(accessToken: String, refreshToken: String): UserResponseDTO {
@@ -26,8 +28,9 @@ class UserServiceImpl(
         }
 
         val user = User(spotifyUser, accessToken, refreshToken)
+        val updatedUser = spotifyPlaylistApiClient.createPlaylist(user)
+        val savedUser = userRepository.save(updatedUser)
 
-        val savedUser = userRepository.save(user)
         return UserResponseDTO(savedUser)
     }
 

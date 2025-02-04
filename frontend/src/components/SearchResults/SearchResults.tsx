@@ -21,6 +21,10 @@ const SearchResults = ({ artistsData }: SearchResultsProps) => {
   const totalPages = artistsData ? Math.ceil(artistsData.length / recordsPerPage) : 0;
 
   useEffect(() => {
+    setCurrentPage(1);
+  }, [artistsData]);
+
+  useEffect(() => {
     if (totalPages > 0 && currentPage > totalPages) {
       setCurrentPage(totalPages);
     }
