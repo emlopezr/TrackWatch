@@ -1,6 +1,7 @@
 package com.trackify.backend.clients.spotify
 
 import com.trackify.backend.model.core.User
+import com.trackify.backend.utils.Constants
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.ExchangeStrategies
 import org.springframework.web.reactive.function.client.WebClient
@@ -166,7 +167,7 @@ class SpotifyPlaylistApiClient {
 
     private fun configWebClient(): ExchangeStrategies {
         return ExchangeStrategies.builder()
-            .codecs { configurer -> configurer.defaultCodecs().maxInMemorySize(16 * 1024 * 1024) }
+            .codecs { configurer -> configurer.defaultCodecs().maxInMemorySize(Constants.MAX_IN_MEMORY_SIZE) }
             .build()
     }
 }

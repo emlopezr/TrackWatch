@@ -4,6 +4,7 @@ import com.trackify.backend.exception.InternalServerErrorException
 import com.trackify.backend.model.core.Artist
 import com.trackify.backend.model.core.Track
 import com.trackify.backend.model.core.TrackImage
+import com.trackify.backend.utils.Constants
 import com.trackify.backend.utils.ErrorCode
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.ExchangeStrategies
@@ -34,7 +35,7 @@ class SpotifyArtistApiClient {
                 .block() ?: return emptyList()
             return parseTracks(response)
         } catch (e: WebClientResponseException) {
-            throw handleSpotifyApiException(e)
+            throw RuntimeException("Error while calling Spotify API: ${e.message}")
         } catch (e: Exception) {
             throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API", e.message ?: "")
         }
@@ -135,18 +136,6 @@ class SpotifyArtistApiClient {
         return parsedAlbumImages
     }
 
-    private fun handleSpotifyApiException(e: WebClientResponseException): Exception {
-        return when (e.statusCode.value()) {
-//            400 -> InternalServerErrorException(ErrorCode.BAD_REQUEST, "Bad request to Spotify API", responseBody)
-//            401 -> InternalServerErrorException(ErrorCode.UNAUTHORIZED, "Unauthorized request to Spotify API", responseBody)
-//            403 -> InternalServerErrorException(ErrorCode.FORBIDDEN, "Forbidden request to Spotify API", responseBody)
-//            404 -> InternalServerErrorException(ErrorCode.NOT_FOUND, "Resource not found in Spotify API", responseBody)
-//            429 -> InternalServerErrorException(ErrorCode.TOO_MANY_REQUESTS, "Too many requests to Spotify API", responseBody)
-//            500 -> InternalServerErrorException(ErrorCode.INTERNAL_SERVER_ERROR, "Internal server error in Spotify API", responseBody)
-            else -> RuntimeException("Error while calling Spotify API: ${e.message}")
-        }
-    }
-
     private fun buildQueryParams(artistName: String, daysLimit: Int, page: Int): String {
         val q = buildQuery(artistName, daysLimit)
         val type = "track"
@@ -182,7 +171,7 @@ class SpotifyArtistApiClient {
 
     private fun configWebClient(): ExchangeStrategies {
         return ExchangeStrategies.builder()
-            .codecs { configurer -> configurer.defaultCodecs().maxInMemorySize(16 * 1024 * 1024) }
+            .codecs { configurer -> configurer.defaultCodecs().maxInMemorySize(Constants.MAX_IN_MEMORY_SIZE) }
             .build()
     }
 

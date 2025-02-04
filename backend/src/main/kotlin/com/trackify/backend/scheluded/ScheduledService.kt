@@ -5,6 +5,7 @@ import com.trackify.backend.model.core.User
 import com.trackify.backend.repository.UserRepository
 import com.trackify.backend.scheluded.service.PlaylistService
 import com.trackify.backend.scheluded.service.TrackService
+import com.trackify.backend.utils.Constants
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
@@ -21,7 +22,7 @@ class ScheduledService(
     fun runCoreTask() {
         val users = userRepository.findAll()
         log.info("Running core task for ${users.size} users")
-        
+
         users.forEach { user ->
             try {
                 runCoreTask(user)
@@ -40,7 +41,7 @@ class ScheduledService(
 
         user.followedArtists.forEach { artist ->
             val tracksToAdd = mutableSetOf<Track>()
-            val artistNewTracks = trackService.getArtistNewTracks(artist, accessToken, 2)
+            val artistNewTracks = trackService.getArtistNewTracks(artist, accessToken, Constants.PAGES_TO_FETCH)
             artistNewTracks.forEach { track -> trackService.filterTrack(track, user, artist, userAddedTracks) }
             userAddedTracks.addAll(tracksToAdd)
         }

@@ -4,6 +4,7 @@ import com.trackify.backend.clients.spotify.SpotifyArtistApiClient
 import com.trackify.backend.model.core.Artist
 import com.trackify.backend.model.core.Track
 import com.trackify.backend.model.core.User
+import com.trackify.backend.utils.Constants
 import org.springframework.stereotype.Service
 import java.util.Calendar
 import java.util.Date
@@ -11,7 +12,7 @@ import java.util.Date
 @Service
 class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
 
-    val daysLimit = 30
+    val daysLimit = Constants.DAYS_LIMIT
 
     fun getArtistNewTracks(artist: Artist, accessToken: String, pagesToFetch: Int): List<Track> {
         val newTracks = mutableListOf<Track>()
