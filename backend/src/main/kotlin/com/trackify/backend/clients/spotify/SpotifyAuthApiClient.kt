@@ -2,21 +2,16 @@ package com.trackify.backend.clients.spotify
 
 import com.trackify.backend.clients.spotify.dto.SpotifyTokenDTO
 import com.trackify.backend.exception.*
-import com.trackify.backend.utils.ApiMetric
-import com.trackify.backend.utils.ErrorCode
-import com.trackify.backend.utils.MetricService
+import com.trackify.backend.utils.values.ErrorCode
+import com.trackify.backend.utils.service.MetricService
 
 import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
-import org.springframework.web.reactive.function.client.WebClient
 import java.util.Base64
 
 @Component
-class SpotifyAuthApiClient(private val metricService: MetricService) {
-
-    private val webClient: WebClient = WebClient.builder()
-        .baseUrl("https://accounts.spotify.com/api").build()
+class SpotifyAuthApiClient(metricService: MetricService): SpotifyApiClient(metricService) {
 
     fun refreshAccessToken(refreshToken: String): SpotifyTokenDTO {
         val authString = getAuthString()
@@ -27,7 +22,7 @@ class SpotifyAuthApiClient(private val metricService: MetricService) {
 
         try {
             sendMetricApiCall("refreshAccessToken")
-            val response = webClient.post()
+            val response = authWebClient.post()
                 .uri("/token")
                 .header("Authorization", "Basic $authString")
                 .header("Content-Type", "application/x-www-form-urlencoded")
@@ -58,10 +53,4 @@ class SpotifyAuthApiClient(private val metricService: MetricService) {
         )
     }
 
-    private fun sendMetricApiCall(method: String) {
-        metricService.incrementCounter(ApiMetric.CLIENT_REQUEST,
-            "client", this.javaClass.simpleName,
-            "method", method
-        )
-    }
 }

@@ -1,19 +1,11 @@
 package com.trackify.backend.clients.spotify
 
 import com.trackify.backend.model.core.User
-import com.trackify.backend.utils.ApiMetric
-import com.trackify.backend.utils.Constants
-import com.trackify.backend.utils.MetricService
+import com.trackify.backend.utils.service.MetricService
 import org.springframework.stereotype.Component
-import org.springframework.web.reactive.function.client.ExchangeStrategies
-import org.springframework.web.reactive.function.client.WebClient
 
 @Component
-class SpotifyPlaylistApiClient(private val metricService: MetricService) {
-
-    private val webClient: WebClient = WebClient.builder()
-        .exchangeStrategies(configWebClient())
-        .baseUrl("https://api.spotify.com/v1").build()
+class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(metricService) {
 
     fun addTracksToPlaylist(user: User, trackUris: List<String>): Map<*, *> {
         val body = mapOf("uris" to trackUris)
@@ -173,16 +165,4 @@ class SpotifyPlaylistApiClient(private val metricService: MetricService) {
         return tracks.map { it["track"] as Map<*, *> }.map { it["uri"] as String }
     }
 
-    private fun configWebClient(): ExchangeStrategies {
-        return ExchangeStrategies.builder()
-            .codecs { configurer -> configurer.defaultCodecs().maxInMemorySize(Constants.MAX_IN_MEMORY_SIZE) }
-            .build()
-    }
-
-    private fun sendMetricApiCall(method: String) {
-        metricService.incrementCounter(ApiMetric.CLIENT_REQUEST,
-            "client", this.javaClass.simpleName,
-            "method", method
-        )
-    }
 }

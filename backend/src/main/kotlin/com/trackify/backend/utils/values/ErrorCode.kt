@@ -1,4 +1,4 @@
-package com.trackify.backend.utils
+package com.trackify.backend.utils.values
 
 enum class ErrorCode(val description: String) {
     UNHANDLED_EXCEPTION("Unhandled exception"),

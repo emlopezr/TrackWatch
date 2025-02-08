@@ -1,4 +1,4 @@
-package com.trackify.backend.utils
+package com.trackify.backend.utils.service
 
 import io.micrometer.core.instrument.MeterRegistry
 import org.springframework.stereotype.Service

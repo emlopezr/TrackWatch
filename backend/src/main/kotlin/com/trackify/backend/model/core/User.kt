@@ -2,7 +2,7 @@ package com.trackify.backend.model.core
 
 import com.trackify.backend.clients.spotify.dto.SpotifyUserDTO
 import com.trackify.backend.exception.UnauthorizedException
-import com.trackify.backend.utils.ErrorCode
+import com.trackify.backend.utils.values.ErrorCode
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 

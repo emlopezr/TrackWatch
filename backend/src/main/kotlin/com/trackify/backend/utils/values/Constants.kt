@@ -1,4 +1,4 @@
-package com.trackify.backend.utils
+package com.trackify.backend.utils.values
 
 object Constants {
     const val MAX_IN_MEMORY_SIZE = 16 * 1024 * 1024

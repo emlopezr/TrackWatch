@@ -1,19 +1,18 @@
-package com.trackify.backend.service.implementation
+package com.trackify.backend.service
 
 import com.trackify.backend.exception.BadRequestException
 import com.trackify.backend.exception.NotFoundException
 import com.trackify.backend.model.core.Artist
 import com.trackify.backend.repository.UserRepository
-import com.trackify.backend.service.contract.ArtistService
-import com.trackify.backend.utils.ErrorCode
+import com.trackify.backend.utils.values.ErrorCode
 import org.springframework.stereotype.Service
 
 @Service
-class ArtistServiceImpl(
+class ArtistService(
     private val userRepository: UserRepository
-): ArtistService {
+) {
 
-    override fun followArtist(userId: String, artist: Artist, accessToken: String): MutableList<Artist> {
+    fun followArtist(userId: String, artist: Artist, accessToken: String): MutableList<Artist> {
         val user = userRepository.findById(userId)
             .orElseThrow { NotFoundException(ErrorCode.USER_NOT_FOUND) }
 
@@ -28,7 +27,7 @@ class ArtistServiceImpl(
         return user.followedArtists
     }
 
-    override fun unfollowArtist(userId: String, artistId: String, accessToken: String): MutableList<Artist> {
+    fun unfollowArtist(userId: String, artistId: String, accessToken: String): MutableList<Artist> {
         val user = userRepository.findById(userId)
             .orElseThrow { NotFoundException(ErrorCode.USER_NOT_FOUND) }
 

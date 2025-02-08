@@ -3,19 +3,14 @@ package com.trackify.backend.clients.spotify
 import com.trackify.backend.clients.spotify.dto.SpotifyImageDTO
 import com.trackify.backend.clients.spotify.dto.SpotifyUserDTO
 import com.trackify.backend.exception.*
-import com.trackify.backend.utils.ApiMetric
-import com.trackify.backend.utils.ErrorCode
-import com.trackify.backend.utils.MetricService
+import com.trackify.backend.utils.values.ErrorCode
+import com.trackify.backend.utils.service.MetricService
 
 import org.springframework.stereotype.Component
-import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.WebClientResponseException
 
 @Component
-class SpotifyUserApiClient(private val metricService: MetricService) {
-
-    private val webClient: WebClient = WebClient.builder()
-        .baseUrl("https://api.spotify.com/v1").build()
+class SpotifyUserApiClient(metricService: MetricService): SpotifyApiClient(metricService) {
 
     fun getUser(accessToken: String): SpotifyUserDTO {
         try {
@@ -65,10 +60,4 @@ class SpotifyUserApiClient(private val metricService: MetricService) {
         }
     }
 
-    private fun sendMetricApiCall(method: String) {
-        metricService.incrementCounter(ApiMetric.CLIENT_REQUEST,
-            "client", this.javaClass.simpleName,
-            "method", method
-        )
-    }
 }

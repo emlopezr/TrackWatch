@@ -1,4 +1,4 @@
-package com.trackify.backend.model.dto
+package com.trackify.backend.controller.dto
 
 import com.trackify.backend.model.core.Artist
 import com.trackify.backend.model.core.User

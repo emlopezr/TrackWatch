@@ -1,6 +1,6 @@
-package com.trackify.backend.utils
+package com.trackify.backend.utils.values
 
-object ApiMetric {
+object Metrics {
 
     private const val METRIC_PREFIX = "trackify_"
 

@@ -1,4 +1,4 @@
-package com.trackify.backend.scheluded.service
+package com.trackify.backend.service
 
 import com.trackify.backend.clients.spotify.SpotifyPlaylistApiClient
 import com.trackify.backend.model.core.Track

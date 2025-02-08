@@ -1,6 +1,6 @@
 package com.trackify.backend.exception
 
-import com.trackify.backend.utils.ErrorCode
+import com.trackify.backend.utils.values.ErrorCode
 
 open class CustomException(val errorCode: ErrorCode, message: String = errorCode.description, val details: String = "") : RuntimeException(message)
 

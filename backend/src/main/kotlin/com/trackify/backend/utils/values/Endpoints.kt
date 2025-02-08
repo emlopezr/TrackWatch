@@ -1,6 +1,6 @@
-package com.trackify.backend.utils
+package com.trackify.backend.utils.values
 
-object ApiEndpoint {
+object Endpoints {
     const val PING = "/ping"
     const val RUN_CORE_TASK = "/run"
 

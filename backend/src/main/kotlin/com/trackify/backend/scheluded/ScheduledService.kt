@@ -3,10 +3,10 @@ package com.trackify.backend.scheluded
 import com.trackify.backend.model.core.Track
 import com.trackify.backend.model.core.User
 import com.trackify.backend.repository.UserRepository
-import com.trackify.backend.scheluded.service.PlaylistService
-import com.trackify.backend.scheluded.service.TrackService
-import com.trackify.backend.service.contract.UserService
-import com.trackify.backend.utils.Constants
+import com.trackify.backend.service.PlaylistService
+import com.trackify.backend.service.TrackService
+import com.trackify.backend.service.UserService
+import com.trackify.backend.utils.values.Constants
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
@@ -16,7 +16,7 @@ class ScheduledService(
     private val userRepository: UserRepository,
     private val trackService: TrackService,
     private val playlistService: PlaylistService,
-    private val userService: UserService,
+    private val userService: UserService
 ) {
 
     private val log = LoggerFactory.getLogger(ScheduledService::class.java)

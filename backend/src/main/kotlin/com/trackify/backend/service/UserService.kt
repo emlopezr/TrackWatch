@@ -1,28 +1,27 @@
-package com.trackify.backend.service.implementation
+package com.trackify.backend.service
 
 import com.trackify.backend.clients.spotify.SpotifyAuthApiClient
 import com.trackify.backend.clients.spotify.SpotifyPlaylistApiClient
 import com.trackify.backend.repository.UserRepository
-import com.trackify.backend.service.contract.UserService
 import com.trackify.backend.model.core.User
-import com.trackify.backend.model.dto.UserResponseDTO
+import com.trackify.backend.controller.dto.UserResponseDTO
 import com.trackify.backend.clients.spotify.SpotifyUserApiClient
 import com.trackify.backend.exception.BadRequestException
 import com.trackify.backend.exception.NotFoundException
-import com.trackify.backend.utils.ErrorCode
+import com.trackify.backend.utils.values.ErrorCode
 
 import org.springframework.stereotype.Service
 
 // TODO: Use interface for userRepository - InMemoryUserRepository for certain profiles, and MongoUserRepository for others
 @Service
-class UserServiceImpl(
+class UserService(
     private val userRepository: UserRepository,
     private val spotifyUserApiClient: SpotifyUserApiClient,
     private val spotifyPlaylistApiClient: SpotifyPlaylistApiClient,
     private val spotifyAuthApiClient: SpotifyAuthApiClient
-): UserService {
+) {
 
-    override fun registerUser(accessToken: String, refreshToken: String): UserResponseDTO {
+    fun registerUser(accessToken: String, refreshToken: String): UserResponseDTO {
         val spotifyUser = spotifyUserApiClient.getUser(accessToken)
 
         if (userRepository.existsById(spotifyUser.id)) {
@@ -36,7 +35,7 @@ class UserServiceImpl(
         return UserResponseDTO(savedUser)
     }
 
-    override fun getCurrentUser(accessToken: String, refreshToken: String): UserResponseDTO {
+    fun getCurrentUser(accessToken: String, refreshToken: String): UserResponseDTO {
         val spotifyUser = spotifyUserApiClient.getUser(accessToken)
 
         val user = userRepository.findById(spotifyUser.id)
@@ -48,7 +47,7 @@ class UserServiceImpl(
         return UserResponseDTO(savedUser)
     }
 
-    override fun getValidAccessToken(user: User): User {
+    fun getValidAccessToken(user: User): User {
         val refreshToken = user.auth.current.refreshToken
 
         val newTokens = spotifyAuthApiClient.refreshAccessToken(refreshToken)
