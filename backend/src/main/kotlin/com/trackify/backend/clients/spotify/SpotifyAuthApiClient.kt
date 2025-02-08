@@ -1,20 +1,19 @@
 package com.trackify.backend.clients.spotify
 
-import com.trackify.backend.clients.spotify.dto.SpotifyImageDTO
 import com.trackify.backend.clients.spotify.dto.SpotifyTokenDTO
-import com.trackify.backend.clients.spotify.dto.SpotifyUserDTO
 import com.trackify.backend.exception.*
+import com.trackify.backend.utils.ApiMetric
 import com.trackify.backend.utils.ErrorCode
+import com.trackify.backend.utils.MetricService
 
 import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import org.springframework.web.reactive.function.client.WebClient
-import org.springframework.web.reactive.function.client.WebClientResponseException
 import java.util.Base64
 
 @Component
-class SpotifyAuthApiClient {
+class SpotifyAuthApiClient(private val metricService: MetricService) {
 
     private val webClient: WebClient = WebClient.builder()
         .baseUrl("https://accounts.spotify.com/api").build()
@@ -27,6 +26,7 @@ class SpotifyAuthApiClient {
         bodyFormEncoded.add("refresh_token", refreshToken)
 
         try {
+            sendMetricApiCall("refreshAccessToken")
             val response = webClient.post()
                 .uri("/token")
                 .header("Authorization", "Basic $authString")
@@ -55,6 +55,13 @@ class SpotifyAuthApiClient {
         return SpotifyTokenDTO(
             accessToken = response["access_token"] as String,
             refreshToken = refreshToken
+        )
+    }
+
+    private fun sendMetricApiCall(method: String) {
+        metricService.incrementCounter(ApiMetric.CLIENT_REQUEST,
+            "client", this.javaClass.simpleName,
+            "method", method
         )
     }
 }

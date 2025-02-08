@@ -1,5 +1,6 @@
 package com.trackify.backend.service.implementation
 
+import com.trackify.backend.clients.spotify.SpotifyAuthApiClient
 import com.trackify.backend.clients.spotify.SpotifyPlaylistApiClient
 import com.trackify.backend.repository.UserRepository
 import com.trackify.backend.service.contract.UserService
@@ -17,7 +18,8 @@ import org.springframework.stereotype.Service
 class UserServiceImpl(
     private val userRepository: UserRepository,
     private val spotifyUserApiClient: SpotifyUserApiClient,
-    private val spotifyPlaylistApiClient: SpotifyPlaylistApiClient
+    private val spotifyPlaylistApiClient: SpotifyPlaylistApiClient,
+    private val spotifyAuthApiClient: SpotifyAuthApiClient
 ): UserService {
 
     override fun registerUser(accessToken: String, refreshToken: String): UserResponseDTO {
@@ -44,5 +46,14 @@ class UserServiceImpl(
 
         val savedUser = userRepository.save(user)
         return UserResponseDTO(savedUser)
+    }
+
+    override fun getValidAccessToken(user: User): User {
+        val refreshToken = user.auth.current.refreshToken
+
+        val newTokens = spotifyAuthApiClient.refreshAccessToken(refreshToken)
+        user.updateTokens(newTokens.accessToken, newTokens.refreshToken)
+
+        return userRepository.save(user)
     }
 }

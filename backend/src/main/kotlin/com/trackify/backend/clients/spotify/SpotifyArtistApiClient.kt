@@ -4,8 +4,7 @@ import com.trackify.backend.exception.InternalServerErrorException
 import com.trackify.backend.model.core.Artist
 import com.trackify.backend.model.core.Track
 import com.trackify.backend.model.core.TrackImage
-import com.trackify.backend.utils.Constants
-import com.trackify.backend.utils.ErrorCode
+import com.trackify.backend.utils.*
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.ExchangeStrategies
 import org.springframework.web.reactive.function.client.WebClient
@@ -16,7 +15,7 @@ import java.util.Date
 import java.util.Locale
 
 @Component
-class SpotifyArtistApiClient {
+class SpotifyArtistApiClient(private val metricService: MetricService) {
 
     private val webClient: WebClient = WebClient.builder()
         .exchangeStrategies(configWebClient())
@@ -27,6 +26,7 @@ class SpotifyArtistApiClient {
         val queryParams = buildQueryParams(artist.name, daysLimit, page)
 
         try {
+            sendMetricApiCall("getArtistNewTracks")
             val response = webClient.get()
                 .uri("/search?$queryParams")
                 .header("Authorization", "Bearer $accessToken")
@@ -173,6 +173,13 @@ class SpotifyArtistApiClient {
         return ExchangeStrategies.builder()
             .codecs { configurer -> configurer.defaultCodecs().maxInMemorySize(Constants.MAX_IN_MEMORY_SIZE) }
             .build()
+    }
+
+    private fun sendMetricApiCall(method: String) {
+        metricService.incrementCounter(ApiMetric.CLIENT_REQUEST,
+            "client", this.javaClass.simpleName,
+            "method", method
+        )
     }
 
 }

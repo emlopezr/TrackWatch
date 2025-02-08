@@ -5,6 +5,7 @@ import com.trackify.backend.model.core.User
 import com.trackify.backend.repository.UserRepository
 import com.trackify.backend.scheluded.service.PlaylistService
 import com.trackify.backend.scheluded.service.TrackService
+import com.trackify.backend.service.contract.UserService
 import com.trackify.backend.utils.Constants
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Async
@@ -14,7 +15,8 @@ import org.springframework.stereotype.Service
 class ScheduledService(
     private val userRepository: UserRepository,
     private val trackService: TrackService,
-    private val playlistService: PlaylistService
+    private val playlistService: PlaylistService,
+    private val userService: UserService,
 ) {
 
     private val log = LoggerFactory.getLogger(ScheduledService::class.java)
@@ -36,19 +38,21 @@ class ScheduledService(
 
     @Async
     fun runCoreTask(user: User) {
-        val accessToken = user.getValidAccessToken()
+        val userWithValidToken = userService.getValidAccessToken(user)
+        val accessToken = userWithValidToken.auth.current.accessToken
+
         val userAddedTracks = mutableSetOf<Track>()
 
-        user.followedArtists.forEach { artist ->
+        userWithValidToken.followedArtists.forEach { artist ->
             val tracksToAdd = mutableSetOf<Track>()
             val artistNewTracks = trackService.getArtistNewTracks(artist, accessToken, Constants.PAGES_TO_FETCH)
-            artistNewTracks.forEach { track -> trackService.filterTrack(track, user, artist, userAddedTracks) }
+            artistNewTracks.forEach { track -> trackService.filterTrack(track, userWithValidToken, artist, userAddedTracks) }
             userAddedTracks.addAll(tracksToAdd)
         }
 
         val userSortedTracks = trackService.sortTracks(userAddedTracks)
 
-        playlistService.checkPlaylist(user)
-        playlistService.addTracksToPlaylist(user, userSortedTracks)
+        playlistService.checkPlaylist(userWithValidToken)
+        playlistService.addTracksToPlaylist(userWithValidToken, userSortedTracks)
     }
 }

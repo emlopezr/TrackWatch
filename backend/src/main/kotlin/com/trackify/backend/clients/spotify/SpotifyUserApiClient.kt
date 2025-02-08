@@ -3,20 +3,23 @@ package com.trackify.backend.clients.spotify
 import com.trackify.backend.clients.spotify.dto.SpotifyImageDTO
 import com.trackify.backend.clients.spotify.dto.SpotifyUserDTO
 import com.trackify.backend.exception.*
+import com.trackify.backend.utils.ApiMetric
 import com.trackify.backend.utils.ErrorCode
+import com.trackify.backend.utils.MetricService
 
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.WebClientResponseException
 
 @Component
-class SpotifyUserApiClient {
+class SpotifyUserApiClient(private val metricService: MetricService) {
 
     private val webClient: WebClient = WebClient.builder()
         .baseUrl("https://api.spotify.com/v1").build()
 
     fun getUser(accessToken: String): SpotifyUserDTO {
         try {
+            sendMetricApiCall("getUser")
             val response = webClient.get()
                 .uri("/me")
                 .header("Authorization", "Bearer $accessToken")
@@ -60,5 +63,12 @@ class SpotifyUserApiClient {
             404 -> BadRequestException(ErrorCode.SPOTIFY_USER_NOT_FOUND)
             else -> RuntimeException("Error while calling Spotify API: ${e.message}")
         }
+    }
+
+    private fun sendMetricApiCall(method: String) {
+        metricService.incrementCounter(ApiMetric.CLIENT_REQUEST,
+            "client", this.javaClass.simpleName,
+            "method", method
+        )
     }
 }

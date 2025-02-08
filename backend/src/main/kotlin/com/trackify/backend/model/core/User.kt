@@ -1,6 +1,5 @@
 package com.trackify.backend.model.core
 
-import com.trackify.backend.clients.spotify.SpotifyAuthApiClient
 import com.trackify.backend.clients.spotify.dto.SpotifyUserDTO
 import com.trackify.backend.exception.UnauthorizedException
 import com.trackify.backend.utils.ErrorCode
@@ -44,16 +43,6 @@ data class User(
     fun updateTokens(accessToken: String, refreshToken: String) {
         auth.last = auth.current
         auth.current = UserTokens(accessToken, refreshToken)
-    }
-
-    fun getValidAccessToken(): String {
-        val refreshToken = auth.current.refreshToken
-
-        val spotifyAuthApiClient = SpotifyAuthApiClient()
-        val newTokens = spotifyAuthApiClient.refreshAccessToken(refreshToken)
-
-        updateTokens(newTokens.accessToken, newTokens.refreshToken)
-        return auth.current.accessToken
     }
 }
 

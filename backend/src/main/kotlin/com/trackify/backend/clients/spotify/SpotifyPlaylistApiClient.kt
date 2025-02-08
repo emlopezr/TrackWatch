@@ -1,13 +1,15 @@
 package com.trackify.backend.clients.spotify
 
 import com.trackify.backend.model.core.User
+import com.trackify.backend.utils.ApiMetric
 import com.trackify.backend.utils.Constants
+import com.trackify.backend.utils.MetricService
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.ExchangeStrategies
 import org.springframework.web.reactive.function.client.WebClient
 
 @Component
-class SpotifyPlaylistApiClient {
+class SpotifyPlaylistApiClient(private val metricService: MetricService) {
 
     private val webClient: WebClient = WebClient.builder()
         .exchangeStrategies(configWebClient())
@@ -18,6 +20,7 @@ class SpotifyPlaylistApiClient {
         val userPlaylistId = user.playlistId
 
         try {
+            sendMetricApiCall("addTracksToPlaylist")
             val response = webClient.post()
                 .uri("/playlists/$userPlaylistId/tracks")
                 .bodyValue(body)
@@ -39,6 +42,7 @@ class SpotifyPlaylistApiClient {
 
         try {
             do {
+                sendMetricApiCall("getPlaylistTracks")
                 val response = webClient.get()
                     .uri { uriBuilder ->
                         uriBuilder.path("/playlists/$userPlaylistId/tracks")
@@ -72,6 +76,8 @@ class SpotifyPlaylistApiClient {
         try {
             ids.chunked(limit).forEach { chunk ->
                 val idsParam = chunk.joinToString(",")
+
+                sendMetricApiCall("filterSavedTracks")
                 val response = webClient.get()
                     .uri { uriBuilder ->
                         uriBuilder.path("/me/tracks/contains")
@@ -106,6 +112,7 @@ class SpotifyPlaylistApiClient {
         )
 
         try {
+            sendMetricApiCall("createPlaylist")
             val response = webClient.post()
                 .uri("/users/${user.id}/playlists")
                 .bodyValue(body)
@@ -130,6 +137,7 @@ class SpotifyPlaylistApiClient {
 
         try {
             do {
+                sendMetricApiCall("checkPlaylistExists")
                 val response = webClient.get()
                     .uri { uriBuilder ->
                         uriBuilder.path("/me/playlists")
@@ -169,5 +177,12 @@ class SpotifyPlaylistApiClient {
         return ExchangeStrategies.builder()
             .codecs { configurer -> configurer.defaultCodecs().maxInMemorySize(Constants.MAX_IN_MEMORY_SIZE) }
             .build()
+    }
+
+    private fun sendMetricApiCall(method: String) {
+        metricService.incrementCounter(ApiMetric.CLIENT_REQUEST,
+            "client", this.javaClass.simpleName,
+            "method", method
+        )
     }
 }
