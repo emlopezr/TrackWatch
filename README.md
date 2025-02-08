@@ -12,6 +12,7 @@ Trackify es una aplicación que ayuda a los usuarios a descubrir y agregar nueva
 - **Métricas:** En casos de Excepciones
 - **Métricas:** En Responses Controllers
 - **Métricas:** De tiempos de ejecución
+- **Logs**: Implementar Loki para logs en Grafana
 
 - **Funcionalidad:** Notificaciones Email en servicio Core
 
