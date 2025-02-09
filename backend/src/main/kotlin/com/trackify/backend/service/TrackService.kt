@@ -1,9 +1,9 @@
 package com.trackify.backend.service
 
 import com.trackify.backend.clients.spotify.SpotifyArtistApiClient
-import com.trackify.backend.model.core.Artist
-import com.trackify.backend.model.core.Track
-import com.trackify.backend.model.core.User
+import com.trackify.backend.model.Artist
+import com.trackify.backend.model.Track
+import com.trackify.backend.model.User
 import com.trackify.backend.utils.values.Constants
 import org.springframework.stereotype.Service
 import java.util.Calendar

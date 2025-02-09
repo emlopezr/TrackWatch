@@ -1,9 +1,8 @@
 package com.trackify.backend.controller
 
-import com.trackify.backend.model.core.Artist
+import com.trackify.backend.model.Artist
 import com.trackify.backend.service.ArtistService
 import com.trackify.backend.utils.values.Endpoints
-import com.trackify.backend.utils.values.Metrics
 import com.trackify.backend.utils.values.Headers
 import com.trackify.backend.utils.service.MetricService
 import org.springframework.http.ResponseEntity

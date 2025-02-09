@@ -1,17 +1,16 @@
 package com.trackify.backend.controller.dto
 
-import com.trackify.backend.model.core.Artist
-import com.trackify.backend.model.core.User
-import com.trackify.backend.model.core.UserImages
-import com.trackify.backend.model.core.UserSettings
+import com.trackify.backend.model.Artist
+import com.trackify.backend.model.User
+import com.trackify.backend.model.UserSettings
 
 data class UserResponseDTO(
     val id: String,
     val playlistId: String,
     val email: String,
     val name: String,
+    val imageUrl: String,
     val settings: UserSettings,
-    val images: List<UserImages>,
     val followedArtists: List<Artist>
 ) {
     constructor(user: User): this (
@@ -19,8 +18,8 @@ data class UserResponseDTO(
         playlistId = user.playlistId,
         email = user.email,
         name = user.name,
+        imageUrl = user.imageUrl,
         settings = user.settings,
-        images = user.images,
         followedArtists = user.followedArtists
     )
 }

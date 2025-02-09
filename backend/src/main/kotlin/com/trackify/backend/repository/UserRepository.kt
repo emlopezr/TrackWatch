@@ -1,6 +1,6 @@
 package com.trackify.backend.repository
 
-import com.trackify.backend.model.core.User
-import org.springframework.data.mongodb.repository.MongoRepository
+import com.trackify.backend.model.User
+import org.springframework.data.jpa.repository.JpaRepository
 
-interface UserRepository : MongoRepository<User, String>
+interface UserRepository : JpaRepository<User, String>

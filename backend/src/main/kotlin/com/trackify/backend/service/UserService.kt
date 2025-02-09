@@ -3,7 +3,7 @@ package com.trackify.backend.service
 import com.trackify.backend.clients.spotify.SpotifyAuthApiClient
 import com.trackify.backend.clients.spotify.SpotifyPlaylistApiClient
 import com.trackify.backend.repository.UserRepository
-import com.trackify.backend.model.core.User
+import com.trackify.backend.model.User
 import com.trackify.backend.controller.dto.UserResponseDTO
 import com.trackify.backend.clients.spotify.SpotifyUserApiClient
 import com.trackify.backend.exception.BadRequestException
@@ -45,6 +45,10 @@ class UserService(
 
         val savedUser = userRepository.save(user)
         return UserResponseDTO(savedUser)
+    }
+
+    fun getAllUsers(): List<User> {
+        return userRepository.findAll()
     }
 
     fun getValidAccessToken(user: User): User {

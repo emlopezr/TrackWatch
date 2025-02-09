@@ -99,7 +99,7 @@ const HomePage = () => {
                 </h1>
                 <a href="/">
                   <img
-                    src={userData.images[0]?.url}
+                    src={userData.imageUrl}
                     alt='Imagen de perfil'
                     width={100}
                     className='profile__image'

@@ -1,8 +1,8 @@
 package com.trackify.backend.service
 
 import com.trackify.backend.clients.spotify.SpotifyPlaylistApiClient
-import com.trackify.backend.model.core.Track
-import com.trackify.backend.model.core.User
+import com.trackify.backend.model.Track
+import com.trackify.backend.model.User
 import com.trackify.backend.repository.UserRepository
 import org.springframework.stereotype.Service
 

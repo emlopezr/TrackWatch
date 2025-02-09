@@ -1,9 +1,9 @@
 package com.trackify.backend.clients.spotify
 
 import com.trackify.backend.exception.InternalServerErrorException
-import com.trackify.backend.model.core.Artist
-import com.trackify.backend.model.core.Track
-import com.trackify.backend.model.core.TrackImage
+import com.trackify.backend.model.Artist
+import com.trackify.backend.model.Track
+import com.trackify.backend.model.TrackImage
 import com.trackify.backend.utils.service.MetricService
 import com.trackify.backend.utils.values.ErrorCode
 import org.springframework.stereotype.Component

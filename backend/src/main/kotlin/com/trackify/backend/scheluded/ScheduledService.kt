@@ -1,8 +1,7 @@
 package com.trackify.backend.scheluded
 
-import com.trackify.backend.model.core.Track
-import com.trackify.backend.model.core.User
-import com.trackify.backend.repository.UserRepository
+import com.trackify.backend.model.Track
+import com.trackify.backend.model.User
 import com.trackify.backend.service.PlaylistService
 import com.trackify.backend.service.TrackService
 import com.trackify.backend.service.UserService
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service
 
 @Service
 class ScheduledService(
-    private val userRepository: UserRepository,
     private val trackService: TrackService,
     private val playlistService: PlaylistService,
     private val userService: UserService
@@ -22,7 +20,7 @@ class ScheduledService(
     private val log = LoggerFactory.getLogger(ScheduledService::class.java)
 
     fun runCoreTask() {
-        val users = userRepository.findAll()
+        val users = userService.getAllUsers()
         log.info("Running core task for ${users.size} users")
 
         users.forEach { user ->

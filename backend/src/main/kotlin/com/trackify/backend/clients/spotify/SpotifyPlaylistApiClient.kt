@@ -1,6 +1,6 @@
 package com.trackify.backend.clients.spotify
 
-import com.trackify.backend.model.core.User
+import com.trackify.backend.model.User
 import com.trackify.backend.utils.service.MetricService
 import org.springframework.stereotype.Component
 

@@ -3,7 +3,6 @@ package com.trackify.backend.controller
 import com.trackify.backend.controller.dto.UserResponseDTO
 import com.trackify.backend.service.UserService
 import com.trackify.backend.utils.values.Endpoints
-import com.trackify.backend.utils.values.Metrics
 import com.trackify.backend.utils.values.Headers
 import com.trackify.backend.utils.service.MetricService
 import org.springframework.http.HttpStatus

@@ -1,4 +1,4 @@
-package com.trackify.backend.model.core
+package com.trackify.backend.model
 
 import java.util.Date
 

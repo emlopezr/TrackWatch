@@ -1,6 +1,5 @@
 package com.trackify.backend.clients.spotify
 
-import com.trackify.backend.clients.spotify.dto.SpotifyImageDTO
 import com.trackify.backend.clients.spotify.dto.SpotifyUserDTO
 import com.trackify.backend.exception.*
 import com.trackify.backend.utils.values.ErrorCode
@@ -33,20 +32,11 @@ class SpotifyUserApiClient(metricService: MetricService): SpotifyApiClient(metri
         val explicitContent = response["explicit_content"] as Map<*, *>
         val imagesJson = response["images"] as List<*>
 
-        val images = imagesJson.map { image ->
-            val imageMap = image as Map<*, *>
-            SpotifyImageDTO(
-                url = imageMap["url"] as String,
-                height = imageMap["height"] as Int,
-                width = imageMap["width"] as Int
-            )
-        }
-
         return SpotifyUserDTO(
             id = response["id"] as String,
             email = response["email"] as String,
             name = response["display_name"] as String,
-            images = images,
+            imageUrl = imagesJson.firstOrNull()?.let { (it as Map<*, *>)["url"] as String } ?: "",
             blockedExplicitContent = explicitContent["filter_enabled"] as Boolean
         )
     }

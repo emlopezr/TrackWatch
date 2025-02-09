@@ -2,15 +2,13 @@ package com.trackify.backend.service
 
 import com.trackify.backend.exception.BadRequestException
 import com.trackify.backend.exception.NotFoundException
-import com.trackify.backend.model.core.Artist
+import com.trackify.backend.model.Artist
 import com.trackify.backend.repository.UserRepository
 import com.trackify.backend.utils.values.ErrorCode
 import org.springframework.stereotype.Service
 
 @Service
-class ArtistService(
-    private val userRepository: UserRepository
-) {
+class ArtistService(private val userRepository: UserRepository) {
 
     fun followArtist(userId: String, artist: Artist, accessToken: String): MutableList<Artist> {
         val user = userRepository.findById(userId)

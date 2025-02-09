@@ -4,7 +4,6 @@ import com.trackify.backend.exception.UnauthorizedException
 import com.trackify.backend.scheluded.ScheduledService
 import com.trackify.backend.utils.service.MetricService
 import com.trackify.backend.utils.values.Endpoints
-import com.trackify.backend.utils.values.Metrics
 import com.trackify.backend.utils.values.Headers
 import com.trackify.backend.utils.values.ErrorCode
 import org.springframework.http.ResponseEntity
