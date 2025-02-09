@@ -10,11 +10,11 @@ plugins {
 
 group = "com.trackify"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_21
+java.sourceCompatibility = JavaVersion.VERSION_17
 
 java {
 	toolchain {
-		languageVersion.set(JavaLanguageVersion.of(21))
+		languageVersion.set(JavaLanguageVersion.of(17))
 		vendor.set(JvmVendorSpec.AMAZON)
 	}
 }
@@ -41,7 +41,7 @@ dependencies {
 kotlin {
 	compilerOptions {
 		freeCompilerArgs.add("-Xjsr305=strict")
-		jvmTarget.set(JvmTarget.JVM_21)
+		jvmTarget.set(JvmTarget.JVM_17)
 	}
 }
 
