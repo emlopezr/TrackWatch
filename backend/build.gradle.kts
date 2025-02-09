@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.gradle.jvm.toolchain.JavaLanguageVersion
 
 plugins {
 	kotlin("jvm") version "1.9.25"
@@ -15,7 +16,6 @@ java.sourceCompatibility = JavaVersion.VERSION_17
 java {
 	toolchain {
 		languageVersion.set(JavaLanguageVersion.of(17))
-		vendor.set(JvmVendorSpec.AMAZON)
 	}
 }
 
