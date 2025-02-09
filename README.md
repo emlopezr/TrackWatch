@@ -22,7 +22,6 @@ Trackify es una aplicación que ayuda a los usuarios a descubrir y agregar nueva
 
 - **Funcionalidad:** Notificaciones Email en servicio Core
 
-- **Optimizaciones:** Migrar la DB de MongoDB a PostgreSQL
 - **Optimizaciones:** Paralelizar la tarea core (Por usuario)
 
 ### Frontend
@@ -34,8 +33,7 @@ Trackify es una aplicación que ayuda a los usuarios a descubrir y agregar nueva
 
 ### Deploy
 
-- Desplegar en la nube (Investigar)
-- ¿Cómo centralizar las métricas?
+- Desplegar el Frontend, Prometheus y Grafana
 - Monitorear costos y proteger la app con RL
 - Monitorear si no se rompe el RL de Spotify
 
