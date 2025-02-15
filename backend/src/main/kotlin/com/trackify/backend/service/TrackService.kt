@@ -5,6 +5,7 @@ import com.trackify.backend.model.Artist
 import com.trackify.backend.model.Track
 import com.trackify.backend.model.User
 import com.trackify.backend.utils.values.Constants
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.Calendar
 import java.util.Date
@@ -12,16 +13,20 @@ import java.util.Date
 @Service
 class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
 
+    val log = LoggerFactory.getLogger(TrackService::class.java)
+
     val daysLimit = Constants.DAYS_LIMIT
 
     fun getArtistNewTracks(artist: Artist, accessToken: String, pagesToFetch: Int): List<Track> {
         val newTracks = mutableListOf<Track>()
 
         for (page in 0 until pagesToFetch) {
+            log.info("Fetching page $page of new tracks for artist ${artist.name}")
             val pageNewTracks = spotifyArtistApiClient.getArtistNewTracks(artist, accessToken, daysLimit, page)
             newTracks.addAll(pageNewTracks)
         }
 
+        log.info("Fetched ${newTracks.size} new tracks for artist ${artist.name}")
         return newTracks
     }
 
@@ -49,6 +54,7 @@ class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
             return selectedTrack
         }
 
+        log.info("Track ${track.name} by ${track.artists.first().name} was filtered out")
         return null
     }
 
