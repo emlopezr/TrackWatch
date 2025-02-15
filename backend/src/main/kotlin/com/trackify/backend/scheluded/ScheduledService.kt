@@ -7,7 +7,6 @@ import com.trackify.backend.service.TrackService
 import com.trackify.backend.service.UserService
 import com.trackify.backend.utils.values.Constants
 import org.slf4j.LoggerFactory
-import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 
 @Service
@@ -34,7 +33,6 @@ class ScheduledService(
         log.info("Core task finished")
     }
 
-    @Async
     fun runCoreTask(user: User) {
         val userWithValidToken = userService.getValidAccessToken(user)
         val accessToken = userWithValidToken.auth.current.accessToken
