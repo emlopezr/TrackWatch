@@ -54,7 +54,6 @@ class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
             return selectedTrack
         }
 
-        log.info("Track ${track.name} by ${track.artists.first().name} was filtered out")
         return null
     }
 
