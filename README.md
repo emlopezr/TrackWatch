@@ -1,4 +1,4 @@
-# Trackify
+# 🎶 Trackify
 
 ![Spotify](https://img.shields.io/badge/Spotify-1ED760?style=for-the-badge&logo=spotify&logoColor=white)
 ![Kotlin](https://img.shields.io/badge/Kotlin-B125EA?style=for-the-badge&logo=kotlin&logoColor=white)
@@ -8,8 +8,9 @@
 ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=000000)
 ![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white)
 ![Grafana](https://img.shields.io/badge/Grafana-F46800?style=for-the-badge&logo=grafana&logoColor=white)
+![Railway](https://img.shields.io/badge/Railway-131415?style=for-the-badge&logo=railway&logoColor=white)
 
-Trackify es una aplicación que ayuda a los usuarios a descubrir y agregar nuevas canciones de artistas específicos a una lista de reproducción de Spotify.
+Automatically track your favorite artists' new releases on Spotify and seamlessly add them to your personalized playlist. Music updates made simple, every day.
 
 ## To-Do
 
