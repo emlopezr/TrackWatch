@@ -14,35 +14,30 @@ Trackify es una aplicación que ayuda a los usuarios a descubrir y agregar nueva
 
 ### Backend
 
-- **Métricas:** Responses de Spotify
-- **Métricas:** En casos de Excepciones
-- **Métricas:** En Responses Controllers
-- **Métricas:** De tiempos de ejecución
+- **Métricas:** Responses Spotify y Controllers
+- **Métricas:** Tiempos de ejecución (Annotation)
 - **Logs**: Implementar Loki para logs en Grafana
-
-- **Funcionalidad:** Notificaciones Email en servicio Core
-
-- **Optimizaciones:** Paralelizar la tarea core (Por usuario)
+- **Optimizaciones:** Paralelizar tarea core (Por usuario)
 
 ### Frontend
 
-- Más botones para la paginación
+- Más botones para la paginación (Inicio - Final)
+- Arreglar el Responsive Design
 - Poder cerrar la sesión del usuario
-- **Mejoras:** Diseño de la UI de la App
-- **Optimizaciones:** Paralelizar y reducir las API Calls
+- Spinners de carga y deshabilitar botones
+- **Métricas:** Si es posible, conectar el Frontend a Prometheus
+- **Métricas:** API Calls y Responses Spotify
+- **Optimizaciones:** Paralelizar y a poder ser, reducir API Calls hechas
 
-### Deploy
+### Seguridad
 
-- Desplegar el Frontend, Prometheus y Grafana
-- Monitorear costos y proteger la app con RL
-- Monitorear si no se rompe el RL de Spotify
+- Proteger la app (Front y Backend) con un Rate Limit
+- Verificar si Prometheus es público y como protegerlo
 
-### Funcionalidades v2
+### Versión 2
 
-- Historial de canciones agregadas
 - Poder organizar los seguidos del usuario
 - Poder generar una playlist de X artista
-
-### App
-
-- Implementar React native para tener la app móvil
+- Hacer una landing Page de Frontend
+- Mejoras en el diseño del Frontend
+- Implementar funcionalidades Pro (Límites)
