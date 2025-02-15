@@ -6,7 +6,7 @@ export const SPOTIFY_REDIRECT_URI = `${window.location.origin}/callback`;
 // Trackify Backend
 export const TRACKIFY_API_BASE_URL = import.meta.env.VITE_TRACKIFY_API_BASE_URL.startsWith('http')
   ? import.meta.env.VITE_TRACKIFY_API_BASE_URL
-  : `http://${import.meta.env.VITE_TRACKIFY_API_BASE_URL}`;
+  : `https://${import.meta.env.VITE_TRACKIFY_API_BASE_URL}`;
 
 // Spotify API
 export const SPOTIFY_BASE_URL = 'https://accounts.spotify.com';
