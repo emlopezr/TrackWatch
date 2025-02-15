@@ -2,6 +2,7 @@ package com.trackify.backend.scheluded
 
 import com.trackify.backend.model.Track
 import com.trackify.backend.model.User
+import com.trackify.backend.service.EmailService
 import com.trackify.backend.service.PlaylistService
 import com.trackify.backend.service.TrackService
 import com.trackify.backend.service.UserService
@@ -13,7 +14,8 @@ import org.springframework.stereotype.Service
 class ScheduledService(
     private val trackService: TrackService,
     private val playlistService: PlaylistService,
-    private val userService: UserService
+    private val userService: UserService,
+    private val emailService: EmailService
 ) {
 
     private val log = LoggerFactory.getLogger(ScheduledService::class.java)
@@ -49,6 +51,8 @@ class ScheduledService(
         val userSortedTracks = trackService.sortTracks(userAddedTracks)
 
         playlistService.checkPlaylist(userWithValidToken)
-        playlistService.addTracksToPlaylist(userWithValidToken, userSortedTracks)
+        val finalAddedTracks = playlistService.addTracksToPlaylist(userWithValidToken, userSortedTracks)
+
+        emailService.sendEmail(userWithValidToken, finalAddedTracks.toList())
     }
 }
