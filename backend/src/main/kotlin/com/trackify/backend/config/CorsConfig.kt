@@ -18,7 +18,15 @@ class CorsConfig {
             "http://localhost:5173",
             "https://trackify.emlopezr.com"
         )
-        config.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
+
+        config.allowedMethods = listOf(
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE",
+            "OPTIONS"
+        )
+
         config.allowedHeaders = listOf("*")
         config.allowCredentials = true
 
