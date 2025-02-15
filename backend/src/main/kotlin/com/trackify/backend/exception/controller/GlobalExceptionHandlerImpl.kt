@@ -2,6 +2,8 @@ package com.trackify.backend.exception.controller
 
 import com.trackify.backend.exception.*
 import com.trackify.backend.exception.controller.dto.ExceptionResponseDTO
+import com.trackify.backend.utils.service.MetricService
+import com.trackify.backend.utils.values.Metrics
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -9,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
-class GlobalExceptionHandler {
+class GlobalExceptionHandler(private val metricService: MetricService) {
 
     @ExceptionHandler(BadRequestException::class)
     fun handleBadRequestException(exception: BadRequestException): ResponseEntity<ExceptionResponseDTO> {
@@ -45,6 +47,7 @@ class GlobalExceptionHandler {
             details = exception.message ?: ""
         )
 
+        sendMetricException(response)
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response)
     }
 
@@ -56,6 +59,15 @@ class GlobalExceptionHandler {
             details = exception.details
         )
 
+        sendMetricException(response)
         return ResponseEntity.status(httpStatus).body(response)
+    }
+
+    protected fun sendMetricException(exception: ExceptionResponseDTO) {
+        metricService.incrementCounter(
+            Metrics.EXCEPTION,
+            "status", exception.status.toString(),
+            "code", exception.code
+        )
     }
 }
