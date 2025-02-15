@@ -46,7 +46,6 @@ class ScheduledService(
             userAddedTracks.addAll(tracksToAdd)
         }
 
-        log.info("User ${user.id}: ${userAddedTracks.size} tracks will be added to the playlist")
         val userSortedTracks = trackService.sortTracks(userAddedTracks)
 
         playlistService.checkPlaylist(userWithValidToken)

@@ -21,12 +21,10 @@ class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
         val newTracks = mutableListOf<Track>()
 
         for (page in 0 until pagesToFetch) {
-            log.info("Fetching page $page of new tracks for artist ${artist.name}")
             val pageNewTracks = spotifyArtistApiClient.getArtistNewTracks(artist, accessToken, daysLimit, page)
             newTracks.addAll(pageNewTracks)
         }
 
-        log.info("Fetched ${newTracks.size} new tracks for artist ${artist.name}")
         return newTracks
     }
 
