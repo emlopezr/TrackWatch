@@ -15,6 +15,7 @@ const generateState = (length: number): string => {
 export const getSpotifyAuthUrl = (): string => {
   const scope = SPOTIFY_SCOPES.join(' ');
 
+  console.log('redirect_uri', SPOTIFY_REDIRECT_URI);
   const params = new URLSearchParams({
     client_id: SPOTIFY_CLIENT_ID,
     response_type: 'code',
