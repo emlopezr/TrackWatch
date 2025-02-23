@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service
 @Service
 class MetricService(private val meterRegistry: MeterRegistry) {
 
-    fun incrementCounter(counterName: String, vararg tags: String) {
-        val endpointCounter = meterRegistry.counter(counterName, *tags)
-        endpointCounter.increment()
+    fun incrementCounter(metricName: String, vararg tags: String) {
+        val summary = meterRegistry.summary(metricName, *tags)
+        summary.record(1.0)
     }
 
 }
