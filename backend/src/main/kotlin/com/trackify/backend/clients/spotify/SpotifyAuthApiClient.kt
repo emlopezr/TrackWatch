@@ -32,7 +32,7 @@ class SpotifyAuthApiClient(metricService: MetricService): SpotifyApiClient(metri
                 .block() ?: throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API", "Response is null")
             return mapToSpotifyTokenDTO(response, refreshToken)
         } catch (e: Exception) {
-            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API", e.message ?: "")
+            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API", e.toString())
         }
     }
 
