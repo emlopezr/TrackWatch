@@ -13,11 +13,7 @@ import java.util.Date
 @Service
 class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
 
-    val log = LoggerFactory.getLogger(TrackService::class.java)
-
-    val daysLimit = Constants.DAYS_LIMIT
-
-    fun getArtistNewTracks(artist: Artist, accessToken: String, pagesToFetch: Int): List<Track> {
+    fun getArtistNewTracks(artist: Artist, accessToken: String, pagesToFetch: Int, daysLimit: Int = Constants.DAYS_LIMIT): List<Track> {
         val newTracks = mutableListOf<Track>()
 
         for (page in 0 until pagesToFetch) {
@@ -28,7 +24,7 @@ class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
         return newTracks
     }
 
-    fun filterTrack(track: Track, user: User, artist: Artist, tracksToAdd: MutableSet<Track>): Track? {
+    fun filterTrack(track: Track, user: User, artist: Artist, tracksToAdd: MutableSet<Track>, daysLimit: Int = Constants.DAYS_LIMIT): Track? {
         val today = Date()
 
         val calendar = Calendar.getInstance()

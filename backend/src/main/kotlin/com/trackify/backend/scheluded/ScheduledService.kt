@@ -20,13 +20,13 @@ class ScheduledService(
 
     private val log = LoggerFactory.getLogger(ScheduledService::class.java)
 
-    fun runCoreTask() {
+    fun runCoreTask(daysLimit: Int = Constants.DAYS_LIMIT) {
         val users = userService.getAllUsers()
         log.info("Running core task for ${users.size} users")
 
         users.forEach { user ->
             try {
-                runCoreTask(user)
+                runCoreTask(user, daysLimit)
             } catch (e: Exception) {
                 log.error("Error while running core task for user ${user.id}", e)
             }
@@ -35,7 +35,7 @@ class ScheduledService(
         log.info("Core task finished")
     }
 
-    fun runCoreTask(user: User) {
+    fun runCoreTask(user: User, daysLimit: Int = Constants.DAYS_LIMIT) {
         val userWithValidToken = userService.getValidAccessToken(user)
         val accessToken = userWithValidToken.auth.current.accessToken
 
@@ -43,8 +43,8 @@ class ScheduledService(
 
         userWithValidToken.followedArtists.forEach { artist ->
             val tracksToAdd = mutableSetOf<Track>()
-            val artistNewTracks = trackService.getArtistNewTracks(artist, accessToken, Constants.PAGES_TO_FETCH)
-            artistNewTracks.forEach { track -> trackService.filterTrack(track, userWithValidToken, artist, userAddedTracks) }
+            val artistNewTracks = trackService.getArtistNewTracks(artist, accessToken, Constants.PAGES_TO_FETCH, daysLimit)
+            artistNewTracks.forEach { track -> trackService.filterTrack(track, userWithValidToken, artist, userAddedTracks, daysLimit) }
             userAddedTracks.addAll(tracksToAdd)
         }
 

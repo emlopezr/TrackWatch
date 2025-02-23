@@ -3,6 +3,7 @@ package com.trackify.backend.controller
 import com.trackify.backend.exception.UnauthorizedException
 import com.trackify.backend.scheluded.ScheduledService
 import com.trackify.backend.utils.service.MetricService
+import com.trackify.backend.utils.values.Constants
 import com.trackify.backend.utils.values.Endpoints
 import com.trackify.backend.utils.values.Headers
 import com.trackify.backend.utils.values.ErrorCode
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestHeader
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -26,11 +28,12 @@ class UtilsController(
 
     @PostMapping(Endpoints.RUN_CORE_TASK)
     fun run(
-        @RequestHeader(Headers.ADMIN_KEY) adminKey: String
+        @RequestHeader(Headers.ADMIN_KEY) adminKey: String,
+        @RequestParam("daysLimit", required = false) daysLimit: Int?
     ): ResponseEntity<String> {
         sendMetricRequest(Endpoints.RUN_CORE_TASK, "POST")
         checkAdminKey(adminKey)
-        scheduledService.runCoreTask()
+        scheduledService.runCoreTask(daysLimit ?: Constants.DAYS_LIMIT)
         return ResponseEntity.ok("Task executed")
     }
 
