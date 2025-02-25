@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service
 @Service
 class Scheduler(private val scheduledService: ScheduledService) {
 
-    @Scheduled(cron = "0 0 22 * * *")
+    @Scheduled(cron = "0 0 */4 * * *")
     fun runCoreTaskScheduled() {
         scheduledService.runCoreTask()
     }
