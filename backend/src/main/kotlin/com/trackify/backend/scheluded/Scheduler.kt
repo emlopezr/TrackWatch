@@ -1,19 +1,16 @@
 package com.trackify.backend.scheluded
 
-import com.trackify.backend.controller.UtilsController
-import com.trackify.backend.utils.values.Constants
-import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.transaction.annotation.Transactional
 
 @Service
-class Scheduler(private val utilsController: UtilsController) {
+class Scheduler(private val scheduledService: ScheduledService) {
 
-    @Scheduled(cron = "0 0 */4 * * *")
+    @Scheduled(cron = "0 0 */1 * * *")
+    @Transactional
     fun runCoreTaskScheduled() {
-        utilsController.run(
-            System.getenv("ADMIN_KEY"),
-            Constants.DAYS_LIMIT
-        )
+        scheduledService.runCoreTask()
     }
 
 }
