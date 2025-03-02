@@ -10,7 +10,7 @@ class Scheduler(private val scheduledService: ScheduledService) {
     @Scheduled(cron = "0 */15 * * * *")
     @Transactional
     fun runCoreTaskScheduled() {
-        scheduledService.runCoreTask()
+        scheduledService.runCoreTask(10)
     }
 
 }
