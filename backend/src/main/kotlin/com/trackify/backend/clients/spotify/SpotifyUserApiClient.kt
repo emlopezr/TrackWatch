@@ -24,7 +24,7 @@ class SpotifyUserApiClient(metricService: MetricService): SpotifyApiClient(metri
         } catch (e: WebClientResponseException) {
             throw handleSpotifyApiException(e)
         } catch (e: Exception) {
-            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API", e.message ?: "")
+            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API", e.toString())
         }
     }
 

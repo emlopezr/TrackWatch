@@ -6,6 +6,7 @@ import com.trackify.backend.model.Track
 import com.trackify.backend.model.TrackImage
 import com.trackify.backend.utils.service.MetricService
 import com.trackify.backend.utils.values.ErrorCode
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClientResponseException
 import java.text.SimpleDateFormat
@@ -16,7 +17,44 @@ import java.util.Locale
 @Component
 class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(metricService) {
 
-    fun getArtistNewTracks(artist: Artist, accessToken: String, daysLimit: Int, page: Int): List<Track> {
+    private val log = LoggerFactory.getLogger(SpotifyArtistApiClient::class.java)
+
+    fun getArtistNewTracksWithRetries(artist: Artist, accessToken: String, daysLimit: Int, page: Int, maxAttempts: Int = 3): List<Track> {
+        var lastException: Exception? = null
+
+        for (attempt in 1..maxAttempts) {
+            try {
+                return getArtistNewTracks(artist, accessToken, daysLimit, page)
+            } catch (e: Exception) {
+                lastException = e
+                log.warn("Spotify API call failed (attempt $attempt/$maxAttempts): $e")
+
+                if (attempt < maxAttempts) {
+                    val waitTimeMs = 1000L * attempt // Exponential backoff
+                    log.info("Retrying in ${waitTimeMs}ms")
+
+                    try {
+                        Thread.sleep(waitTimeMs)
+                    } catch (ie: InterruptedException) {
+                        Thread.currentThread().interrupt()
+                        throw ie
+                    }
+                }
+            }
+        }
+
+        if (lastException is WebClientResponseException) {
+            throw RuntimeException("Error while calling Spotify API after $maxAttempts attempts: ${lastException.message}")
+        }
+
+        throw InternalServerErrorException(
+            ErrorCode.UNHANDLED_EXCEPTION,
+            "Error while calling Spotify API after $maxAttempts attempts",
+            lastException?.toString() ?: ""
+        )
+    }
+
+    private fun getArtistNewTracks(artist: Artist, accessToken: String, daysLimit: Int, page: Int): List<Track> {
         val queryParams = buildQueryParams(artist.name, daysLimit, page)
 
         try {
@@ -31,7 +69,7 @@ class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(met
         } catch (e: WebClientResponseException) {
             throw RuntimeException("Error while calling Spotify API: ${e.message}")
         } catch (e: Exception) {
-            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API", e.message ?: "")
+            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API", e.toString())
         }
     }
 

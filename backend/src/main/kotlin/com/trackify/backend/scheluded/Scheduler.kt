@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class Scheduler(private val scheduledService: ScheduledService) {
 
-    @Scheduled(cron = "0 0 */1 * * *")
+    @Scheduled(cron = "0 */15 * * * *")
     @Transactional
     fun runCoreTaskScheduled() {
         scheduledService.runCoreTask()
