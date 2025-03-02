@@ -16,10 +16,10 @@ Automatically track your favorite artists' new releases on Spotify and seamlessl
 - Arreglar el Responsive Design
 - Poder cerrar la sesión del usuario
 - Spinners de carga y deshabilitar botones
-- **Métricas:** Si es posible, conectar el Frontend a Prometheus
-- **Métricas:** API Calls y Responses de Spotify en el Frontend
-- **Optimizaciones:** Paralelizar API Calls hechas en Frontend
-- *Optimizaciones:** Paralelizar API Calls hechas en Backend
+
+- Recopilar métricas del Frontend (Conectar a Prometheus)
+- Paralelizar API Calls hechas en Frontend (¿Es posible?)
+- Paralelizar API Calls hechas en Backend (Tarea Core)
 - Proteger la app (Front y Backend) con un Rate Limit
 - Verificar si Prometheus es público y como protegerlo
 
