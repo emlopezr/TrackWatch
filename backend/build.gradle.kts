@@ -9,7 +9,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.7"
 }
 
-group = "com.trackify"
+group = "com.trackwatch"
 version = "1.0.0"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
