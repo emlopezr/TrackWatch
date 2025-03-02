@@ -16,7 +16,7 @@ class CorsConfig {
 
         config.allowedOrigins = listOf(
             "http://localhost:5173",
-            "https://trackify.emlopezr.com"
+            "https://trackwatch.emlopezr.com"
         )
 
         config.allowedMethods = listOf(

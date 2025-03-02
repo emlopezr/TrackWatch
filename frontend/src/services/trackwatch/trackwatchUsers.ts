@@ -1,16 +1,16 @@
-import { TRACKIFY_API_BASE_URL } from '../../common/constants';
-import { TrackifyUser } from '../../types/trackify/TrackifyUser';
+import { TRACKWATCH_API_BASE_URL } from '../../common/constants';
+import { TrackWatchUser } from '../../types/trackwatch/TrackWatchUser';
 import { refreshAccessToken } from '../spotify/spotifyToken';
 
 
-export const registerTrackifyUser = async (
+export const registerTrackWatchUser = async (
   setAccessToken: (token: string) => void,
-  setUserData: (data: TrackifyUser) => void,
+  setUserData: (data: TrackWatchUser) => void,
   retryNumber: number = 0
 ) => {
   try {
-    console.log('{TrackifyAPI] Registering user');
-    const response = await fetch(`${TRACKIFY_API_BASE_URL}/users/register`, {
+    console.log('{TrackWatchAPI] Registering user');
+    const response = await fetch(`${TRACKWATCH_API_BASE_URL}/users/register`, {
       method: 'POST',
       headers: {
         'X-Spotify-Access-Token': localStorage.getItem('spotify_access_token') || '',
@@ -33,7 +33,7 @@ export const registerTrackifyUser = async (
 
           // Retry the request
           if (retryNumber < 1) {
-            registerTrackifyUser(setAccessToken, setUserData, retryNumber + 1);
+            registerTrackWatchUser(setAccessToken, setUserData, retryNumber + 1);
             return;
           }
         }
@@ -45,7 +45,7 @@ export const registerTrackifyUser = async (
     }
 
     if (response.status == 400 && data.code === 'USER_ALREADY_EXISTS') {
-      const registeredUser = await getTrackifyUserData(setAccessToken, setUserData);
+      const registeredUser = await getTrackWatchUserData(setAccessToken, setUserData);
       return registeredUser;
     }
 
@@ -63,20 +63,20 @@ export const registerTrackifyUser = async (
   }
 }
 
-export const getTrackifyUserData = async (
+export const getTrackWatchUserData = async (
   setAccessToken: (token: string) => void,
-  setUserData: (data: TrackifyUser) => void
+  setUserData: (data: TrackWatchUser) => void
 ) => {
   try {
-    let url = `${TRACKIFY_API_BASE_URL}/users/me`;
+    let url = `${TRACKWATCH_API_BASE_URL}/users/me`;
 
-    const userId = localStorage.getItem('trackify_user_id');
+    const userId = localStorage.getItem('trackwatch_user_id');
     if (userId) {
       // Use query param userId if available
       url = `${url}?userId=${userId}`;
     }
 
-    console.log('[TrackifyAPI] Fetching user data');
+    console.log('[TrackWatchAPI] Fetching user data');
     const response = await fetch(url, {
       headers: {
         'X-Spotify-Access-Token': localStorage.getItem('spotify_access_token') || '',
@@ -107,7 +107,7 @@ export const getTrackifyUserData = async (
 
     const data = await response.json();
     setUserData(data);
-    localStorage.setItem('trackify_user_id', data.id);
+    localStorage.setItem('trackwatch_user_id', data.id);
 
     return data;
   } catch (error) {

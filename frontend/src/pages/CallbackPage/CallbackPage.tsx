@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getAccessToken } from '../../services/spotify/spotifyToken';
-import { registerTrackifyUser } from '../../services/trackify/trackifyUser';
+import { registerTrackWatchUser } from '../../services/trackwatch/trackwatchUsers';
 import { useUser } from '../../context/useUser';
 
 const CallbackPage = () => {
@@ -39,7 +39,7 @@ const CallbackPage = () => {
         setAccessToken(token);
         localStorage.removeItem('spotify_callback_code');
 
-        const userData = await registerTrackifyUser(setAccessToken, setUserData);
+        const userData = await registerTrackWatchUser(setAccessToken, setUserData);
         setUserData(userData);
         navigate('/');
 

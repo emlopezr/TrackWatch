@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { SpotifyArtistResponse } from '../../types/spotify/SpotifyArtistResponse';
 import Artist from '../Artist/Artist';
 import './FollowedArtists.css';
-import { TrackifyArtist } from '../../types/trackify/TrackifyArtist';
+import { TrackWatchArtist } from '../../types/trackwatch/TrackWatchArtist';
 import { useUser } from '../../context/useUser';
-import { followArtist, unfollowArtist } from '../../services/trackify/trackifyArtists';
+import { followArtist, unfollowArtist } from '../../services/trackwatch/trackwatchArtists';
 import left from '../../assets/png/left.png';
 import right from '../../assets/png/right.png';
 import Spinner from '../Spinner/Spinner';
@@ -12,7 +12,7 @@ import { batchGetArtists } from '../../services/spotify/spotifyArtists';
 
 interface FollowedArtistsProps {
   accessToken: string;
-  followedArtists: TrackifyArtist[];
+  followedArtists: TrackWatchArtist[];
 }
 
 const FollowedArtists = ({ accessToken, followedArtists }: FollowedArtistsProps) => {

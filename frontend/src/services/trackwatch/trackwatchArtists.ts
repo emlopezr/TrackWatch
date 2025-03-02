@@ -1,12 +1,12 @@
-import { TrackifyArtist } from "../../types/trackify/TrackifyArtist";
-import { TRACKIFY_API_BASE_URL } from "../../common/constants";
-import { TrackifyUser } from "../../types/trackify/TrackifyUser";
+import { TrackWatchArtist } from "../../types/trackwatch/TrackWatchArtist";
+import { TRACKWATCH_API_BASE_URL } from "../../common/constants";
+import { TrackWatchUser } from "../../types/trackwatch/TrackWatchUser";
 
-export const followArtist = async (userData: TrackifyUser, setUserData: (value: TrackifyUser) => void, artist: TrackifyArtist) => {
+export const followArtist = async (userData: TrackWatchUser, setUserData: (value: TrackWatchUser) => void, artist: TrackWatchArtist) => {
   try {
-    console.log("[TrackifyAPI] Following artist", artist.id);
+    console.log("[TrackWatchAPI] Following artist", artist.id);
     const response = await fetch(
-      `${TRACKIFY_API_BASE_URL}/artists/follow?userId=${userData.id}`,
+      `${TRACKWATCH_API_BASE_URL}/artists/follow?userId=${userData.id}`,
       {
         method: "POST",
         headers: {
@@ -34,11 +34,11 @@ export const followArtist = async (userData: TrackifyUser, setUserData: (value: 
   }
 };
 
-export const unfollowArtist = async (artistId: string, userData: TrackifyUser, setUserData: (value: TrackifyUser) => void) => {
+export const unfollowArtist = async (artistId: string, userData: TrackWatchUser, setUserData: (value: TrackWatchUser) => void) => {
   try {
-    console.log("[TrackifyAPI] Unfollowing artist", artistId);
+    console.log("[TrackWatchAPI] Unfollowing artist", artistId);
     const response = await fetch(
-      `${TRACKIFY_API_BASE_URL}/artists/unfollow?userId=${userData.id}&artistId=${artistId}`,
+      `${TRACKWATCH_API_BASE_URL}/artists/unfollow?userId=${userData.id}&artistId=${artistId}`,
       {
         method: "POST",
         headers: {

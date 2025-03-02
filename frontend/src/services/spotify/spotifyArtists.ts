@@ -1,6 +1,6 @@
 import { SPOTIFY_API_URL } from '../../common/constants';
 import { SpotifyArtistResponse } from "../../types/spotify/SpotifyArtistResponse";
-import { TrackifyArtist } from '../../types/trackify/TrackifyArtist';
+import { TrackWatchArtist } from '../../types/trackwatch/TrackWatchArtist';
 
 const artistCache: { [artistId: string]: SpotifyArtistResponse } = {};
 
@@ -14,7 +14,7 @@ const chunkArray = <T>(array: T[], chunkSize: number): T[][] => {
 
 export const batchGetArtists = async (
   accessToken: string,
-  artists: TrackifyArtist[]
+  artists: TrackWatchArtist[]
 ): Promise<SpotifyArtistResponse[]> => {
   try {
     const allArtistIds = artists.map(artist => artist.id);

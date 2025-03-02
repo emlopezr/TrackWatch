@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useUser } from '../../context/useUser';
 import { getSpotifyAuthUrl } from '../../services/spotify/spotifyAuth';
 import { refreshAccessToken, verifyToken } from '../../services/spotify/spotifyToken';
-import { getTrackifyUserData } from '../../services/trackify/trackifyUser';
+import { getTrackWatchUserData } from '../../services/trackwatch/trackwatchUsers';
 import FollowedArtists from '../../components/FollowedArtists/FollowedArtists';
 import spotifyLogo from '../../assets/svg/spotify.svg';
 import SearchBar from '../../components/SearchBar/SearchBar';
@@ -65,7 +65,7 @@ const HomePage = () => {
 
   useEffect(() => {
     if (accessToken && !userData) {
-      getTrackifyUserData(setAccessToken, setUserData);
+      getTrackWatchUserData(setAccessToken, setUserData);
     }
   }, [accessToken, setUserData, userData]);
 
@@ -76,7 +76,7 @@ const HomePage = () => {
   if (!accessToken) {
     return (
       <div className='login'>
-        <h1 className='login__title'>Trackify</h1>
+        <h1 className='login__title'>TrackWatch</h1>
         <a href={getSpotifyAuthUrl()} className='login__link'>
           <button className='login__button'>
             <img src={spotifyLogo} alt='Spotify Logo' className='login__logo' />
@@ -95,7 +95,7 @@ const HomePage = () => {
             <div className="header">
               <div className='profile'>
                 <h1 className='profile__title'>
-                  Bienvenido a Trackify, {userData.name}!
+                  Bienvenido a TrackWatch, {userData.name}!
                 </h1>
                 <a href="/">
                   <img

@@ -1,9 +1,9 @@
 import { createContext } from 'react';
-import { TrackifyUser } from '../types/trackify/TrackifyUser';
+import { TrackWatchUser } from '../types/trackwatch/TrackWatchUser';
 
 type UserContextType = {
-  userData: TrackifyUser | null;
-  setUserData: (user: TrackifyUser) => void;
+  userData: TrackWatchUser | null;
+  setUserData: (user: TrackWatchUser) => void;
 };
 
 export const UserContext = createContext<UserContextType | undefined>(undefined);

@@ -3,10 +3,9 @@ export const SPOTIFY_CLIENT_ID  = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
 export const SPOTIFY_CLIENT_SECRET = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
 export const SPOTIFY_REDIRECT_URI = `${window.location.origin}/callback`;
 
-// Trackify Backend
-export const TRACKIFY_API_BASE_URL = import.meta.env.VITE_TRACKIFY_API_BASE_URL.startsWith('http')
-  ? import.meta.env.VITE_TRACKIFY_API_BASE_URL
-  : `https://${import.meta.env.VITE_TRACKIFY_API_BASE_URL}`;
+export const TRACKWATCH_API_BASE_URL = import.meta.env.VITE_TRACKWATCH_API_BASE_URL?.startsWith('http')
+  ? import.meta.env.VITE_TRACKWATCH_API_BASE_URL
+  : `https://${import.meta.env.VITE_TRACKWATCH_API_BASE_URL}`;
 
 // Spotify API
 export const SPOTIFY_BASE_URL = 'https://accounts.spotify.com';

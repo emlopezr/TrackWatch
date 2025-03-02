@@ -2,7 +2,7 @@ import { SpotifyArtistResponse } from "../../types/spotify/SpotifyArtistResponse
 import Artist from "../Artist/Artist";
 import './SearchResults.css';
 import { useUser } from "../../context/useUser";
-import { followArtist, unfollowArtist } from "../../services/trackify/trackifyArtists";
+import { followArtist, unfollowArtist } from "../../services/trackwatch/trackwatchArtists";
 import Spinner from "../Spinner/Spinner";
 import { useEffect, useState } from "react";
 import left from '../../assets/png/left.png';
