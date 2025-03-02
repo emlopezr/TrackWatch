@@ -1,4 +1,4 @@
-# 🎶 Trackify
+# 🎶 TrackWatch
 
 ![Spotify](https://img.shields.io/badge/Spotify-1ED760?style=for-the-badge&logo=spotify&logoColor=white)
 ![Kotlin](https://img.shields.io/badge/Kotlin-B125EA?style=for-the-badge&logo=kotlin&logoColor=white)
@@ -12,27 +12,14 @@
 
 Automatically track your favorite artists' new releases on Spotify and seamlessly add them to your personalized playlist. Music updates made simple, every day.
 
-## To-Do
-
-### Backend
-
-- **Métricas:** Responses Spotify y Controllers
-- **Métricas:** Tiempos de ejecución (Annotation)
-- **Logs**: Implementar Loki para logs en Grafana
-- **Optimizaciones:** Paralelizar tarea core (Por usuario)
-
-### Frontend
-
 - Más botones para la paginación (Inicio - Final)
 - Arreglar el Responsive Design
 - Poder cerrar la sesión del usuario
 - Spinners de carga y deshabilitar botones
 - **Métricas:** Si es posible, conectar el Frontend a Prometheus
-- **Métricas:** API Calls y Responses Spotify
-- **Optimizaciones:** Paralelizar y a poder ser, reducir API Calls hechas
-
-### Seguridad
-
+- **Métricas:** API Calls y Responses de Spotify en el Frontend
+- **Optimizaciones:** Paralelizar API Calls hechas en Frontend
+- *Optimizaciones:** Paralelizar API Calls hechas en Backend
 - Proteger la app (Front y Backend) con un Rate Limit
 - Verificar si Prometheus es público y como protegerlo
 
