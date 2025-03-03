@@ -4,12 +4,15 @@ import com.trackwatch.backend.clients.spotify.dto.SpotifyUserDTO
 import com.trackwatch.backend.exception.*
 import com.trackwatch.backend.utils.values.ErrorCode
 import com.trackwatch.backend.utils.service.MetricService
+import org.slf4j.LoggerFactory
 
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClientResponseException
 
 @Component
 class SpotifyUserApiClient(metricService: MetricService): SpotifyApiClient(metricService) {
+
+    private val log = LoggerFactory.getLogger(SpotifyUserApiClient::class.java)
 
     fun getUser(accessToken: String): SpotifyUserDTO {
         try {
@@ -42,6 +45,8 @@ class SpotifyUserApiClient(metricService: MetricService): SpotifyApiClient(metri
     }
 
     private fun handleSpotifyApiException(e: WebClientResponseException): Exception {
+        log.error(e.toString())
+
         return when (e.statusCode.value()) {
             401 -> UnauthorizedException(ErrorCode.SPOTIFY_INVALID_ACCESS_TOKEN, details = e.message)
             403 -> ForbiddenException(ErrorCode.SPOTIFY_FORBIDDEN_REQUEST, details = e.message)
