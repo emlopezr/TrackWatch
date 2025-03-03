@@ -13,6 +13,7 @@
   border-top-color: var(--white);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
+  -webkit-animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {

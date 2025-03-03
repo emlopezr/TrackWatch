@@ -66,6 +66,26 @@
   -o-transition: background-color 0.2s ease;
 }
 
+.artist__button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.artist__button-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.artist__button-spinner .spinner__circle {
+  width: 1rem;
+  height: 1rem;
+}
+
+.artist__button-spinner .spinner {
+  padding: 0;
+}
+
 .artist__button--unfollow {
   background-color: var(--red);
 }

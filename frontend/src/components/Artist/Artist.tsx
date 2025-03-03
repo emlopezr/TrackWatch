@@ -4,6 +4,8 @@ import like from '../../assets/png/like.png';
 import blank from '../../assets/png/blank.png';
 import Tag from "../common/Tag/Tag";
 import './Artist.css';
+import { useState } from "react";
+import Spinner from "../Spinner/Spinner";
 
 interface ArtistProps {
   data: SpotifyArtistResponse;
@@ -13,6 +15,27 @@ interface ArtistProps {
 }
 
 const Artist = ({ data, isFollowed, onFollow, onUnfollow }: ArtistProps) => {
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const handleFollow = async () => {
+    setIsLoading(true);
+    try {
+      await onFollow();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleUnfollow = async () => {
+    setIsLoading(true);
+    try {
+      await onUnfollow();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
 
   return (
     <div className="artist">
@@ -36,19 +59,33 @@ const Artist = ({ data, isFollowed, onFollow, onUnfollow }: ArtistProps) => {
 
       {isFollowed && (
         <button
-          onClick={onUnfollow}
+          onClick={handleUnfollow}
           className="artist__button artist__button--unfollow"
+          disabled={isLoading}
         >
-          <img src={unlike} alt="Unfollow" className="artist__icon" />
+          {isLoading ? (
+            <div className="artist__button-spinner">
+              <Spinner />
+            </div>
+          ) : (
+            <img src={unlike} alt="Unfollow" className="artist__icon" />
+          )}
         </button>
       )}
 
       {!isFollowed && (
         <button
-          onClick={onFollow} 
+          onClick={handleFollow}
           className="artist__button artist__button--follow"
+          disabled={isLoading}
         >
-          <img src={like} alt="Follow" className="artist__icon" />
+          {isLoading ? (
+            <div className="artist__button-spinner">
+              <Spinner />
+            </div>
+          ) : (
+            <img src={like} alt="Follow" className="artist__icon" />
+          )}
         </button>
       )}
     </div>
