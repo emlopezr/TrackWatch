@@ -12,11 +12,6 @@
 
 Automatically track your favorite artists' new releases on Spotify and seamlessly add them to your personalized playlist. Music updates made simple, every day.
 
-- Más botones para la paginación (Inicio - Final)
-- Arreglar el Responsive Design
-- Poder cerrar la sesión del usuario
-- Spinners de carga y deshabilitar botones
-
 - Recopilar métricas del Frontend (Conectar a Prometheus)
 - Paralelizar API Calls hechas en Frontend (¿Es posible?)
 - Paralelizar API Calls hechas en Backend (Tarea Core)
