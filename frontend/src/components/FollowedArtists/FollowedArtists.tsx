@@ -5,10 +5,9 @@ import './FollowedArtists.css';
 import { TrackWatchArtist } from '../../types/trackwatch/TrackWatchArtist';
 import { useUser } from '../../context/useUser';
 import { followArtist, unfollowArtist } from '../../services/trackwatch/trackwatchArtists';
-import left from '../../assets/png/left.png';
-import right from '../../assets/png/right.png';
 import Spinner from '../Spinner/Spinner';
 import { batchGetArtists } from '../../services/spotify/spotifyArtists';
+import { PaginatedHeader } from '../PaginatedHeader/PaginatedHeader';
 
 interface FollowedArtistsProps {
   accessToken: string;
@@ -52,17 +51,8 @@ const FollowedArtists = ({ accessToken, followedArtists }: FollowedArtistsProps)
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords = artistsData.slice(indexOfFirstRecord, indexOfLastRecord);
 
-  const nextPage = () => {
-    if (currentPage < totalPages) setCurrentPage(prev => prev + 1);
-  };
-
-  const prevPage = () => {
-    if (currentPage > 1) setCurrentPage(prev => prev - 1);
-  };
-
-  const handleRecordsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newRecordsPerPage = parseInt(e.target.value);
-    setRecordsPerPage(newRecordsPerPage);
+  const handleRecordsPerPageChange = (records: number) => {
+    setRecordsPerPage(records);
     setCurrentPage(1);
   };
 
@@ -71,7 +61,7 @@ const FollowedArtists = ({ accessToken, followedArtists }: FollowedArtistsProps)
       <div className="followed-artists__empty">
         <p className="followed-artists__empty">
           Aún no sigues a ningún artista 😔 <br />
-          Busca artistas en la barra de búsqueda!
+          Sigue tu primer artista, buscándolo en la barra de arriba!
         </p>
       </div>
     );
@@ -79,40 +69,16 @@ const FollowedArtists = ({ accessToken, followedArtists }: FollowedArtistsProps)
 
   return (
     <div className="followed-artists">
-      <div className="followed-artists-header">
-        <div className="followed-artists-header__left">
-          <h2 className="followed-artists__title">Artistas Seguidos</h2>
-          {totalPages > 1 && (
-            <div className="pagination-inline">
-              <button onClick={prevPage} disabled={currentPage === 1}>
-                <img src={left} alt="Prev" className="pagination-inline__icon" />
-              </button>
-              <span>
-                {currentPage} de {totalPages}
-              </span>
-              <button onClick={nextPage} disabled={currentPage === totalPages}>
-                <img src={right} alt="Next" className="pagination-inline__icon" />
-              </button>
-            </div>
-          )}
-        </div>
-        <div className="followed-artists-header__right">
-          <div className="records-per-page">
-            <label htmlFor="recordsPerPage">Mostrar:</label>
-            <select
-              id="recordsPerPage"
-              value={recordsPerPage}
-              onChange={handleRecordsPerPageChange}
-            >
-              <option value={10}>10</option>
-              <option value={20}>20</option>
-              <option value={50}>50</option>
-              <option value={100}>100</option>
-              <option value={followedArtists.length}>Todos</option>
-            </select>
-          </div>
-        </div>
-      </div>
+
+      <PaginatedHeader
+        title="Artistas Seguidos"
+        currentPage={currentPage}
+        totalPages={totalPages}
+        recordsPerPage={recordsPerPage}
+        totalRecords={followedArtists.length}
+        onPageChange={setCurrentPage}
+        onRecordsPerPageChange={handleRecordsPerPageChange}
+      />
 
       {loadingPage ? (
         <Spinner />

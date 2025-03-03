@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #fff;
+  background-color: var(--white);
   border-radius:0.7rem;
   padding: 0.7rem;
   -webkit-border-radius:0.7rem;
@@ -64,4 +64,31 @@
 
 .search-bar__clear-btn:hover img {
   opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .search-bar {
+    padding: 0.5rem;
+    gap: 0.25rem;
+    border-radius: 0.5rem;
+  }
+
+  .search-bar__input {
+    font-size: 0.9rem;
+    padding: 0.3rem 0.5rem;
+  }
+
+  .search-bar__icon {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
+  .search-bar__clear-btn {
+    right: 0.5rem;
+  }
+
+  .search-bar__clear-btn img {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
 }

@@ -1,0 +1,117 @@
+.paginated-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  gap: 0.25rem;
+}
+
+.paginated-header__title {
+  margin: 0;
+}
+
+.paginated-header__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1rem;
+}
+
+.pagination-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.pagination-inline span {
+  margin: 0 0.5rem;
+}
+
+.pagination-inline button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  font-weight: bold;
+  color: var(--white);
+  border: none;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  background-color: var(--primary);
+  transition: background-color 0.2s ease;
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
+  -ms-border-radius: 0.5rem;
+  -o-border-radius: 0.5rem;
+}
+
+.pagination-inline button:hover {
+  background-color: color-mix(in srgb, var(--primary) 50%, transparent);
+}
+
+.pagination-inline button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.records-per-page {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.records-per-page label {
+  font-size: 0.9rem;
+  color: var(--white);
+  font-weight: bold;
+}
+
+.records-per-page select {
+  background-color: var(--background);
+  color: var(--white);
+  border: none;
+  border-radius: 50px;
+  padding: 0.3rem 0.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.2s ease;
+  text-align: center;
+}
+
+.pagination-inline__icon {
+  width: 1rem;
+  height: 1rem;
+  object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .paginated-header {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .paginated-header__bottom {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 0.8rem;
+  }
+
+  .pagination-inline {
+    justify-content: flex-start;
+  }
+
+  .records-per-page label {
+    font-size: 0.8rem!important;
+  }
+
+  .pagination-inline__icon {
+    width: 0.75rem!important;
+    height: 0.75rem!important;
+  }
+}

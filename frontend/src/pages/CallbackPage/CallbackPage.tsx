@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { getAccessToken } from '../../services/spotify/spotifyToken';
 import { registerTrackWatchUser } from '../../services/trackwatch/trackwatchUsers';
 import { useUser } from '../../context/useUser';
+import Spinner from '../../components/Spinner/Spinner';
 
 const CallbackPage = () => {
   const [ , setAccessToken] = useState<string | null>(null);
@@ -54,9 +55,7 @@ const CallbackPage = () => {
   }, [location, navigate, setUserData]);
 
   return (
-    <div>
-      {loading && (<p>Iniciando sesión...</p>)}
-    </div>
+    <div> {loading && <Spinner />} </div>
   );
 };
 

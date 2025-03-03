@@ -3,7 +3,7 @@
   padding: 0.2rem 0.7rem;
   font-size: 0.7rem;
   font-weight: 500;
-  color: #ffffff;
+  color: var(--white);
   text-transform: capitalize;
   border-radius:0.7rem;
   -webkit-border-radius:0.7rem;

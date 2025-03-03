@@ -5,8 +5,7 @@ import { useUser } from "../../context/useUser";
 import { followArtist, unfollowArtist } from "../../services/trackwatch/trackwatchArtists";
 import Spinner from "../Spinner/Spinner";
 import { useEffect, useState } from "react";
-import left from '../../assets/png/left.png';
-import right from '../../assets/png/right.png';
+import { PaginatedHeader } from '../PaginatedHeader/PaginatedHeader';
 
 interface SearchResultsProps {
   artistsData: SpotifyArtistResponse[] | null;
@@ -37,12 +36,8 @@ const SearchResults = ({ artistsData }: SearchResultsProps) => {
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords = artistsData ? artistsData.slice(indexOfFirstRecord, indexOfLastRecord) : [];
 
-  const nextPage = () => { if (currentPage < totalPages) setCurrentPage((prev) => prev + 1); };
-  const prevPage = () => { if (currentPage > 1) setCurrentPage((prev) => prev - 1); };
-
-  const handleRecordsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newRecordsPerPage = parseInt(e.target.value);
-    setRecordsPerPage(newRecordsPerPage);
+  const handleRecordsPerPageChange = (records: number) => {
+    setRecordsPerPage(records);
     setCurrentPage(1);
   };
 
@@ -53,7 +48,7 @@ const SearchResults = ({ artistsData }: SearchResultsProps) => {
   return (
     <div className="search-results">
 
-      <div className="search-results-header">
+      {/* <div className="search-results-header">
         <div className="search-results-header__left">
           <h2 className="search-results__title">Resultados</h2>
 
@@ -73,14 +68,23 @@ const SearchResults = ({ artistsData }: SearchResultsProps) => {
         </div>
 
         <div className="records-per-page">
-          <label htmlFor="recordsPerPage">Mostrar:</label>
+          <label htmlFor="recordsPerPage">Mostrar</label>
           <select id="recordsPerPage" value={recordsPerPage} onChange={handleRecordsPerPageChange}>
             <option value={10}>10</option>
             <option value={25}>25</option>
             <option value={50}>50</option>
           </select>
         </div>
-      </div>
+      </div> */}
+      <PaginatedHeader
+        title="Resultados de búsqueda"
+        currentPage={currentPage}
+        totalPages={totalPages}
+        recordsPerPage={recordsPerPage}
+        totalRecords={artistsData.length}
+        onPageChange={setCurrentPage}
+        onRecordsPerPageChange={handleRecordsPerPageChange}
+      />
 
       <ul className="search-results__list">
         {currentRecords.map((artist) => (

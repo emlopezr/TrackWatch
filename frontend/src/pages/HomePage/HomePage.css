@@ -6,6 +6,12 @@
   gap: 1rem;
 }
 
+@media (max-width: 768px) {
+  .home {
+    padding: 1rem;
+  }
+}
+
 .login {
   display: flex;
   flex-direction: column;
@@ -29,7 +35,7 @@
   gap: 0.5rem;
   padding: 1rem 1.5rem;
   align-items: center;
-  background-color: #1DB954;
+  background-color: var(--primary);
   color: white;
   border: none;
   cursor: pointer;
@@ -48,7 +54,7 @@
 }
 
 .login__button:hover {
-  background-color: #1ed760;
+  background-color: var(--primary);
   transform: scale(1.05);
   -webkit-transform: scale(1.05);
   -moz-transform: scale(1.05);
@@ -69,7 +75,7 @@
   flex-direction: column;
   gap: 0.7rem;
   padding: 2rem 0 1rem 0;
-  background-color: #242424;
+  background-color: var(--background);
 }
 
 .profile {
@@ -80,12 +86,35 @@
 
 .profile__title {
   margin: 0;
+  display: flex;
+  gap: 0.75rem;
+  font-size: 1.2rem;
+}
+
+.profile__title--white {
+  color: white;
+}
+
+.profile__title--green {
+  color: var(--primary);
 }
 
 .profile__image {
-  width: 3rem;
-  height: 3rem;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: 50%;
   object-fit: cover;
   display: block;
+}
+
+.profile__logo {
+  width: 2.5rem;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem 0 0.5rem 0;
+    gap: 0.5rem;
+  }
 }

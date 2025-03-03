@@ -9,7 +9,7 @@
   -moz-border-radius: 1rem;
   -ms-border-radius: 1rem;
   -o-border-radius: 1rem;
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: var(--card);
 }
 
 .artist__content {
@@ -35,7 +35,7 @@
 .artist__name {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #fff;
+  color: var(--white);
   margin: 0;
 }
 
@@ -51,7 +51,7 @@
   align-items: center;
   padding: 0.5rem;
   font-weight: bold;
-  color: #fff;
+  color: var(--white);
   border: none;
   cursor: pointer;
   border-radius:50%;
@@ -67,23 +67,60 @@
 }
 
 .artist__button--unfollow {
-  background-color: rgb(255, 77, 77, 0.75);
+  background-color: var(--red);
 }
 
 .artist__button--unfollow:hover {
-  background-color: rgba(255, 77, 77, 0.5);
+  background-color: color-mix(in srgb, var(--red) 50%, transparent);
 }
 
 .artist__button--follow {
-  background-color: rgba(77, 255, 77, 0.5);
+  background-color: var(--primary);
 }
 
 .artist__button--follow:hover {
-  background-color: rgba(77, 255, 77, 0.25);
+  background-color: color-mix(in srgb, var(--primary) 50%, transparent);
 }
 
 .artist__icon {
   width: 1.5rem;
   height: 1.5rem;
   object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .artist {
+    gap: 1rem;
+    padding: 1rem 1rem;
+  }
+
+  .artist__content {
+    gap: 0.5rem;
+  }
+
+  .artist__image {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .artist__name {
+    font-size: 1.25rem;
+  }
+
+  .artist__tags {
+    gap: 0.3rem;
+  }
+
+  .artist__tags .tag {
+    font-size: 0.6rem;
+  }
+
+  .artist__button {
+    padding: 0.5rem;
+  }
+
+  .artist__icon {
+    width: 1.3rem;
+    height: 1.3rem;
+  }
 }

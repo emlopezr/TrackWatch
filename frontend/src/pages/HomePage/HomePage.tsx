@@ -9,6 +9,7 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 import SearchResults from '../../components/SearchResults/SearchResults';
 import { SpotifyArtistResponse } from '../../types/spotify/SpotifyArtistResponse';
 import Spinner from '../../components/Spinner/Spinner';
+import logo from '../../assets/svg/logo.svg';
 import './HomePage.css';
 
 const HomePage = () => {
@@ -70,7 +71,7 @@ const HomePage = () => {
   }, [accessToken, setUserData, userData]);
 
   if (loading) {
-    return (<div> <p>Cargando...</p> </div>);
+    return (<div> <Spinner /> </div>);
   }
 
   if (!accessToken) {
@@ -94,9 +95,13 @@ const HomePage = () => {
           <>
             <div className="header">
               <div className='profile'>
-                <h1 className='profile__title'>
-                  Bienvenido a TrackWatch, {userData.name}!
-                </h1>
+                <div className="profile__title">
+                  <img src={logo} alt="Logo" className="profile__logo" />
+                  <h1>
+                    <span className="profile__title--green">Track</span>
+                    <span className="profile__title--white">Watch</span>
+                  </h1>
+                </div>
                 <a href="/">
                   <img
                     src={userData.imageUrl}
@@ -123,7 +128,7 @@ const HomePage = () => {
             )
             }
           </>
-        ) : <Spinner/>
+        ) : <Spinner />
       }
     </div>
   );
