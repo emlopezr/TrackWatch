@@ -26,6 +26,14 @@
   margin: 0 0 1rem 0;
 }
 
+.login__title--white {
+  color: white;
+}
+
+.login__title--green {
+  color: var(--primary);
+}
+
 .login__link {
   text-decoration: none;
 }
@@ -54,7 +62,7 @@
 }
 
 .login__button:hover {
-  background-color: var(--primary);
+  background-color: color-mix(in srgb, var(--primary) 50%, transparent);
   transform: scale(1.05);
   -webkit-transform: scale(1.05);
   -moz-transform: scale(1.05);
@@ -116,5 +124,76 @@
   .header {
     padding: 1rem 0 0.5rem 0;
     gap: 0.5rem;
+  }
+}
+
+.profile__user-container {
+  position: relative;
+}
+
+.profile__image-container {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.profile__image-container:hover {
+  transform: scale(1.05);
+}
+
+.profile__menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background-color: var(--card);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px var(--box-shadow);
+  padding: 12px;
+  width: 200px;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+.profile__menu:before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 20px;
+  width: 12px;
+  height: 12px;
+  background-color: var(--card);
+  transform: rotate(45deg);
+}
+
+.profile__menu-name {
+  color: white;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  padding-bottom: 10px;
+}
+
+.profile__menu-logout {
+  background-color: var(--red);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.2s;
+}
+
+.profile__menu-logout:hover {
+  background-color: color-mix(in srgb, var(--red) 50%, transparent);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

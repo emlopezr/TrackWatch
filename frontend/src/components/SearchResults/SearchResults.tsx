@@ -47,35 +47,6 @@ const SearchResults = ({ artistsData }: SearchResultsProps) => {
 
   return (
     <div className="search-results">
-
-      {/* <div className="search-results-header">
-        <div className="search-results-header__left">
-          <h2 className="search-results__title">Resultados</h2>
-
-          {totalPages > 1 && (
-            <div className="pagination-inline">
-              <button onClick={prevPage} disabled={currentPage === 1}>
-                <img src={left} alt="Prev" className="pagination-inline__icon" />
-              </button>
-              <span>
-                {currentPage} de {totalPages}
-              </span>
-              <button onClick={nextPage} disabled={currentPage === totalPages}>
-                <img src={right} alt="Next" className="pagination-inline__icon" />
-              </button>
-            </div>
-          )}
-        </div>
-
-        <div className="records-per-page">
-          <label htmlFor="recordsPerPage">Mostrar</label>
-          <select id="recordsPerPage" value={recordsPerPage} onChange={handleRecordsPerPageChange}>
-            <option value={10}>10</option>
-            <option value={25}>25</option>
-            <option value={50}>50</option>
-          </select>
-        </div>
-      </div> */}
       <PaginatedHeader
         title="Resultados de búsqueda"
         currentPage={currentPage}
