@@ -12,13 +12,15 @@
 
 Automatically track your favorite artists' new releases on Spotify and seamlessly add them to your personalized playlist. Music updates made simple, every day.
 
+### To-Do - Versión 1
+
 - Recopilar métricas del Frontend (Conectar a Prometheus)
 - Paralelizar API Calls hechas en Frontend (¿Es posible?)
 - Paralelizar API Calls hechas en Backend (Tarea Core)
 - Proteger la app (Front y Backend) con un Rate Limit
 - Verificar si Prometheus es público y como protegerlo
 
-### Versión 2
+### To-Do - Versión 2
 
 - Poder organizar los seguidos del usuario
 - Poder generar una playlist de X artista
