@@ -67,50 +67,79 @@ export const getTrackWatchUserData = async (
   setAccessToken: (token: string) => void,
   setUserData: (data: TrackWatchUser) => void
 ) => {
-  try {
-    let url = `${TRACKWATCH_API_BASE_URL}/users/me`;
+  const MAX_RETRIES = 3;
+  let retryCount = 0;
 
-    const userId = localStorage.getItem('trackwatch_user_id');
-    if (userId) {
-      // Use query param userId if available
-      url = `${url}?userId=${userId}`;
-    }
+  const attemptFetch = async (): Promise<TrackWatchUser | undefined> => {
+    try {
+      let url = `${TRACKWATCH_API_BASE_URL}/users/me`;
 
-    console.log('[TrackWatchAPI] Fetching user data');
-    const response = await fetch(url, {
-      headers: {
-        'X-Spotify-Access-Token': localStorage.getItem('spotify_access_token') || '',
-        'X-Spotify-Refresh-Token': localStorage.getItem('spotify_refresh_token') || '',
-      },
-    });
-
-    if (response.status === 401) {
-      // Si obtenemos un 401 aquí, intentamos renovar el token
-      const refreshToken = localStorage.getItem('spotify_refresh_token');
-
-      if (refreshToken) {
-        const newToken = await refreshAccessToken();
-
-        if (newToken) {
-          localStorage.setItem('spotify_access_token', newToken);
-          setAccessToken(newToken);
-        }
+      const userId = localStorage.getItem('trackwatch_user_id');
+      if (userId) {
+        // Use query param userId if available
+        url = `${url}?userId=${userId}`;
       }
 
-      throw new Error('Failed to fetch user data');
+      console.log(`[TrackWatchAPI] Fetching user data (attempt ${retryCount + 1}/${MAX_RETRIES})`);
+      const response = await fetch(url, {
+        headers: {
+          'X-Spotify-Access-Token': localStorage.getItem('spotify_access_token') || '',
+          'X-Spotify-Refresh-Token': localStorage.getItem('spotify_refresh_token') || '',
+        },
+      });
+
+      if (response.status === 401) {
+        // Si obtenemos un 401 aquí, intentamos renovar el token
+        const refreshToken = localStorage.getItem('spotify_refresh_token');
+
+        if (refreshToken) {
+          const newToken = await refreshAccessToken();
+
+          if (newToken) {
+            localStorage.setItem('spotify_access_token', newToken);
+            setAccessToken(newToken);
+            // Retry with new token instead of throwing
+            retryCount++;
+            if (retryCount < MAX_RETRIES) {
+              return attemptFetch();
+            }
+          }
+        }
+
+        throw new Error('Failed to fetch user data: Unauthorized');
+      }
+
+      if (response.status !== 200) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Failed to fetch user data:', errorData);
+        throw new Error(`Failed to fetch user data: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setUserData(data);
+      localStorage.setItem('trackwatch_user_id', data.id);
+
+      return data;
+    } catch (error) {
+      console.error(`Error fetching user data (attempt ${retryCount + 1}/${MAX_RETRIES}):`, error);
+
+      retryCount++;
+      if (retryCount < MAX_RETRIES) {
+        console.log(`Retrying... (${retryCount}/${MAX_RETRIES})`);
+        // Add a small delay before retrying
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        return attemptFetch();
+      }
+
+      // If we've exhausted all retries, rethrow the error
+      throw error;
     }
+  };
 
-    if (response.status !== 200) {
-      console.error('Failed to fetch user data:', response.json());
-      throw new Error('Failed to fetch user data');
-    }
-
-    const data = await response.json();
-    setUserData(data);
-    localStorage.setItem('trackwatch_user_id', data.id);
-
-    return data;
+  try {
+    return await attemptFetch();
   } catch (error) {
-    console.error('Error fetching user data:', error);
+    console.error(`Failed to fetch user data after ${MAX_RETRIES} attempts:`, error);
+    return undefined;
   }
-}
+};
