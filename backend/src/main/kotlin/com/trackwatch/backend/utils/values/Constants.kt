@@ -10,4 +10,5 @@ object Constants {
     const val USER_FOLLOWED_ARTIST_DB_TABLE = "users_followed_artists"
 
     const val DEFAULT_IMAGE_URL = "https://www.wagbet.com/wp-content/uploads/2019/11/music_placeholder.png"
+    const val EMAIL_GREEN = "#49b243"
 }

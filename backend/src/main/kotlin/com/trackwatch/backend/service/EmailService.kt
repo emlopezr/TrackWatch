@@ -8,9 +8,13 @@ import org.springframework.stereotype.Service
 @Service
 class EmailService(private val resendClient: ResendClient) {
 
-    fun sendEmail(user: User, addedTracks: List<Track>) {
+    fun sendWelcomeEmail(user: User) {
+        resendClient.sendWelcomeEmail(user)
+    }
+
+    fun sendAddedTracksEmail(user: User, addedTracks: List<Track>) {
         if (addedTracks.isNotEmpty()) {
-            resendClient.sendEmail(user, addedTracks)
+            resendClient.sendAddedTracksEmail(user, addedTracks)
         }
     }
 

@@ -53,6 +53,6 @@ class ScheduledService(
         playlistService.checkPlaylist(userWithValidToken)
         val finalAddedTracks = playlistService.addTracksToPlaylist(userWithValidToken, userSortedTracks)
 
-        emailService.sendEmail(userWithValidToken, finalAddedTracks.toList())
+        emailService.sendAddedTracksEmail(userWithValidToken, finalAddedTracks.toList())
     }
 }

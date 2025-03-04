@@ -19,15 +19,10 @@ class ResendClient(private val metricService: MetricService) {
     private val log = LoggerFactory.getLogger(ResendClient::class.java)
     private val resend = Resend(System.getenv("RESEND_API_KEY"))
 
-    fun sendEmail(user: User, addedTracks: List<Track>) {
-        val emailSubject = generateEmailSubject(addedTracks)
-        val emailBody = generateEmailBody(addedTracks)
-
-        val recipientEmail = user.email
-
+    fun sendEmail(recipient: User, emailSubject: String, emailBody: String) {
         val params = CreateEmailOptions.builder()
             .from("TrackWatch <trackwatch@emlopezr.com>")
-            .to(recipientEmail)
+            .to(recipient.email)
             .subject(emailSubject)
             .html(emailBody)
             .build()
@@ -41,7 +36,19 @@ class ResendClient(private val metricService: MetricService) {
         }
     }
 
-    private fun generateEmailSubject(userAddedTracks: List<Track>): String {
+    fun sendWelcomeEmail(user: User) {
+        val emailSubject = "\uD83C\uDFB6 ¡Bienvenido a TrackWatch! ❤\uFE0F"
+        val emailBody = generateWelcomeEmailBody(user)
+        sendEmail(user, emailSubject, emailBody)
+    }
+
+    fun sendAddedTracksEmail(user: User, addedTracks: List<Track>) {
+        val emailSubject = generateAddedTracksEmailSubject(addedTracks)
+        val emailBody = generateAddedTracksEmailBody(addedTracks)
+        sendEmail(user, emailSubject, emailBody)
+    }
+
+    private fun generateAddedTracksEmailSubject(userAddedTracks: List<Track>): String {
         return if (userAddedTracks.size == 1) {
             "\uD83C\uDFB6 Nueva canción añadida a tu playlist"
         } else {
@@ -49,7 +56,42 @@ class ResendClient(private val metricService: MetricService) {
         }
     }
 
-    fun generateEmailBody(userAddedTracks: List<Track>): String {
+    fun generateWelcomeEmailBody(user: User): String {
+        return """
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body { font-family: Arial, sans-serif; background-color: #f7f7f7; color: #333; }
+                .email-container { max-width: 600px; margin: 20px auto; background-color: #fff; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+                .header { background-color: ${Constants.EMAIL_GREEN}; color: #fff; text-align: center; padding: 20px; font-size: 20px; font-weight: bold; }
+                .header-subtitle { font-size: 12px; font-weight: normal; }
+                .content { padding: 20px; }
+                .footer { background-color: #f4f4f4; color: #666; text-align: center; padding: 10px; font-size: 12px; }
+            </style>
+        </head>
+        <body>
+            <div class="email-container">
+                <div class="header">
+                    🎶 ¡Bienvenido a TrackWatch! ❤️
+                    <div class="header-subtitle">Gracias por unirte a nosotros</div>
+                </div>
+                <div class="content">
+                    <p>Hola ${user.name}, ¡Gracias por registrarte en TrackWatch! 🎉</p>
+                    <p>Ahora podrás estar al tanto de los nuevos lanzamientos de tus artistas favoritos sin esforzarte.</p>
+                    <p>¡No olvides seguir a tus artistas favoritos para día a día tener sus últimas canciones en tu playlist y recibir notificaciones!</p>
+                    <p>¡Que disfrutes de la música! 🎧</p>
+                </div>
+                <div class="footer">
+                    © ${LocalDate.now().year} - TrackWatch - Desarrollado por <a href="https://github.com/emlopezr" style="color: ${Constants.EMAIL_GREEN}; text-decoration: none;">@emlopezr</a>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+    }
+
+    fun generateAddedTracksEmailBody(userAddedTracks: List<Track>): String {
         val today = LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy", Locale("es", "ES")))
 
         val tracksHtml = userAddedTracks.joinToString(separator = "") { track ->
@@ -75,7 +117,7 @@ class ResendClient(private val metricService: MetricService) {
             <style>
                 body { font-family: Arial, sans-serif; background-color: #f7f7f7; color: #333; }
                 .email-container { max-width: 600px; margin: 20px auto; background-color: #fff; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
-                .header { background-color: #1db954; color: #fff; text-align: center; padding: 20px; font-size: 20px; font-weight: bold; }
+                .header { background-color: ${Constants.EMAIL_GREEN}; color: #fff; text-align: center; padding: 20px; font-size: 20px; font-weight: bold; }
                 .header-subtitle { font-size: 12px; font-weight: normal; }
                 .content { padding: 20px; }
                 table { width: 100%; border-collapse: collapse; margin-top: 20px; }
@@ -100,7 +142,7 @@ class ResendClient(private val metricService: MetricService) {
                     <p style="margin-top: 20px;">Disfruta de los nuevos lanzamientos! 🎧</p>
                 </div>
                 <div class="footer">
-                    © ${LocalDate.now().year} - TrackWatch - Desarrollado por <a href="https://github.com/emlopezr" style="color: #1db954; text-decoration: none;">@emlopezr</a>
+                    © ${LocalDate.now().year} - TrackWatch - Desarrollado por <a href="https://github.com/emlopezr" style="color: ${Constants.EMAIL_GREEN}; text-decoration: none;">@emlopezr</a>
                 </div>
             </div>
         </body>

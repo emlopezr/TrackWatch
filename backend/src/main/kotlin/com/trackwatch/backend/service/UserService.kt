@@ -16,9 +16,10 @@ import org.springframework.stereotype.Service
 @Service
 class UserService(
     private val userRepository: UserRepository,
+    private val emailService: EmailService,
     private val spotifyUserApiClient: SpotifyUserApiClient,
     private val spotifyPlaylistApiClient: SpotifyPlaylistApiClient,
-    private val spotifyAuthApiClient: SpotifyAuthApiClient
+    private val spotifyAuthApiClient: SpotifyAuthApiClient,
 ) {
 
     fun registerUser(accessToken: String, refreshToken: String): UserResponseDTO {
@@ -32,6 +33,7 @@ class UserService(
         val updatedUser = spotifyPlaylistApiClient.createPlaylist(user)
         val savedUser = userRepository.save(updatedUser)
 
+        emailService.sendWelcomeEmail(savedUser)
         return UserResponseDTO(savedUser)
     }
 
