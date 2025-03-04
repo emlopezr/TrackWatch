@@ -12,18 +12,22 @@
 
 Automatically track your favorite artists' new releases on Spotify and seamlessly add them to your personalized playlist. Music updates made simple, every day.
 
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/57fa5f8c-3878-46a3-ac84-93f3b70f3539" width="33%">
+  <img src="https://github.com/user-attachments/assets/59bcd549-66a7-4a3c-9fd1-4ecdc7562eb6" width="33%">
+  <img src="https://github.com/user-attachments/assets/50407dce-1007-4a55-a632-9e40b95cdf97" width="33%">
+</div>
+
 ### To-Do - Versión 1
 
-- Recopilar métricas del Frontend (Conectar a Prometheus)
-- Paralelizar API Calls hechas en Frontend (¿Es posible?)
-- Paralelizar API Calls hechas en Backend (Tarea Core)
-- Proteger la app (Front y Backend) con un Rate Limit
-- Verificar si Prometheus es público y como protegerlo
+- Paralelizar la tarea Core del Backend (API Calls)
+- Proteger la app con un Rate Limit (Front y Backend)
 
 ### To-Do - Versión 2
 
+- Implementar funcionalidades Pro y Anuncios
 - Poder organizar los seguidos del usuario
 - Poder generar una playlist de X artista
 - Hacer una landing Page de Frontend
-- Mejoras en el diseño del Frontend
-- Implementar funcionalidades Pro (Límites)
+- Paralelizar API Calls del Frontend
+- Proteger los endpoints de métricas
