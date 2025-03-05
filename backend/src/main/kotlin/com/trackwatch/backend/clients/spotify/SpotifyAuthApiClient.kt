@@ -4,6 +4,7 @@ import com.trackwatch.backend.clients.spotify.dto.SpotifyTokenDTO
 import com.trackwatch.backend.exception.*
 import com.trackwatch.backend.utils.values.ErrorCode
 import com.trackwatch.backend.utils.service.MetricService
+import org.slf4j.LoggerFactory
 
 import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
@@ -12,6 +13,40 @@ import java.util.Base64
 
 @Component
 class SpotifyAuthApiClient(metricService: MetricService): SpotifyApiClient(metricService) {
+
+    private val log = LoggerFactory.getLogger(SpotifyAuthApiClient::class.java)
+
+    fun refreshAccessTokenWithRetries(refreshToken: String, maxAttempts: Int = 3): SpotifyTokenDTO {
+        var lastException: Exception? = null
+
+        for (attempt in 1..maxAttempts) {
+            try {
+                return refreshAccessToken(refreshToken)
+            } catch (e: Exception) {
+                lastException = e
+                log.warn("Spotify token refresh failed (attempt $attempt/$maxAttempts): $e")
+
+                if (attempt < maxAttempts) {
+                    val waitTimeMs = 1000L * attempt // Exponential backoff
+                    log.info("Retrying in ${waitTimeMs}ms")
+
+                    try {
+                        Thread.sleep(waitTimeMs)
+                    } catch (ie: InterruptedException) {
+                        Thread.currentThread().interrupt()
+                        throw ie
+                    }
+                }
+            }
+        }
+
+        // If all attempts fail, throw the last exception
+        throw lastException ?: InternalServerErrorException(
+            ErrorCode.UNHANDLED_EXCEPTION,
+            "Failed to refresh Spotify access token after $maxAttempts attempts",
+            "Unknown error"
+        )
+    }
 
     fun refreshAccessToken(refreshToken: String): SpotifyTokenDTO {
         val authString = getAuthString()

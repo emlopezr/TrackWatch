@@ -56,7 +56,7 @@ class UserService(
     fun getValidAccessToken(user: User): User {
         val refreshToken = user.auth.current.refreshToken
 
-        val newTokens = spotifyAuthApiClient.refreshAccessToken(refreshToken)
+        val newTokens = spotifyAuthApiClient.refreshAccessTokenWithRetries(refreshToken)
         user.updateTokens(newTokens.accessToken, newTokens.refreshToken)
 
         return userRepository.save(user)
