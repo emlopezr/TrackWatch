@@ -18,7 +18,7 @@ Automatically track your favorite artists' new releases on Spotify and seamlessl
   <img src="https://github.com/user-attachments/assets/50407dce-1007-4a55-a632-9e40b95cdf97" width="30%">
 </div>
 
-### To-Do - Versión 1
+### To-Do - Versión 2
 
 - Paralelizar tarea Core Backend (API Calls)
 - Implementar funcionalidades Pro y Anuncios
