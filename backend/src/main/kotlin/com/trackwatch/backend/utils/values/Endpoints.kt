@@ -11,4 +11,7 @@ object Endpoints {
     const val ARTIST_CONTROLLER_BASE = "/artists"
     const val ARTIST_CONTROLLER_FOLLOW = "/follow"
     const val ARTIST_CONTROLLER_UNFOLLOW = "/unfollow"
+
+    const val GENERATOR_CONTROLLER_BASE = "/generator"
+    const val GENERATOR_CONTROLLER_ARTIST = "/artist"
 }

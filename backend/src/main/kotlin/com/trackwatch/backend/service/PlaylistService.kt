@@ -4,6 +4,7 @@ import com.trackwatch.backend.clients.spotify.SpotifyPlaylistApiClient
 import com.trackwatch.backend.model.Track
 import com.trackwatch.backend.model.User
 import com.trackwatch.backend.repository.UserRepository
+import com.trackwatch.backend.utils.values.Constants
 import org.springframework.stereotype.Service
 
 @Service
@@ -12,26 +13,37 @@ class PlaylistService(
     val userRepository: UserRepository
 ) {
 
-    fun addTracksToPlaylist(user: User, tracksToAdd: Set<Track>): Set<Track> {
+    fun addTracksToPlaylist(
+        user: User,
+        playlistId: String,
+        tracksToAdd: Set<Track>,
+        shouldfilterUrisByExistingInPlaylist: Boolean = true,
+        shouldFilterUrisBySavedByUser: Boolean = true
+    ): Set<Track> {
         var trackUris = getTrackUris(tracksToAdd)
 
-        trackUris = filterUrisByExistingInPlaylist(user, trackUris)
-        trackUris = filterUrisBySavedByUser(user, trackUris)
+        if (shouldfilterUrisByExistingInPlaylist) {
+            trackUris = filterUrisByExistingInPlaylist(user, playlistId, trackUris)
+        }
+
+        if (shouldFilterUrisBySavedByUser) {
+            trackUris = filterUrisBySavedByUser(user, trackUris)
+        }
 
         val chunkedTrackUris = trackUris.chunked(100)
         chunkedTrackUris.forEach {
-            spotifyPlaylistApiClient.addTracksToPlaylist(user, it)
+            spotifyPlaylistApiClient.addTracksToPlaylist(user, playlistId, it)
         }
 
-        return filerTracksByUris(tracksToAdd, trackUris)
+        return filterTracksByUris(tracksToAdd, trackUris)
     }
 
     fun getTrackUris(tracks: Set<Track>): Set<String> {
         return tracks.map { it.uri }.toSet()
     }
 
-    fun filterUrisByExistingInPlaylist(user: User, trackUris: Set<String>): Set<String> {
-        val tracksInPlaylist = spotifyPlaylistApiClient.getPlaylistTracks(user)
+    fun filterUrisByExistingInPlaylist(user: User, playlistId: String, trackUris: Set<String>): Set<String> {
+        val tracksInPlaylist = spotifyPlaylistApiClient.getPlaylistTracks(user, playlistId)
         return trackUris.filter { !tracksInPlaylist.contains(it) }.toSet()
     }
 
@@ -39,15 +51,25 @@ class PlaylistService(
         return spotifyPlaylistApiClient.filterSavedTracks(user, trackUris)
     }
 
-    fun filerTracksByUris(tracks: Set<Track>, uris: Set<String>): Set<Track> {
+    fun filterTracksByUris(tracks: Set<Track>, uris: Set<String>): Set<Track> {
         return tracks.filter { uris.contains(it.uri) }.toSet()
+    }
+
+    fun createPlaylist(
+        user: User,
+        name: String = Constants.DEFAULT_PLAYLIST_NAME,
+        description: String = Constants.DEFAULT_PLAYLIST_DESCRIPTION,
+        isPublic: Boolean = Constants.DEFAULT_PLAYLIST_PRIVACY
+    ): String {
+        return spotifyPlaylistApiClient.createPlaylist(user, name, description, isPublic)
     }
 
     fun checkPlaylist(user: User) {
         val playlistExists = spotifyPlaylistApiClient.checkPlaylistExists(user)
 
         if (!playlistExists) {
-            val userUpdated = spotifyPlaylistApiClient.createPlaylist(user)
+            val playlistId = createPlaylist(user)
+            val userUpdated = user.copy(playlistId = playlistId)
             userRepository.save(userUpdated)
         }
     }

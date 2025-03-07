@@ -2,32 +2,34 @@ package com.trackwatch.backend.clients.spotify
 
 import com.trackwatch.backend.model.User
 import com.trackwatch.backend.utils.service.MetricService
+import com.trackwatch.backend.utils.values.Constants
 import org.springframework.stereotype.Component
 
 @Component
 class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(metricService) {
 
-    fun addTracksToPlaylist(user: User, trackUris: List<String>): Map<*, *> {
+    fun addTracksToPlaylist(user: User, playlistId: String, trackUris: List<String>): Map<*, *> {
         val body = mapOf("uris" to trackUris)
-        val userPlaylistId = user.playlistId
 
         try {
             sendMetricApiCall("addTracksToPlaylist")
+
             val response = webClient.post()
-                .uri("/playlists/$userPlaylistId/tracks")
+                .uri("/playlists/$playlistId/tracks")
                 .bodyValue(body)
                 .header("Authorization", "Bearer ${user.auth.current.accessToken}")
                 .retrieve()
                 .bodyToMono(Map::class.java)
                 .block() ?: throw RuntimeException("Failed to add tracks to playlist")
+
             return response
+
         } catch (e: Exception) {
             throw RuntimeException(e)
         }
     }
 
-    fun getPlaylistTracks(user: User): List<String> {
-        val userPlaylistId = user.playlistId
+    fun getPlaylistTracks(user: User, playlistId: String): List<String> {
         val trackUris = mutableListOf<String>()
         var offset = 0
         val limit = 100
@@ -37,7 +39,7 @@ class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(m
                 sendMetricApiCall("getPlaylistTracks")
                 val response = webClient.get()
                     .uri { uriBuilder ->
-                        uriBuilder.path("/playlists/$userPlaylistId/tracks")
+                        uriBuilder.path("/playlists/$playlistId/tracks")
                             .queryParam("limit", limit)
                             .queryParam("offset", offset)
                             .build()
@@ -59,6 +61,7 @@ class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(m
             throw RuntimeException(e)
         }
     }
+
 
     fun filterSavedTracks(user: User, uris: Set<String>): Set<String> {
         val ids = uris.map { it.split(":").last() }
@@ -96,11 +99,11 @@ class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(m
         return filteredUris
     }
 
-    fun createPlaylist(user: User): User {
+    fun createPlaylist(user: User, name: String, description: String, isPublic: Boolean): String {
         val body = mapOf(
-            "name" to "Your TrackWatch Playlist",
-            "description" to "Your latest releases from your favorite artists - Powered by TrackWatch",
-            "public" to false
+            "name" to name,
+            "description" to description,
+            "public" to isPublic
         )
 
         try {
@@ -113,10 +116,7 @@ class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(m
                 .bodyToMono(Map::class.java)
                 .block() ?: throw RuntimeException("Failed to create playlist")
 
-            val playlistId = response["id"] as String
-            user.playlistId = playlistId
-
-            return user
+            return response["id"] as String
         } catch (e: Exception) {
             throw RuntimeException(e)
         }

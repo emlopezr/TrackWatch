@@ -17,8 +17,8 @@ import org.springframework.stereotype.Service
 class UserService(
     private val userRepository: UserRepository,
     private val emailService: EmailService,
+    private val playlistService: PlaylistService,
     private val spotifyUserApiClient: SpotifyUserApiClient,
-    private val spotifyPlaylistApiClient: SpotifyPlaylistApiClient,
     private val spotifyAuthApiClient: SpotifyAuthApiClient,
 ) {
 
@@ -30,7 +30,8 @@ class UserService(
         }
 
         val user = User(spotifyUser, accessToken, refreshToken)
-        val updatedUser = spotifyPlaylistApiClient.createPlaylist(user)
+        val playlistId = playlistService.createPlaylist(user)
+        val updatedUser = user.copy(playlistId = playlistId)
         val savedUser = userRepository.save(updatedUser)
 
         emailService.sendWelcomeEmail(savedUser)

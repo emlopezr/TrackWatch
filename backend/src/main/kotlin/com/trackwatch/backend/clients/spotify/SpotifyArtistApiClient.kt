@@ -19,12 +19,34 @@ class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(met
 
     private val log = LoggerFactory.getLogger(SpotifyArtistApiClient::class.java)
 
-    fun getArtistNewTracksWithRetries(artist: Artist, accessToken: String, daysLimit: Int, page: Int, maxAttempts: Int = 3): List<Track> {
+    fun getArtistInfo(artistId: String, accessToken: String): Artist {
+        try {
+            sendMetricApiCall("getArtistInfo")
+
+            val response = webClient.get()
+                .uri("/artists/$artistId")
+                .header("Authorization", "Bearer $accessToken")
+                .retrieve()
+                .bodyToMono(Map::class.java)
+                .block() ?: throw RuntimeException("No data returned from Spotify API")
+
+            return parseArtistInfo(response)
+
+        } catch (e: WebClientResponseException) {
+            throw RuntimeException("Error while calling Spotify API: ${e.message}")
+
+        } catch (e: Exception) {
+            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API", e.toString())
+        }
+    }
+
+    fun getArtistNewTracksWithRetries(artist: Artist, accessToken: String, daysLimit: Int?, page: Int, maxAttempts: Int = 3): List<Track> {
         var lastException: Exception? = null
 
         for (attempt in 1..maxAttempts) {
             try {
                 return getArtistNewTracks(artist, accessToken, daysLimit, page)
+
             } catch (e: Exception) {
                 lastException = e
                 log.warn("Spotify API call failed (attempt $attempt/$maxAttempts): $e")
@@ -54,20 +76,24 @@ class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(met
         )
     }
 
-    private fun getArtistNewTracks(artist: Artist, accessToken: String, daysLimit: Int, page: Int): List<Track> {
+    private fun getArtistNewTracks(artist: Artist, accessToken: String, daysLimit: Int?, page: Int): List<Track> {
         val queryParams = buildQueryParams(artist.name, daysLimit, page)
 
         try {
             sendMetricApiCall("getArtistNewTracks")
+
             val response = webClient.get()
                 .uri("/search?$queryParams")
                 .header("Authorization", "Bearer $accessToken")
                 .retrieve()
                 .bodyToMono(Map::class.java)
                 .block() ?: return emptyList()
+
             return parseTracks(response)
+
         } catch (e: WebClientResponseException) {
             throw RuntimeException("Error while calling Spotify API: ${e.message}")
+
         } catch (e: Exception) {
             throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API", e.toString())
         }
@@ -168,7 +194,7 @@ class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(met
         return parsedAlbumImages
     }
 
-    private fun buildQueryParams(artistName: String, daysLimit: Int, page: Int): String {
+    private fun buildQueryParams(artistName: String, daysLimit: Int?, page: Int): String {
         val q = buildQuery(artistName, daysLimit)
         val type = "track"
         val limit = 50
@@ -177,7 +203,12 @@ class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(met
         return "q=$q&type=$type&limit=$limit&offset=$offset"
     }
 
-    private fun buildQuery(artistName: String, daysLimit: Int): String {
+    private fun buildQuery(artistName: String, daysLimit: Int?): String {
+
+        if (daysLimit == null) {
+            return "artist:${artistName}"
+        }
+
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val today = Date()
         val todayIso = dateFormat.format(today)
@@ -199,6 +230,16 @@ class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(met
         }
 
         return searchQuery
+    }
+
+    fun parseArtistInfo(response: Map<*, *>): Artist {
+        val genres = response["genres"] as List<*>
+        val images = response["images"] as List<*>
+
+        return Artist(
+            id = response["id"] as String,
+            name = response["name"] as String
+        )
     }
 
 }
