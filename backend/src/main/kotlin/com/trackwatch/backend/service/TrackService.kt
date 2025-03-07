@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.Calendar
 import java.util.Date
+import java.util.TimeZone
 
 @Service
 class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
@@ -25,10 +26,9 @@ class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
     }
 
     fun filterTrack(track: Track, user: User, artist: Artist, tracksToAdd: MutableSet<Track>, daysLimit: Int = Constants.DAYS_LIMIT): Track? {
-        val today = Date()
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone(Constants.TIMEZONE))
+        val today = calendar.time
 
-        val calendar = Calendar.getInstance()
-        calendar.time = today
         calendar.add(Calendar.DAY_OF_YEAR, -daysLimit)
         val startDate = calendar.time
 

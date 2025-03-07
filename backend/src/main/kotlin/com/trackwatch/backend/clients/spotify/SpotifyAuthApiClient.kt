@@ -48,7 +48,7 @@ class SpotifyAuthApiClient(metricService: MetricService): SpotifyApiClient(metri
         )
     }
 
-    fun refreshAccessToken(refreshToken: String): SpotifyTokenDTO {
+    private fun refreshAccessToken(refreshToken: String): SpotifyTokenDTO {
         val authString = getAuthString()
 
         val bodyFormEncoded: MultiValueMap<String, String> = LinkedMultiValueMap()
