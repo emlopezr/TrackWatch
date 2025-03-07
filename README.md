@@ -20,10 +20,8 @@ Automatically track your favorite artists' new releases on Spotify and seamlessl
 
 ### To-Do - Versión 2
 
-- Paralelizar tarea Core Backend (API Calls)
-- Implementar funcionalidades Pro y Anuncios
-- Poder organizar los seguidos del usuario
 - Poder generar una playlist de X artista
-- Hacer una landing Page de Frontend
-- Paralelizar API Calls del Frontend
-- Proteger los endpoints de métricas
+- Hacer una landing Page para el Frontend
+- Poder organizar los seguidos del usuario
+- Paralelizar tarea Core Backend (API Calls)
+- Implementar funcionalidades Pro? Anuncios?
