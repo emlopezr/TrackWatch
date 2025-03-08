@@ -4,8 +4,6 @@ import com.trackwatch.backend.model.Track
 import com.trackwatch.backend.model.User
 import com.trackwatch.backend.utils.values.Constants
 import org.springframework.stereotype.Component
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 @Component
@@ -24,6 +22,8 @@ class EmailHelper {
     }
 
     fun generateWelcomeEmailBody(user: User): String {
+        val year = generateCurrentYear()
+
         return """
         <!DOCTYPE html>
         <html>
@@ -50,7 +50,7 @@ class EmailHelper {
                     <p>¡Que disfrutes de la música! 🎧</p>
                 </div>
                 <div class="footer">
-                    © ${LocalDate.now().year} - TrackWatch - Desarrollado por <a href="https://github.com/emlopezr" style="color: ${Constants.EMAIL_GREEN}; text-decoration: none;">@emlopezr</a>
+                    © $year - TrackWatch - Desarrollado por <a href="https://github.com/emlopezr" style="color: ${Constants.EMAIL_GREEN}; text-decoration: none;">@emlopezr</a>
                 </div>
             </div>
         </body>
@@ -59,7 +59,8 @@ class EmailHelper {
     }
 
     fun generateAddedTracksEmailBody(userAddedTracks: List<Track>): String {
-        val today = LocalDate.now().format(DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy", Locale("es", "ES")))
+        val today = generateTodayDate()
+        val year = generateCurrentYear()
 
         val tracksHtml = userAddedTracks.joinToString(separator = "") { track ->
             val image = track.albumImages.firstOrNull()?.url ?: Constants.DEFAULT_TRACK_IMAGE_URL
@@ -109,11 +110,36 @@ class EmailHelper {
                     <p style="margin-top: 20px;">Disfruta de los nuevos lanzamientos! 🎧</p>
                 </div>
                 <div class="footer">
-                    © ${LocalDate.now().year} - TrackWatch - Desarrollado por <a href="https://github.com/emlopezr" style="color: ${Constants.EMAIL_GREEN}; text-decoration: none;">@emlopezr</a>
+                    © $year - TrackWatch - Desarrollado por <a href="https://github.com/emlopezr" style="color: ${Constants.EMAIL_GREEN}; text-decoration: none;">@emlopezr</a>
                 </div>
             </div>
         </body>
         </html>
         """
+    }
+
+    private fun generateTodayDate(): String {
+        val calendar =  Calendar.getInstance(TimeZone.getTimeZone(Constants.SERVER_TIMEZONE))
+        val locale = Locale("es", "ES")
+
+        val dayOfWeek = generateLocaleDayOfWeek(calendar, locale)
+        val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH).toString()
+        val month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, locale)
+        val year = calendar.get(Calendar.YEAR).toString()
+
+        return "$dayOfWeek $dayOfMonth de $month de $year"
+    }
+
+    private fun generateLocaleDayOfWeek(calendar: Calendar, locale: Locale): String {
+        return calendar.getDisplayName(
+            Calendar.DAY_OF_WEEK,
+            Calendar.LONG,
+            locale
+        )!!.replaceFirstChar { if (it.isLowerCase()) it.titlecase(locale) else it.toString() }
+    }
+
+    private fun generateCurrentYear(): String {
+        val calendar =  Calendar.getInstance(TimeZone.getTimeZone(Constants.SERVER_TIMEZONE))
+        return calendar.get(Calendar.YEAR).toString()
     }
 }

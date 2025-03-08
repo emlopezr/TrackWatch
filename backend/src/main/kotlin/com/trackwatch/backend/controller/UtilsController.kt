@@ -1,6 +1,6 @@
 package com.trackwatch.backend.controller
 
-import com.trackwatch.backend.service.CoreService
+import com.trackwatch.backend.use_case.CoreService
 import com.trackwatch.backend.service.MetricService
 import com.trackwatch.backend.utils.values.Constants
 import com.trackwatch.backend.utils.values.Endpoints

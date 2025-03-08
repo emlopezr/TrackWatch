@@ -1,4 +1,4 @@
-package com.trackwatch.backend.service
+package com.trackwatch.backend.use_case
 
 import com.trackwatch.backend.clients.spotify.SpotifyArtistApiClient
 import com.trackwatch.backend.exception.NotFoundException
@@ -8,6 +8,8 @@ import com.trackwatch.backend.model.User
 import com.trackwatch.backend.repository.UserRepository
 import com.trackwatch.backend.utils.values.Constants
 import com.trackwatch.backend.exception.ErrorCode
+import com.trackwatch.backend.service.PlaylistService
+import com.trackwatch.backend.service.TrackService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import kotlin.math.abs
@@ -81,7 +83,8 @@ class GeneratorService(
                 shouldCheckCorrectArtist = true,
                 shouldCheckTrackInTimeRange = false,
                 shouldCheckCompilationAlbum = true,
-                shouldCheckSongBlockedByUserSettings = false
+                shouldCheckSongBlockedByUserSettings = false,
+                shouldCheckTrackRecentlyAdded = false
             )
         }
 

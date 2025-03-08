@@ -64,4 +64,8 @@ class UserService(
 
         return userRepository.save(user)
     }
+
+    fun saveUser(user: User): User {
+        return userRepository.save(user)
+    }
 }

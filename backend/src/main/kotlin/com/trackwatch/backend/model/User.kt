@@ -45,7 +45,15 @@ data class User(
         name = Constants.USER_FOLLOWED_ARTIST_DB_TABLE,
         joinColumns = [JoinColumn(name = "user_id")]
     )
-    var followedArtists: MutableList<Artist> = mutableListOf()
+    var followedArtists: MutableList<Artist> = mutableListOf(),
+
+    // I want to add a list of recently added tracks
+    @ElementCollection
+    @CollectionTable(
+        name = Constants.USER_RECENTLY_ADDED_TRACKS_DB_TABLE,
+        joinColumns = [JoinColumn(name = "user_id")]
+    )
+    var recentlyAddedTracks: MutableList<PersistedTrack> = mutableListOf()
 ) {
 
     constructor(dto: SpotifyUserDTO, accessToken: String, refreshToken: String): this(

@@ -6,13 +6,12 @@ import com.trackwatch.backend.model.Track
 import com.trackwatch.backend.model.TrackImage
 import com.trackwatch.backend.service.MetricService
 import com.trackwatch.backend.exception.ErrorCode
+import com.trackwatch.backend.utils.values.Constants
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClientResponseException
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 @Component
 class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(metricService) {
@@ -203,16 +202,14 @@ class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(met
 
     private fun buildQuery(artistName: String, daysLimit: Int?): String {
 
-        if (daysLimit == null) {
-            return "artist:${artistName}"
-        }
+        if (daysLimit == null) {  return "artist:${artistName}" }
+
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone(Constants.SERVER_TIMEZONE))
 
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val today = Date()
+        val today = calendar.time
         val todayIso = dateFormat.format(today)
 
-        val calendar = Calendar.getInstance()
-        calendar.time = today
         calendar.add(Calendar.DAY_OF_YEAR, - daysLimit)
 
         val startDate = calendar.time

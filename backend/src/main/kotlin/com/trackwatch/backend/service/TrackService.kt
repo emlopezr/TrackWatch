@@ -38,7 +38,8 @@ class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
         shouldCheckCorrectArtist: Boolean = true,
         shouldCheckTrackInTimeRange: Boolean = true,
         shouldCheckCompilationAlbum: Boolean = true,
-        shouldCheckSongBlockedByUserSettings: Boolean = true
+        shouldCheckSongBlockedByUserSettings: Boolean = true,
+        shouldCheckTrackRecentlyAdded: Boolean = false
     ): Track? {
         val calendar = Calendar.getInstance(TimeZone.getTimeZone(Constants.SERVER_TIMEZONE))
         val today = calendar.time
@@ -50,14 +51,17 @@ class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
         val isTrackInTimeRange = !shouldCheckTrackInTimeRange || isTrackInTimeRange(track, startDate, today)
         val isCompilationAlbum = shouldCheckCompilationAlbum && isCompilationAlbum(track)
         val isSongBlockedByUserSettings = shouldCheckSongBlockedByUserSettings && isSongBlockedByUserSettings(track, user)
+        val isTrackRecentlyAdded = shouldCheckTrackRecentlyAdded && isTrackRecentlyAdded(user, track)
 
-        if (isCorrectArtist && isTrackInTimeRange && !isCompilationAlbum && !isSongBlockedByUserSettings) {
+        if (
+            isCorrectArtist &&
+            isTrackInTimeRange &&
+            !isCompilationAlbum &&
+            !isSongBlockedByUserSettings &&
+            !isTrackRecentlyAdded
+        ) {
             val selectedTrack = selectTrack(track, tracksToAdd)
-
-            if (isExactlyTheSameTrackInList(selectedTrack, tracksToAdd)) {
-                return null
-            }
-
+            if (isSameTrackInList(selectedTrack, tracksToAdd)) { return null }
             tracksToAdd.add(selectedTrack)
             return selectedTrack
         }
@@ -105,15 +109,20 @@ class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
         }
 
         // Prefer explicit tracks over non-explicit tracks
-        if (!selectedTrack.isExplicit && nonSelectedTrack!!.isExplicit) {
+        if (!selectedTrack.isExplicit && nonSelectedTrack.isExplicit) {
             selectedTrack = nonSelectedTrack
         }
 
         return selectedTrack
     }
 
-    private fun isExactlyTheSameTrackInList(track: Track, tracks: Set<Track>): Boolean {
-        return tracks.any { it.isExactlyEqual(track) }
+    private fun isSameTrackInList(track: Track, tracks: Set<Track>): Boolean {
+        return tracks.any { it.isEqualStrict(track) }
+    }
+
+    private fun isTrackRecentlyAdded(user: User, track: Track): Boolean {
+        val recentlyAddedTracks = user.recentlyAddedTracks
+        return recentlyAddedTracks.any { it.isEqualToTrack(track) }
     }
 
 }
