@@ -158,7 +158,7 @@ class GenerateArtistPlaylistUseCase(
         "All of: $artistName"
 
     private fun generatePlaylistDescription(artistName: String): String =
-        "Every track from $artistName in one place - Powered by ${Constants.APP_NAME}"
+        "Every track from $artistName in one place (oldest to newest) - Powered by ${Constants.APP_NAME}"
 
     private fun addTracksToFindings(tracks: List<Track>, findings: MutableSet<Track>, artist: Artist): Boolean {
         val initialSize = findings.size
