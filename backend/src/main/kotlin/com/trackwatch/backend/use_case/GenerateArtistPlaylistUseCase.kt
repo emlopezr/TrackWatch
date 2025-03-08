@@ -15,14 +15,14 @@ import org.springframework.stereotype.Service
 import kotlin.math.abs
 
 @Service
-class GeneratorService(
+class GenerateArtistPlaylistUseCase(
     private val userRepository: UserRepository,
     private val playlistService: PlaylistService,
     private val trackService: TrackService,
     private val spotifyArtistApiClient: SpotifyArtistApiClient
 ) {
 
-    private val log = LoggerFactory.getLogger(GeneratorService::class.java)
+    private val log = LoggerFactory.getLogger(GenerateArtistPlaylistUseCase::class.java)
 
     fun generateArtistPlaylist(userId: String, artistId: String, playlistId: String?, accessToken: String) {
         val user = retrieveAndValidateUser(userId, accessToken)

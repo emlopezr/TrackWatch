@@ -20,6 +20,7 @@ object Constants {
 
     const val EMAIL_GREEN = "#49b243"
 
-    const val DEFAULT_TRACK_IMAGE_URL = "https://raw.githubusercontent.com/emlopezr/TrackWatch/refs/heads/develop/assets/track_placeholder.png"
-    const val DEFAULT_PLAYLIST_COVER_URL = "https://raw.githubusercontent.com/emlopezr/TrackWatch/refs/heads/develop/assets/default_playlist_cover.png"
+    private const val ASSETS_PATH = "https://raw.githubusercontent.com/emlopezr/TrackWatch/refs/heads/develop/assets/"
+    const val DEFAULT_TRACK_IMAGE_URL = "${ASSETS_PATH}track_placeholder.png"
+    const val DEFAULT_PLAYLIST_COVER_URL = "${ASSETS_PATH}default_playlist_cover.png"
 }

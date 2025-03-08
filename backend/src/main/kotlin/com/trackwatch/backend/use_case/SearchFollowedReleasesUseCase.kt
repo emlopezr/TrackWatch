@@ -13,55 +13,55 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class CoreService(
+class SearchFollowedReleasesUseCase(
     private val trackService: TrackService,
     private val playlistService: PlaylistService,
     private val userService: UserService,
     private val emailService: EmailService
 ) {
 
-    private val log = LoggerFactory.getLogger(CoreService::class.java)
+    private val log = LoggerFactory.getLogger(SearchFollowedReleasesUseCase::class.java)
 
-    fun runCoreTask(daysLimit: Int = Constants.FILTER_DAYS_LIMIT) {
+    fun updateNewReleasesForAllUsers(daysLimit: Int = Constants.FILTER_DAYS_LIMIT) {
         val users = userService.getAllUsers()
-        log.info("Running core task for ${users.size} users")
+        log.info("Running new releases update for ${users.size} users")
 
         users.forEach { user ->
             try {
-                runCoreTask(user, daysLimit)
+                updateUserNewReleases(user, daysLimit)
             } catch (e: Exception) {
-                log.error("Error while running core task for user ${user.id}", e)
+                log.error("Error while updating new releases for user ${user.id}", e)
             }
         }
 
-        log.info("Core task finished")
+        log.info("New releases update finished")
     }
 
-    fun runCoreTask(user: User, daysLimit: Int = Constants.FILTER_DAYS_LIMIT) {
+    fun updateUserNewReleases(user: User, daysLimit: Int = Constants.FILTER_DAYS_LIMIT) {
         val activeUser = getUserWithValidToken(user)
         val accessToken = activeUser.auth.current.accessToken
 
-        val userSortedTracks = collectAndProcessTracks(activeUser, accessToken, daysLimit)
-        val finalAddedTracks = updatePlaylist(activeUser, userSortedTracks)
+        val newReleaseTracks = findNewReleasesForUser(activeUser, accessToken, daysLimit)
+        val addedTracks = updateNewReleasesPlaylist(activeUser, newReleaseTracks)
 
-        updateUserRecentlyAddedTracks(activeUser, finalAddedTracks)
+        updateUserRecentlyAddedTracks(activeUser, addedTracks)
 
         userService.saveUser(activeUser)
-        emailService.sendAddedTracksEmail(user, finalAddedTracks)
+        emailService.sendAddedTracksEmail(user, addedTracks)
     }
 
     private fun getUserWithValidToken(user: User): User {
         return userService.getValidAccessToken(user)
     }
 
-    private fun collectAndProcessTracks(user: User, accessToken: String, daysLimit: Int): List<Track> {
-        val addedTracks = mutableSetOf<Track>()
+    private fun findNewReleasesForUser(user: User, accessToken: String, daysLimit: Int): List<Track> {
+        val newReleases  = mutableSetOf<Track>()
 
         user.followedArtists.forEach { artist ->
-            collectArtistTracks(user, artist, accessToken, addedTracks, daysLimit)
+            collectArtistTracks(user, artist, accessToken, newReleases, daysLimit)
         }
 
-        return trackService.sortTracks(addedTracks).toList()
+        return trackService.sortTracks(newReleases).toList()
     }
 
     private fun collectArtistTracks(
@@ -90,7 +90,7 @@ class CoreService(
         }
     }
 
-    private fun updatePlaylist(user: User, tracks: List<Track>): List<Track> {
+    private fun updateNewReleasesPlaylist(user: User, tracks: List<Track>): List<Track> {
         playlistService.checkPlaylist(user)
         return playlistService.addTracksToPlaylist(user, user.playlistId, tracks.toSet()).toList()
     }

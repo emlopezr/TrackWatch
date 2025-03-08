@@ -1,6 +1,6 @@
 package com.trackwatch.backend.controller
 
-import com.trackwatch.backend.use_case.CoreService
+import com.trackwatch.backend.use_case.SearchFollowedReleasesUseCase
 import com.trackwatch.backend.service.MetricService
 import com.trackwatch.backend.utils.values.Constants
 import com.trackwatch.backend.utils.values.Endpoints
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class UtilsController(
-    private val coreService: CoreService,
+    private val searchFollowedReleasesUseCase: SearchFollowedReleasesUseCase,
     metricService: MetricService
 ): BaseController(metricService) {
 
@@ -29,9 +29,9 @@ class UtilsController(
         @RequestHeader(Headers.ADMIN_KEY) adminKey: String,
         @RequestParam(required = false) daysLimit: Int?
     ): ResponseEntity<String> {
-        sendMetricRequest(Endpoints.RUN_CORE_TASK, "POST")
         checkAdminKey(adminKey)
-        coreService.runCoreTask(daysLimit ?: Constants.FILTER_DAYS_LIMIT)
+        sendMetricRequest(Endpoints.RUN_CORE_TASK, "POST")
+        searchFollowedReleasesUseCase.updateNewReleasesForAllUsers(daysLimit ?: Constants.FILTER_DAYS_LIMIT)
         return ResponseEntity.ok("Task executed")
     }
 
