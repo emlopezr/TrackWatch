@@ -13,15 +13,6 @@
 Automatically track your favorite artists' new releases on Spotify and seamlessly add them to your personalized playlist. Music updates made simple, every day.
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/57fa5f8c-3878-46a3-ac84-93f3b70f3539" width="30%">
-  <img src="https://github.com/user-attachments/assets/59bcd549-66a7-4a3c-9fd1-4ecdc7562eb6" width="30%">
-  <img src="https://github.com/user-attachments/assets/50407dce-1007-4a55-a632-9e40b95cdf97" width="30%">
+  <img src="https://github.com/user-attachments/assets/57fa5f8c-3878-46a3-ac84-93f3b70f3539" width="40%">
+  <img src="https://github.com/user-attachments/assets/ab667c32-5868-46e2-be7d-fa3705e36812" width="40%">
 </div>
-
-### To-Do - Versión 2
-
-- Poder generar una playlist de X artista
-- Hacer una landing Page para el Frontend
-- Poder organizar los seguidos del usuario
-- Paralelizar tarea Core Backend (API Calls)
-- Implementar funcionalidades Pro? Anuncios?
