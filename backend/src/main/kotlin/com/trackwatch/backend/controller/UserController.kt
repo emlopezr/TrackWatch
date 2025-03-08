@@ -4,7 +4,7 @@ import com.trackwatch.backend.controller.dto.UserResponseDTO
 import com.trackwatch.backend.service.UserService
 import com.trackwatch.backend.utils.values.Endpoints
 import com.trackwatch.backend.utils.values.Headers
-import com.trackwatch.backend.utils.service.MetricService
+import com.trackwatch.backend.service.MetricService
 import org.springframework.http.HttpStatus
 
 import org.springframework.http.ResponseEntity

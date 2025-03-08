@@ -4,7 +4,7 @@ import com.trackwatch.backend.exception.InternalServerErrorException
 import com.trackwatch.backend.model.Artist
 import com.trackwatch.backend.model.Track
 import com.trackwatch.backend.model.TrackImage
-import com.trackwatch.backend.utils.service.MetricService
+import com.trackwatch.backend.service.MetricService
 import com.trackwatch.backend.exception.ErrorCode
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component

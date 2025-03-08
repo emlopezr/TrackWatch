@@ -2,7 +2,7 @@ package com.trackwatch.backend.clients.spotify
 
 import com.trackwatch.backend.utils.values.Metrics
 import com.trackwatch.backend.utils.values.Constants
-import com.trackwatch.backend.utils.service.MetricService
+import com.trackwatch.backend.service.MetricService
 import org.springframework.web.reactive.function.client.ExchangeStrategies
 import org.springframework.web.reactive.function.client.WebClient
 

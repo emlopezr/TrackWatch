@@ -4,7 +4,7 @@ import com.trackwatch.backend.model.Artist
 import com.trackwatch.backend.service.ArtistService
 import com.trackwatch.backend.utils.values.Endpoints
 import com.trackwatch.backend.utils.values.Headers
-import com.trackwatch.backend.utils.service.MetricService
+import com.trackwatch.backend.service.MetricService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 

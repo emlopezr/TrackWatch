@@ -1,7 +1,7 @@
 package com.trackwatch.backend.controller
 
 import com.trackwatch.backend.service.GeneratorService
-import com.trackwatch.backend.utils.service.MetricService
+import com.trackwatch.backend.service.MetricService
 import com.trackwatch.backend.utils.values.Endpoints
 import com.trackwatch.backend.utils.values.Headers
 import org.springframework.http.ResponseEntity

@@ -2,7 +2,7 @@ package com.trackwatch.backend.exception.controller
 
 import com.trackwatch.backend.exception.*
 import com.trackwatch.backend.exception.controller.dto.ExceptionResponseDTO
-import com.trackwatch.backend.utils.service.MetricService
+import com.trackwatch.backend.service.MetricService
 import com.trackwatch.backend.utils.values.Metrics
 
 import org.springframework.http.HttpStatus

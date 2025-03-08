@@ -1,4 +1,4 @@
-package com.trackwatch.backend.utils.service
+package com.trackwatch.backend.service
 
 import io.micrometer.core.instrument.MeterRegistry
 import org.springframework.stereotype.Service
