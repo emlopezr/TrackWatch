@@ -1,7 +1,7 @@
 package com.trackwatch.backend.controller
 
 import com.trackwatch.backend.exception.UnauthorizedException
-import com.trackwatch.backend.scheluded.ScheduledService
+import com.trackwatch.backend.service.CoreService
 import com.trackwatch.backend.utils.service.MetricService
 import com.trackwatch.backend.utils.values.Constants
 import com.trackwatch.backend.utils.values.Endpoints
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class UtilsController(
-    private val scheduledService: ScheduledService,
+    private val coreService: CoreService,
     metricService: MetricService
 ): BaseController(metricService) {
 
@@ -33,7 +33,7 @@ class UtilsController(
     ): ResponseEntity<String> {
         sendMetricRequest(Endpoints.RUN_CORE_TASK, "POST")
         checkAdminKey(adminKey)
-        scheduledService.runCoreTask(daysLimit ?: Constants.DAYS_LIMIT)
+        coreService.runCoreTask(daysLimit ?: Constants.DAYS_LIMIT)
         return ResponseEntity.ok("Task executed")
     }
 

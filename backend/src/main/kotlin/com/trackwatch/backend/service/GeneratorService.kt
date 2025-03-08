@@ -49,7 +49,7 @@ class GeneratorService(
         var iteration = 0
 
         while (true) {
-            val tracks = spotifyArtistApiClient.getArtistNewTracksWithRetries(
+            val tracks = spotifyArtistApiClient.searchArtistTracksWithRetries(
                 artist,
                 accessToken,
                 daysLimit = null,

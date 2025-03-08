@@ -1,16 +1,17 @@
 package com.trackwatch.backend.scheluded
 
+import com.trackwatch.backend.service.CoreService
 import org.springframework.stereotype.Service
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class Scheduler(private val scheduledService: ScheduledService) {
+class Scheduler(private val coreService: CoreService) {
 
-    @Scheduled(cron = "0 0 2,8,14,20 * * *")
+    @Scheduled(cron = "0 0 3/8 * * *")
     @Transactional
     fun runCoreTaskScheduled() {
-        scheduledService.runCoreTask()
+        coreService.runCoreTask()
     }
 
 }

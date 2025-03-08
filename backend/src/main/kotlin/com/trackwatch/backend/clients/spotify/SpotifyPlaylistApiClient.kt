@@ -1,8 +1,9 @@
 package com.trackwatch.backend.clients.spotify
 
+import com.trackwatch.backend.exception.InternalServerErrorException
 import com.trackwatch.backend.model.User
 import com.trackwatch.backend.utils.service.MetricService
-import com.trackwatch.backend.utils.values.Constants
+import com.trackwatch.backend.utils.values.ErrorCode
 import org.springframework.stereotype.Component
 
 @Component
@@ -20,12 +21,12 @@ class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(m
                 .header("Authorization", "Bearer ${user.auth.current.accessToken}")
                 .retrieve()
                 .bodyToMono(Map::class.java)
-                .block() ?: throw RuntimeException("Failed to add tracks to playlist")
+                .block() ?: throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Failed to add tracks to playlist")
 
             return response
 
         } catch (e: Exception) {
-            throw RuntimeException(e)
+            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, e.toString())
         }
     }
 
@@ -37,6 +38,7 @@ class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(m
         try {
             do {
                 sendMetricApiCall("getPlaylistTracks")
+
                 val response = webClient.get()
                     .uri { uriBuilder ->
                         uriBuilder.path("/playlists/$playlistId/tracks")
@@ -47,18 +49,19 @@ class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(m
                     .header("Authorization", "Bearer ${user.auth.current.accessToken}")
                     .retrieve()
                     .bodyToMono(Map::class.java)
-                    .block() ?: throw RuntimeException("Failed to get playlist tracks")
+                    .block() ?: throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Failed to get playlist tracks")
 
                 val uris = mapResponseToTrackUris(response)
                 trackUris.addAll(uris)
                 offset += limit
-
                 val total = (response["total"] as Int?) ?: 0
+
             } while (offset < total)
 
             return trackUris
+
         } catch (e: Exception) {
-            throw RuntimeException(e)
+            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, e.toString())
         }
     }
 
@@ -81,7 +84,7 @@ class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(m
                     .header("Authorization", "Bearer ${user.auth.current.accessToken}")
                     .retrieve()
                     .bodyToMono(List::class.java)
-                    .block() ?: throw RuntimeException("Failed to check saved tracks")
+                    .block() ?: throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Failed to check saved tracks")
 
                 val savedStatuses = response as List<Boolean>
 
@@ -91,8 +94,9 @@ class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(m
                     }
                 }
             }
+
         } catch (e: Exception) {
-            throw RuntimeException(e)
+            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, e.toString())
         }
 
         return filteredUris
@@ -107,17 +111,19 @@ class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(m
 
         try {
             sendMetricApiCall("createPlaylist")
+
             val response = webClient.post()
                 .uri("/users/${user.id}/playlists")
                 .bodyValue(body)
                 .header("Authorization", "Bearer ${user.auth.current.accessToken}")
                 .retrieve()
                 .bodyToMono(Map::class.java)
-                .block() ?: throw RuntimeException("Failed to create playlist")
+                .block() ?: throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Failed to create playlist")
 
             return response["id"] as String
+
         } catch (e: Exception) {
-            throw RuntimeException(e)
+            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, e.toString())
         }
     }
 
@@ -139,7 +145,7 @@ class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(m
                     .header("Authorization", "Bearer ${user.auth.current.accessToken}")
                     .retrieve()
                     .bodyToMono(Map::class.java)
-                    .block() ?: throw RuntimeException("Failed to get user playlists")
+                    .block() ?: throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Failed to get user playlists")
 
                 val items = response["items"] as List<*>
                 val playlistIds = items.map { (it as Map<*, *>)["id"] as String }
@@ -154,7 +160,7 @@ class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(m
 
             return false
         } catch (e: Exception) {
-            throw RuntimeException(e)
+            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, e.toString())
         }
     }
 
@@ -172,7 +178,7 @@ class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(m
                 .block()
 
         } catch (e: Exception) {
-            throw RuntimeException(e)
+            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, e.toString())
         }
     }
 

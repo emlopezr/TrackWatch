@@ -14,11 +14,16 @@ import java.util.TimeZone
 @Service
 class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
 
-    fun getArtistNewTracks(artist: Artist, accessToken: String, pagesToFetch: Int, daysLimit: Int = Constants.DAYS_LIMIT): List<Track> {
+    fun searchArtistTracks(
+        artist: Artist,
+        accessToken: String,
+        pagesToFetch: Int,
+        daysLimit: Int = Constants.DAYS_LIMIT
+    ): List<Track> {
         val newTracks = mutableListOf<Track>()
 
         for (page in 0 until pagesToFetch) {
-            val pageNewTracks = spotifyArtistApiClient.getArtistNewTracksWithRetries(artist, accessToken, daysLimit, page)
+            val pageNewTracks = spotifyArtistApiClient.searchArtistTracksWithRetries(artist, accessToken, daysLimit, page)
             newTracks.addAll(pageNewTracks)
         }
 

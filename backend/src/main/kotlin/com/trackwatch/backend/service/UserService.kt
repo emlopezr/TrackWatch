@@ -22,6 +22,10 @@ class UserService(
     private val spotifyAuthApiClient: SpotifyAuthApiClient,
 ) {
 
+    fun getAllUsers(): List<User> {
+        return userRepository.findAll()
+    }
+
     fun registerUser(accessToken: String, refreshToken: String): UserResponseDTO {
         val spotifyUser = spotifyUserApiClient.getUser(accessToken)
 
@@ -48,10 +52,6 @@ class UserService(
 
         val savedUser = userRepository.save(user)
         return UserResponseDTO(savedUser)
-    }
-
-    fun getAllUsers(): List<User> {
-        return userRepository.findAll()
     }
 
     fun getValidAccessToken(user: User): User {

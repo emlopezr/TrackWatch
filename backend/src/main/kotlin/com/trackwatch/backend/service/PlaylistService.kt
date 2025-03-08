@@ -15,16 +15,25 @@ class PlaylistService(
     val userRepository: UserRepository
 ) {
 
+    fun createPlaylist(
+        user: User,
+        name: String = Constants.DEFAULT_PLAYLIST_NAME,
+        description: String = Constants.DEFAULT_PLAYLIST_DESCRIPTION,
+        isPublic: Boolean = Constants.DEFAULT_PLAYLIST_PRIVACY
+    ): String {
+        return spotifyPlaylistApiClient.createPlaylist(user, name, description, isPublic)
+    }
+
     fun addTracksToPlaylist(
         user: User,
         playlistId: String,
         tracksToAdd: Set<Track>,
-        shouldfilterUrisByExistingInPlaylist: Boolean = true,
+        shouldFilterUrisByExistingInPlaylist: Boolean = true,
         shouldFilterUrisBySavedByUser: Boolean = true
     ): Set<Track> {
         var trackUris = getTrackUris(tracksToAdd)
 
-        if (shouldfilterUrisByExistingInPlaylist) {
+        if (shouldFilterUrisByExistingInPlaylist) {
             trackUris = filterUrisByExistingInPlaylist(user, playlistId, trackUris)
         }
 
@@ -40,37 +49,6 @@ class PlaylistService(
         return filterTracksByUris(tracksToAdd, trackUris)
     }
 
-    fun getTrackUris(tracks: Set<Track>): Set<String> {
-        return tracks.map { it.uri }.toSet()
-    }
-
-    fun filterUrisByExistingInPlaylist(user: User, playlistId: String, trackUris: Set<String>): Set<String> {
-        val tracksInPlaylist = spotifyPlaylistApiClient.getPlaylistTracks(user, playlistId)
-        return trackUris.filter { !tracksInPlaylist.contains(it) }.toSet()
-    }
-
-    fun filterUrisBySavedByUser(user: User, trackUris: Set<String>): Set<String> {
-        return spotifyPlaylistApiClient.filterSavedTracks(user, trackUris)
-    }
-
-    fun filterTracksByUris(tracks: Set<Track>, uris: Set<String>): Set<Track> {
-        return tracks.filter { uris.contains(it.uri) }.toSet()
-    }
-
-    fun createPlaylist(
-        user: User,
-        name: String = Constants.DEFAULT_PLAYLIST_NAME,
-        description: String = Constants.DEFAULT_PLAYLIST_DESCRIPTION,
-        isPublic: Boolean = Constants.DEFAULT_PLAYLIST_PRIVACY
-    ): String {
-        return spotifyPlaylistApiClient.createPlaylist(user, name, description, isPublic)
-    }
-
-    fun uploadPlaylistCover(user: User, playlistId: String, coverUrl: String) {
-        val coverBase64 = imageService.encodeImageToBase64(coverUrl) ?: return
-        spotifyPlaylistApiClient.uploadPlaylistCover(user, playlistId, coverBase64)
-    }
-
     fun checkPlaylist(user: User) {
         val playlistExists = spotifyPlaylistApiClient.checkPlaylistExists(user)
 
@@ -79,6 +57,28 @@ class PlaylistService(
             val userUpdated = user.copy(playlistId = playlistId)
             userRepository.save(userUpdated)
         }
+    }
+
+    fun uploadPlaylistCover(user: User, playlistId: String, coverUrl: String) {
+        val coverBase64 = imageService.encodeImageToBase64(coverUrl) ?: return
+        spotifyPlaylistApiClient.uploadPlaylistCover(user, playlistId, coverBase64)
+    }
+
+    private fun getTrackUris(tracks: Set<Track>): Set<String> {
+        return tracks.map { it.uri }.toSet()
+    }
+
+    private fun filterUrisByExistingInPlaylist(user: User, playlistId: String, trackUris: Set<String>): Set<String> {
+        val tracksInPlaylist = spotifyPlaylistApiClient.getPlaylistTracks(user, playlistId)
+        return trackUris.filter { !tracksInPlaylist.contains(it) }.toSet()
+    }
+
+    private fun filterUrisBySavedByUser(user: User, trackUris: Set<String>): Set<String> {
+        return spotifyPlaylistApiClient.filterSavedTracks(user, trackUris)
+    }
+
+    private fun filterTracksByUris(tracks: Set<Track>, uris: Set<String>): Set<Track> {
+        return tracks.filter { uris.contains(it.uri) }.toSet()
     }
 
 }

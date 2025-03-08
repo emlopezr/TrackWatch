@@ -17,15 +17,19 @@ class SpotifyUserApiClient(metricService: MetricService): SpotifyApiClient(metri
     fun getUser(accessToken: String): SpotifyUserDTO {
         try {
             sendMetricApiCall("getUser")
+
             val response = webClient.get()
                 .uri("/me")
                 .header("Authorization", "Bearer $accessToken")
                 .retrieve()
                 .bodyToMono(Map::class.java)
                 .block() ?: throw UnauthorizedException(ErrorCode.SPOTIFY_INVALID_ACCESS_TOKEN)
+
             return mapToSpotifyUserDTO(response)
+
         } catch (e: WebClientResponseException) {
             throw handleSpotifyApiException(e)
+
         } catch (e: Exception) {
             throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API", e.toString())
         }
@@ -51,7 +55,7 @@ class SpotifyUserApiClient(metricService: MetricService): SpotifyApiClient(metri
             401 -> UnauthorizedException(ErrorCode.SPOTIFY_INVALID_ACCESS_TOKEN, details = e.message)
             403 -> ForbiddenException(ErrorCode.SPOTIFY_FORBIDDEN_REQUEST, details = e.message)
             404 -> BadRequestException(ErrorCode.SPOTIFY_USER_NOT_FOUND)
-            else -> RuntimeException("Error while calling Spotify API: ${e.message}")
+            else -> InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API: ${e.message}")
         }
     }
 

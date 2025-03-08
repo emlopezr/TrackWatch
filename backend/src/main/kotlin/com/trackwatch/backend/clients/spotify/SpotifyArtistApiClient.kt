@@ -28,24 +28,24 @@ class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(met
                 .header("Authorization", "Bearer $accessToken")
                 .retrieve()
                 .bodyToMono(Map::class.java)
-                .block() ?: throw RuntimeException("No data returned from Spotify API")
+                .block() ?: throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "No data returned from Spotify API")
 
             return parseArtistInfo(response)
 
         } catch (e: WebClientResponseException) {
-            throw RuntimeException("Error while calling Spotify API: ${e.message}")
+            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API: ${e.message}")
 
         } catch (e: Exception) {
             throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API", e.toString())
         }
     }
 
-    fun getArtistNewTracksWithRetries(artist: Artist, accessToken: String, daysLimit: Int?, page: Int, maxAttempts: Int = 3): List<Track> {
+    fun searchArtistTracksWithRetries(artist: Artist, accessToken: String, daysLimit: Int?, page: Int, maxAttempts: Int = 3): List<Track> {
         var lastException: Exception? = null
 
         for (attempt in 1..maxAttempts) {
             try {
-                return getArtistNewTracks(artist, accessToken, daysLimit, page)
+                return searchArtistTracks(artist, accessToken, daysLimit, page)
 
             } catch (e: Exception) {
                 lastException = e
@@ -66,7 +66,7 @@ class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(met
         }
 
         if (lastException is WebClientResponseException) {
-            throw RuntimeException("Error while calling Spotify API after $maxAttempts attempts: ${lastException.message}")
+            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API after $maxAttempts attempts: ${lastException.message}")
         }
 
         throw InternalServerErrorException(
@@ -76,23 +76,20 @@ class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(met
         )
     }
 
-    private fun getArtistNewTracks(artist: Artist, accessToken: String, daysLimit: Int?, page: Int): List<Track> {
+    private fun searchArtistTracks(artist: Artist, accessToken: String, daysLimit: Int?, page: Int): List<Track> {
         val queryParams = buildQueryParams(artist.name, daysLimit, page)
 
         try {
-            sendMetricApiCall("getArtistNewTracks")
-
+            sendMetricApiCall("searchArtistTracks")
             val response = webClient.get()
                 .uri("/search?$queryParams")
                 .header("Authorization", "Bearer $accessToken")
                 .retrieve()
                 .bodyToMono(Map::class.java)
                 .block() ?: return emptyList()
-
             return parseTracks(response)
-
         } catch (e: WebClientResponseException) {
-            throw RuntimeException("Error while calling Spotify API: ${e.message}")
+            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API: ${e.message}")
 
         } catch (e: Exception) {
             throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API", e.toString())
@@ -152,7 +149,7 @@ class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(met
             "day" -> {
                 dateFormat.parse(releaseDateString)
             }
-            else -> throw RuntimeException("Invalid release date precision: $releaseDatePrecision")
+            else -> throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Invalid release date precision: $releaseDatePrecision")
         }
 
         return releaseDate

@@ -5,9 +5,8 @@ import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 
 @Service
-class ImageService {
+class ImageService(private val webClient: WebClient) {
 
-    private val webClient: WebClient = WebClient.builder().build()
     private val log = LoggerFactory.getLogger(ImageService::class.java)
 
     fun encodeImageToBase64(imageUrl: String): String? {

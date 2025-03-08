@@ -57,6 +57,7 @@ class SpotifyAuthApiClient(metricService: MetricService): SpotifyApiClient(metri
 
         try {
             sendMetricApiCall("refreshAccessToken")
+
             val response = authWebClient.post()
                 .uri("/token")
                 .header("Authorization", "Basic $authString")
@@ -65,7 +66,9 @@ class SpotifyAuthApiClient(metricService: MetricService): SpotifyApiClient(metri
                 .retrieve()
                 .bodyToMono(Map::class.java)
                 .block() ?: throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API", "Response is null")
+
             return mapToSpotifyTokenDTO(response, refreshToken)
+
         } catch (e: Exception) {
             throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API", e.toString())
         }
