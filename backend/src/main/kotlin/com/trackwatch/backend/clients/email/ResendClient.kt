@@ -6,6 +6,7 @@ import com.trackwatch.backend.exception.InternalServerErrorException
 import com.trackwatch.backend.model.User
 import com.trackwatch.backend.service.MetricService
 import com.trackwatch.backend.exception.ErrorCode
+import com.trackwatch.backend.utils.values.Constants
 import com.trackwatch.backend.utils.values.Metrics
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -31,7 +32,7 @@ class ResendClient(private val metricService: MetricService) {
 
     private fun createEmailParams(recipient: User, emailSubject: String, emailBody: String): CreateEmailOptions {
         return CreateEmailOptions.builder()
-            .from("TrackWatch <trackwatch@emlopezr.com>")
+            .from("${Constants.APP_NAME} <${Constants.APP_NAME.lowercase()}@>${Constants.DOMAIN}")
             .to(recipient.email)
             .subject(emailSubject)
             .html(emailBody)

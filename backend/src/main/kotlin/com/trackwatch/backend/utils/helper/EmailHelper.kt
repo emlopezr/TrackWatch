@@ -9,17 +9,12 @@ import java.util.*
 @Component
 class EmailHelper {
 
-    fun generateWelcomeEmailSubject(): String {
-        return "\uD83C\uDFB6 ¡Bienvenido a TrackWatch! ❤\uFE0F"
-    }
+    fun generateWelcomeEmailSubject(): String =
+        "\uD83C\uDFB6 ¡Bienvenido a ${Constants.APP_NAME}! ❤\uFE0F"
 
-    fun generateAddedTracksEmailSubject(userAddedTracks: List<Track>): String {
-        return if (userAddedTracks.size == 1) {
-            "\uD83C\uDFB6 Nueva canción añadida a tu playlist"
-        } else {
-            "\uD83C\uDFB6 ${userAddedTracks.size} nuevas canciones añadidas a tu playlist"
-        }
-    }
+    fun generateAddedTracksEmailSubject(userAddedTracks: List<Track>): String =
+        if (userAddedTracks.size == 1) "\uD83C\uDFB6 Nueva canción añadida a tu playlist"
+        else "\uD83C\uDFB6 ${userAddedTracks.size} nuevas canciones añadidas a tu playlist"
 
     fun generateWelcomeEmailBody(user: User): String {
         val year = generateCurrentYear()
@@ -29,28 +24,28 @@ class EmailHelper {
         <html>
         <head>
             <style>
-                body { font-family: Arial, sans-serif; background-color: #f7f7f7; color: #333; }
-                .email-container { max-width: 600px; margin: 20px auto; background-color: #fff; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
-                .header { background-color: ${Constants.EMAIL_GREEN}; color: #fff; text-align: center; padding: 20px; font-size: 20px; font-weight: bold; }
+                body { font-family: Arial, sans-serif; background-color: ${Constants.COLOR_LIGHT_GRAY_1}; color: ${Constants.COLOR_DARK_GRAY}; }
+                .email-container { max-width: 600px; margin: 20px auto; background-color: ${Constants.COLOR_WHITE}; border-radius: 8px; border: 1px solid ${Constants.COLOR_LIGHT_GRAY_3}; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+                .header { background-color: ${Constants.COLOR_GREEN}; color: ${Constants.COLOR_WHITE}; text-align: center; padding: 20px; font-size: 20px; font-weight: bold; }
                 .header-subtitle { font-size: 12px; font-weight: normal; }
                 .content { padding: 20px; }
-                .footer { background-color: #f4f4f4; color: #666; text-align: center; padding: 10px; font-size: 12px; }
+                .footer { background-color: ${Constants.COLOR_LIGHT_GRAY_2}; color: #666; text-align: center; padding: 10px; font-size: 12px; }
             </style>
         </head>
         <body>
             <div class="email-container">
                 <div class="header">
-                    🎶 ¡Bienvenido a TrackWatch! ❤️
+                    🎶 ¡Bienvenido a ${Constants.APP_NAME}! ❤️
                     <div class="header-subtitle">Gracias por unirte a nosotros</div>
                 </div>
                 <div class="content">
-                    <p>Hola ${user.name}, ¡Gracias por registrarte en TrackWatch! 🎉</p>
+                    <p>Hola ${user.name}, ¡Gracias por registrarte en ${Constants.APP_NAME}! 🎉</p>
                     <p>Ahora podrás estar al tanto de los nuevos lanzamientos de tus artistas favoritos sin esforzarte.</p>
                     <p>¡No olvides seguir a tus artistas favoritos para día a día tener sus últimas canciones en tu playlist y recibir notificaciones!</p>
                     <p>¡Que disfrutes de la música! 🎧</p>
                 </div>
                 <div class="footer">
-                    © $year - TrackWatch - Desarrollado por <a href="https://github.com/emlopezr" style="color: ${Constants.EMAIL_GREEN}; text-decoration: none;">@emlopezr</a>
+                    © $year - ${Constants.APP_NAME} - Desarrollado por <a href="${Constants.GITHUB_USER_PROFILE}" style="color: ${Constants.COLOR_GREEN}; text-decoration: none;">@${Constants.GITHUB_USERNAME}</a>
                 </div>
             </div>
         </body>
@@ -83,15 +78,15 @@ class EmailHelper {
         <html>
         <head>
             <style>
-                body { font-family: Arial, sans-serif; background-color: #f7f7f7; color: #333; }
-                .email-container { max-width: 600px; margin: 20px auto; background-color: #fff; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
-                .header { background-color: ${Constants.EMAIL_GREEN}; color: #fff; text-align: center; padding: 20px; font-size: 20px; font-weight: bold; }
+                body { font-family: Arial, sans-serif; background-color: ${Constants.COLOR_LIGHT_GRAY_1}; color: ${Constants.COLOR_DARK_GRAY}; }
+                .email-container { max-width: 600px; margin: 20px auto; background-color: ${Constants.COLOR_WHITE}; border-radius: 8px; border: 1px solid ${Constants.COLOR_LIGHT_GRAY_3}; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+                .header { background-color: ${Constants.COLOR_GREEN}; color: ${Constants.COLOR_WHITE}; text-align: center; padding: 20px; font-size: 20px; font-weight: bold; }
                 .header-subtitle { font-size: 12px; font-weight: normal; }
                 .content { padding: 20px; }
                 table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                th, td { padding: 10px; border: 1px solid #ddd; }
-                th { background-color: #f4f4f4; text-align: center; }
-                .footer { background-color: #f4f4f4; color: #666; text-align: center; padding: 10px; font-size: 12px; }
+                th, td { padding: 10px; border: 1px solid ${Constants.COLOR_LIGHT_GRAY_3}; }
+                th { background-color: ${Constants.COLOR_LIGHT_GRAY_2}; text-align: center; }
+                .footer { background-color: ${Constants.COLOR_LIGHT_GRAY_2}; color: #666; text-align: center; padding: 10px; font-size: 12px; }
             </style>
         </head>
         <body>
@@ -110,7 +105,7 @@ class EmailHelper {
                     <p style="margin-top: 20px;">Disfruta de los nuevos lanzamientos! 🎧</p>
                 </div>
                 <div class="footer">
-                    © $year - TrackWatch - Desarrollado por <a href="https://github.com/emlopezr" style="color: ${Constants.EMAIL_GREEN}; text-decoration: none;">@emlopezr</a>
+                    © $year - ${Constants.APP_NAME} - Desarrollado por <a href="${Constants.GITHUB_USER_PROFILE}" style="color: ${Constants.COLOR_GREEN}; text-decoration: none;">@${Constants.GITHUB_USERNAME}</a>
                 </div>
             </div>
         </body>

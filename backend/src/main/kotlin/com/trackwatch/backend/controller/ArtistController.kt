@@ -5,6 +5,7 @@ import com.trackwatch.backend.service.ArtistService
 import com.trackwatch.backend.utils.values.Endpoints
 import com.trackwatch.backend.utils.values.Headers
 import com.trackwatch.backend.service.MetricService
+import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*
 class ArtistController(
     private val artistService: ArtistService,
     metricService: MetricService
-): BaseController(metricService) {
+): AbstractController(metricService) {
 
     @PostMapping(Endpoints.ARTIST_CONTROLLER_FOLLOW)
     fun followArtist(
@@ -21,7 +22,7 @@ class ArtistController(
         @RequestBody artist: Artist,
         @RequestHeader(Headers.ACCESS_TOKEN) accessToken: String
     ): ResponseEntity<MutableList<Artist>> {
-        sendMetricRequest(Endpoints.ARTIST_CONTROLLER_FOLLOW, "POST")
+        sendMetricRequest(Endpoints.ARTIST_CONTROLLER_FOLLOW, HttpMethod.POST)
         val response = artistService.followArtist(userId, artist, accessToken)
         return ResponseEntity.ok(response)
     }
@@ -32,7 +33,7 @@ class ArtistController(
         @RequestParam artistId: String,
         @RequestHeader(Headers.ACCESS_TOKEN) accessToken: String
     ): ResponseEntity<MutableList<Artist>> {
-        sendMetricRequest(Endpoints.ARTIST_CONTROLLER_UNFOLLOW, "POST")
+        sendMetricRequest(Endpoints.ARTIST_CONTROLLER_UNFOLLOW, HttpMethod.POST)
         val response = artistService.unfollowArtist(userId, artistId, accessToken)
         return ResponseEntity.ok(response)
     }

@@ -154,13 +154,11 @@ class GenerateArtistPlaylistUseCase(
         return tracks.filter { track -> trackService.isCorrectArtist(track, artist) }
     }
 
-    private fun generatePlaylistName(artistName: String): String {
-        return "All of: $artistName"
-    }
+    private fun generatePlaylistName(artistName: String): String =
+        "All of: $artistName"
 
-    private fun generatePlaylistDescription(artistName: String): String {
-        return "Every track from $artistName in one place - Powered by TrackWatch"
-    }
+    private fun generatePlaylistDescription(artistName: String): String =
+        "Every track from $artistName in one place - Powered by ${Constants.APP_NAME}"
 
     private fun addTracksToFindings(tracks: List<Track>, findings: MutableSet<Track>, artist: Artist): Boolean {
         val initialSize = findings.size

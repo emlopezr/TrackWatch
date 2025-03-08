@@ -2,16 +2,17 @@ package com.trackwatch.backend.controller
 
 import com.trackwatch.backend.service.MetricService
 import com.trackwatch.backend.utils.values.Endpoints
+import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class UtilsController(metricService: MetricService): BaseController(metricService) {
+class UtilsController(metricService: MetricService): AbstractController(metricService) {
 
     @GetMapping(Endpoints.PING)
     fun ping(): ResponseEntity<String> {
-        sendMetricRequest(Endpoints.PING, "GET")
+        sendMetricRequest(Endpoints.PING, HttpMethod.GET)
         return ResponseEntity.ok("pong")
     }
 

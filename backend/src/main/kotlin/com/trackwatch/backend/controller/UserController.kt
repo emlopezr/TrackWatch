@@ -5,6 +5,7 @@ import com.trackwatch.backend.service.UserService
 import com.trackwatch.backend.utils.values.Endpoints
 import com.trackwatch.backend.utils.values.Headers
 import com.trackwatch.backend.service.MetricService
+import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 
 import org.springframework.http.ResponseEntity
@@ -15,14 +16,14 @@ import org.springframework.web.bind.annotation.*
 class UserController(
     private val userService: UserService,
     metricService: MetricService
-): BaseController(metricService) {
+): AbstractController(metricService) {
 
     @PostMapping(Endpoints.USER_CONTROLLER_REGISTER)
     fun registerUser(
         @RequestHeader(Headers.ACCESS_TOKEN)  accessToken: String,
         @RequestHeader(Headers.REFRESH_TOKEN) refreshToken: String
     ): ResponseEntity<UserResponseDTO> {
-        sendMetricRequest(Endpoints.USER_CONTROLLER_REGISTER, "POST")
+        sendMetricRequest(Endpoints.USER_CONTROLLER_REGISTER, HttpMethod.POST)
         val response = userService.registerUser(accessToken, refreshToken)
         return ResponseEntity.status(HttpStatus.CREATED).body(response)
     }
@@ -32,7 +33,7 @@ class UserController(
         @RequestHeader(Headers.ACCESS_TOKEN)  accessToken: String,
         @RequestHeader(Headers.REFRESH_TOKEN) refreshToken: String
     ): ResponseEntity<UserResponseDTO> {
-        sendMetricRequest(Endpoints.USER_CONTROLLER_GET_BY_ID, "GET")
+        sendMetricRequest(Endpoints.USER_CONTROLLER_GET_BY_ID, HttpMethod.GET)
         val response = userService.getCurrentUser(accessToken, refreshToken)
         return ResponseEntity.ok(response)
     }
