@@ -2,7 +2,11 @@ package com.trackwatch.backend.utils.values
 
 object Endpoints {
     const val PING = "/ping"
-    const val RUN_CORE_TASK = "/run"
+
+    const val ACTIONS_CONTROLLER_BASE = "/actions"
+    const val ACTIONS_GENERATE_ARTIST_PLAYLIST = "/generate"
+    const val ACTIONS_UPDATE_GET_NEW_RELEASES = "/releases"
+
 
     const val USER_CONTROLLER_BASE = "/users"
     const val USER_CONTROLLER_REGISTER = "/register"
