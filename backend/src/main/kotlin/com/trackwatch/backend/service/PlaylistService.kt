@@ -54,14 +54,17 @@ class PlaylistService(
 
         if (!playlistExists) {
             val playlistId = createPlaylist(user)
+            updatePlaylistCover(user, playlistId, Constants.DEFAULT_PLAYLIST_COVER_URL)
+
             val userUpdated = user.copy(playlistId = playlistId)
             userRepository.save(userUpdated)
         }
     }
 
-    fun uploadPlaylistCover(user: User, playlistId: String, coverUrl: String) {
+    fun updatePlaylistCover(user: User, playlistId: String, coverUrl: String) {
+        Thread.sleep(Constants.DEFAULT_WAIT_TIME)
         val coverBase64 = imageHelper.encodeImageToBase64(coverUrl) ?: return
-        spotifyPlaylistApiClient.uploadPlaylistCover(user, playlistId, coverBase64)
+        spotifyPlaylistApiClient.updatePlaylistCover(user, playlistId, coverBase64)
     }
 
     private fun getTrackUris(tracks: Set<Track>): Set<String> {

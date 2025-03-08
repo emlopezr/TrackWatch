@@ -31,7 +31,7 @@ class UtilsController(
     ): ResponseEntity<String> {
         sendMetricRequest(Endpoints.RUN_CORE_TASK, "POST")
         checkAdminKey(adminKey)
-        coreService.runCoreTask(daysLimit ?: Constants.DAYS_LIMIT)
+        coreService.runCoreTask(daysLimit ?: Constants.FILTER_DAYS_LIMIT)
         return ResponseEntity.ok("Task executed")
     }
 

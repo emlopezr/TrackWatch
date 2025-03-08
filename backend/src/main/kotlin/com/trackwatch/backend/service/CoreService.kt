@@ -16,7 +16,7 @@ class CoreService(
 
     private val log = LoggerFactory.getLogger(CoreService::class.java)
 
-    fun runCoreTask(daysLimit: Int = Constants.DAYS_LIMIT) {
+    fun runCoreTask(daysLimit: Int = Constants.FILTER_DAYS_LIMIT) {
         val users = userService.getAllUsers()
         log.info("Running core task for ${users.size} users")
 
@@ -31,7 +31,7 @@ class CoreService(
         log.info("Core task finished")
     }
 
-    fun runCoreTask(user: User, daysLimit: Int = Constants.DAYS_LIMIT) {
+    fun runCoreTask(user: User, daysLimit: Int = Constants.FILTER_DAYS_LIMIT) {
         val userWithValidToken = userService.getValidAccessToken(user)
         val accessToken = userWithValidToken.auth.current.accessToken
 

@@ -8,6 +8,7 @@ import com.trackwatch.backend.clients.spotify.SpotifyUserApiClient
 import com.trackwatch.backend.exception.BadRequestException
 import com.trackwatch.backend.exception.NotFoundException
 import com.trackwatch.backend.exception.ErrorCode
+import com.trackwatch.backend.utils.values.Constants
 
 import org.springframework.stereotype.Service
 
@@ -32,7 +33,10 @@ class UserService(
         }
 
         val user = User(spotifyUser, accessToken, refreshToken)
+
         val playlistId = playlistService.createPlaylist(user)
+        playlistService.updatePlaylistCover(user, playlistId, Constants.DEFAULT_PLAYLIST_COVER_URL)
+
         val updatedUser = user.copy(playlistId = playlistId)
         val savedUser = userRepository.save(updatedUser)
 

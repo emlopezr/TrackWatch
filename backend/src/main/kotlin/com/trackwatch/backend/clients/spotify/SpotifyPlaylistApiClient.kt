@@ -164,9 +164,9 @@ class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(m
         }
     }
 
-    fun uploadPlaylistCover(user: User, playlistId: String, imageBase64: String) {
+    fun updatePlaylistCover(user: User, playlistId: String, imageBase64: String) {
         try {
-            sendMetricApiCall("uploadPlaylistCover")
+            sendMetricApiCall("updatePlaylistCover")
 
             webClient.put()
                 .uri("/playlists/$playlistId/images")

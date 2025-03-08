@@ -17,7 +17,7 @@ class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
         artist: Artist,
         accessToken: String,
         pagesToFetch: Int,
-        daysLimit: Int = Constants.DAYS_LIMIT
+        daysLimit: Int = Constants.FILTER_DAYS_LIMIT
     ): List<Track> {
         val newTracks = mutableListOf<Track>()
 
@@ -34,13 +34,13 @@ class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
         user: User,
         artist: Artist,
         tracksToAdd: MutableSet<Track>,
-        daysLimit: Int = Constants.DAYS_LIMIT,
+        daysLimit: Int = Constants.FILTER_DAYS_LIMIT,
         shouldCheckCorrectArtist: Boolean = true,
         shouldCheckTrackInTimeRange: Boolean = true,
         shouldCheckCompilationAlbum: Boolean = true,
         shouldCheckSongBlockedByUserSettings: Boolean = true
     ): Track? {
-        val calendar = Calendar.getInstance(TimeZone.getTimeZone(Constants.TIMEZONE))
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone(Constants.SERVER_TIMEZONE))
         val today = calendar.time
 
         calendar.add(Calendar.DAY_OF_YEAR, -daysLimit)

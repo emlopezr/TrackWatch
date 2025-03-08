@@ -59,7 +59,7 @@ class GeneratorService(
             if (
                 tracks.isEmpty() ||
                 !addTracksToFindings(tracks, findings, artist) ||
-                iteration >= Constants.MAX_ITERATION
+                iteration >= Constants.MAX_LOOP_ITERATION
             ) {  break }
 
             iteration++
@@ -141,8 +141,7 @@ class GeneratorService(
         )
 
         try {
-            Thread.sleep(2500)
-            playlistService.uploadPlaylistCover(user, playlistId, coverImageUrl)
+            playlistService.updatePlaylistCover(user, playlistId, coverImageUrl)
         } catch (e: Exception) {
             log.error("Failed to upload playlist cover for playlist: $playlistId")
         }
