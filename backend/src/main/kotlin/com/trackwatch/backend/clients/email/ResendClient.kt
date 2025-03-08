@@ -3,11 +3,9 @@ package com.trackwatch.backend.clients.email
 import com.resend.Resend
 import com.resend.services.emails.model.CreateEmailOptions
 import com.trackwatch.backend.exception.InternalServerErrorException
-import com.trackwatch.backend.model.Track
 import com.trackwatch.backend.model.User
-import com.trackwatch.backend.utils.service.EmailHelper
 import com.trackwatch.backend.utils.service.MetricService
-import com.trackwatch.backend.utils.values.ErrorCode
+import com.trackwatch.backend.exception.ErrorCode
 import com.trackwatch.backend.utils.values.Metrics
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component

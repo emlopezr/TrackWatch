@@ -5,7 +5,7 @@ import com.trackwatch.backend.model.Artist
 import com.trackwatch.backend.model.Track
 import com.trackwatch.backend.model.TrackImage
 import com.trackwatch.backend.utils.service.MetricService
-import com.trackwatch.backend.utils.values.ErrorCode
+import com.trackwatch.backend.exception.ErrorCode
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClientResponseException

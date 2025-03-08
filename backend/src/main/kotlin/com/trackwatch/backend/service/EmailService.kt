@@ -3,7 +3,7 @@ package com.trackwatch.backend.service
 import com.trackwatch.backend.clients.email.ResendClient
 import com.trackwatch.backend.model.Track
 import com.trackwatch.backend.model.User
-import com.trackwatch.backend.utils.service.EmailHelper
+import com.trackwatch.backend.utils.helper.EmailHelper
 import org.springframework.stereotype.Service
 
 @Service

@@ -3,7 +3,7 @@ package com.trackwatch.backend.clients.spotify
 import com.trackwatch.backend.exception.InternalServerErrorException
 import com.trackwatch.backend.model.User
 import com.trackwatch.backend.utils.service.MetricService
-import com.trackwatch.backend.utils.values.ErrorCode
+import com.trackwatch.backend.exception.ErrorCode
 import org.springframework.stereotype.Component
 
 @Component

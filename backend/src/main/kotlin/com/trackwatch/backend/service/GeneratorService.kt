@@ -7,7 +7,7 @@ import com.trackwatch.backend.model.Track
 import com.trackwatch.backend.model.User
 import com.trackwatch.backend.repository.UserRepository
 import com.trackwatch.backend.utils.values.Constants
-import com.trackwatch.backend.utils.values.ErrorCode
+import com.trackwatch.backend.exception.ErrorCode
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import kotlin.math.abs

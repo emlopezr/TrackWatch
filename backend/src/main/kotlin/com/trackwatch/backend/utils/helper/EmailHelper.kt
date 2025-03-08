@@ -1,4 +1,4 @@
-package com.trackwatch.backend.utils.service
+package com.trackwatch.backend.utils.helper
 
 import com.trackwatch.backend.model.Track
 import com.trackwatch.backend.model.User

@@ -1,4 +1,4 @@
-package com.trackwatch.backend.utils.values
+package com.trackwatch.backend.exception
 
 enum class ErrorCode(val description: String) {
     UNHANDLED_EXCEPTION("Unhandled exception"),

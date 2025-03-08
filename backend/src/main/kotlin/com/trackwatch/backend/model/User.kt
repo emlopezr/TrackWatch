@@ -3,7 +3,7 @@ package com.trackwatch.backend.model
 import com.trackwatch.backend.clients.spotify.dto.SpotifyUserDTO
 import com.trackwatch.backend.exception.UnauthorizedException
 import com.trackwatch.backend.utils.values.Constants
-import com.trackwatch.backend.utils.values.ErrorCode
+import com.trackwatch.backend.exception.ErrorCode
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.AttributeOverrides
 import jakarta.persistence.CollectionTable

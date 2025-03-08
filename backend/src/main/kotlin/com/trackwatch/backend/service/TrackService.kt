@@ -5,7 +5,6 @@ import com.trackwatch.backend.model.Artist
 import com.trackwatch.backend.model.Track
 import com.trackwatch.backend.model.User
 import com.trackwatch.backend.utils.values.Constants
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.Calendar
 import java.util.Date

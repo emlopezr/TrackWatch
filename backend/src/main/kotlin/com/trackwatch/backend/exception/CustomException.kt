@@ -1,7 +1,5 @@
 package com.trackwatch.backend.exception
 
-import com.trackwatch.backend.utils.values.ErrorCode
-
 open class CustomException(val errorCode: ErrorCode, message: String = errorCode.description, val details: String = "") : RuntimeException(message)
 
 class BadRequestException(errorCode: ErrorCode, message: String = errorCode.description, details: String = "") : CustomException(errorCode, message, details)

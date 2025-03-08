@@ -1,18 +1,16 @@
 package com.trackwatch.backend.service
 
 import com.trackwatch.backend.clients.spotify.SpotifyAuthApiClient
-import com.trackwatch.backend.clients.spotify.SpotifyPlaylistApiClient
 import com.trackwatch.backend.repository.UserRepository
 import com.trackwatch.backend.model.User
 import com.trackwatch.backend.controller.dto.UserResponseDTO
 import com.trackwatch.backend.clients.spotify.SpotifyUserApiClient
 import com.trackwatch.backend.exception.BadRequestException
 import com.trackwatch.backend.exception.NotFoundException
-import com.trackwatch.backend.utils.values.ErrorCode
+import com.trackwatch.backend.exception.ErrorCode
 
 import org.springframework.stereotype.Service
 
-// TODO: Use interface for userRepository - InMemoryUserRepository for certain profiles, and MongoUserRepository for others
 @Service
 class UserService(
     private val userRepository: UserRepository,

@@ -2,7 +2,7 @@ package com.trackwatch.backend.clients.spotify
 
 import com.trackwatch.backend.clients.spotify.dto.SpotifyTokenDTO
 import com.trackwatch.backend.exception.*
-import com.trackwatch.backend.utils.values.ErrorCode
+import com.trackwatch.backend.exception.ErrorCode
 import com.trackwatch.backend.utils.service.MetricService
 import org.slf4j.LoggerFactory
 

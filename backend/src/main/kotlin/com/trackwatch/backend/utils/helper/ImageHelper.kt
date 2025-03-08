@@ -1,13 +1,13 @@
-package com.trackwatch.backend.utils.service
+package com.trackwatch.backend.utils.helper
 
 import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Service
+import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 
-@Service
-class ImageService(private val webClient: WebClient) {
+@Component
+class ImageHelper(private val webClient: WebClient) {
 
-    private val log = LoggerFactory.getLogger(ImageService::class.java)
+    private val log = LoggerFactory.getLogger(ImageHelper::class.java)
 
     fun encodeImageToBase64(imageUrl: String): String? {
         return try {
