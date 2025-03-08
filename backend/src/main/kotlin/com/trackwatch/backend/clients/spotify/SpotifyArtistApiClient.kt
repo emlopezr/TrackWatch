@@ -127,6 +127,7 @@ class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(met
                 albumType = album["album_type"] as String,
                 discNumber = mapTrack["disc_number"] as Int,
                 albumOrder = mapTrack["track_number"] as Int,
+                durationMs = mapTrack["duration_ms"] as Int
             )
 
             parsedTracks.add(track)
@@ -233,12 +234,13 @@ class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(met
     }
 
     fun parseArtistInfo(response: Map<*, *>): Artist {
-        val genres = response["genres"] as List<*>
         val images = response["images"] as List<*>
+        val imageUrl = (images.firstOrNull() as? Map<*, *>)?.get("url") as? String ?: ""
 
         return Artist(
             id = response["id"] as String,
-            name = response["name"] as String
+            name = response["name"] as String,
+            imageUrl = imageUrl
         )
     }
 

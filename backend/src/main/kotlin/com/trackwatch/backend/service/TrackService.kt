@@ -25,17 +25,27 @@ class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
         return newTracks
     }
 
-    fun filterTrack(track: Track, user: User, artist: Artist, tracksToAdd: MutableSet<Track>, daysLimit: Int = Constants.DAYS_LIMIT): Track? {
+    fun filterTrack(
+        track: Track,
+        user: User,
+        artist: Artist,
+        tracksToAdd: MutableSet<Track>,
+        daysLimit: Int = Constants.DAYS_LIMIT,
+        shouldCheckCorrectArtist: Boolean = true,
+        shouldCheckTrackInTimeRange: Boolean = true,
+        shouldCheckCompilationAlbum: Boolean = true,
+        shouldCheckSongBlockedByUserSettings: Boolean = true
+    ): Track? {
         val calendar = Calendar.getInstance(TimeZone.getTimeZone(Constants.TIMEZONE))
         val today = calendar.time
 
         calendar.add(Calendar.DAY_OF_YEAR, -daysLimit)
         val startDate = calendar.time
 
-        val isCorrectArtist = isCorrectArtist(track, artist)
-        val isTrackInTimeRange = isTrackInTimeRange(track, startDate, today)
-        val isCompilationAlbum = isCompilationAlbum(track)
-        val isSongBlockedByUserSettings = isSongBlockedByUserSettings(track, user)
+        val isCorrectArtist = !shouldCheckCorrectArtist || isCorrectArtist(track, artist)
+        val isTrackInTimeRange = !shouldCheckTrackInTimeRange || isTrackInTimeRange(track, startDate, today)
+        val isCompilationAlbum = shouldCheckCompilationAlbum && isCompilationAlbum(track)
+        val isSongBlockedByUserSettings = shouldCheckSongBlockedByUserSettings && isSongBlockedByUserSettings(track, user)
 
         if (isCorrectArtist && isTrackInTimeRange && !isCompilationAlbum && !isSongBlockedByUserSettings) {
             val selectedTrack = selectTrack(track, tracksToAdd)
@@ -61,7 +71,7 @@ class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
         return sortedList.toSet()
     }
 
-    private fun isCorrectArtist(track: Track, artist: Artist): Boolean {
+    fun isCorrectArtist(track: Track, artist: Artist): Boolean {
         return track.artists.any { it.id == artist.id }
     }
 

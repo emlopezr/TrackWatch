@@ -15,6 +15,8 @@ data class Track (
     val albumType: String,
     val discNumber: Int,
     val albumOrder: Int,
+
+    val durationMs: Int,
 ) {
     fun isEqualTo(other: Any): Boolean {
         if (other !is Track) {

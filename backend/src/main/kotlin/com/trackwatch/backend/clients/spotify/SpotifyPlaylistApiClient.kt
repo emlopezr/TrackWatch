@@ -62,7 +62,6 @@ class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(m
         }
     }
 
-
     fun filterSavedTracks(user: User, uris: Set<String>): Set<String> {
         val ids = uris.map { it.split(":").last() }
         val filteredUris = mutableSetOf<String>()
@@ -154,6 +153,24 @@ class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(m
             } while (offset < total)
 
             return false
+        } catch (e: Exception) {
+            throw RuntimeException(e)
+        }
+    }
+
+    fun uploadPlaylistCover(user: User, playlistId: String, imageBase64: String) {
+        try {
+            sendMetricApiCall("uploadPlaylistCover")
+
+            webClient.put()
+                .uri("/playlists/$playlistId/images")
+                .header("Authorization", "Bearer ${user.auth.current.accessToken}")
+                .header("Content-Type", "image/jpeg")
+                .bodyValue(imageBase64)
+                .retrieve()
+                .bodyToMono(Void::class.java)
+                .block()
+
         } catch (e: Exception) {
             throw RuntimeException(e)
         }

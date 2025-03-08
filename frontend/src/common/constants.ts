@@ -16,5 +16,6 @@ export const SPOTIFY_SCOPES = [
   'playlist-modify-private',
   'playlist-modify-public',
   'user-read-email',
-  'user-library-read'
+  'user-library-read',
+  'ugc-image-upload'
 ]

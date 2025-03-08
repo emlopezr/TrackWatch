@@ -9,7 +9,9 @@ data class Artist(
     val id: String,
 
     @Column(name = "artist_name")
-    val name: String
+    val name: String,
+
+    val imageUrl: String = ""
 ) {
     fun isEqualTo(other: Any): Boolean {
         if (other !is Artist) {  return false  }

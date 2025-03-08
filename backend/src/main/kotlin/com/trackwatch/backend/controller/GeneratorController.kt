@@ -18,10 +18,11 @@ class GeneratorController(
     fun generatePlaylist(
         @RequestParam userId: String,
         @RequestParam artistId: String,
+        @RequestParam(required = false) playlistId: String?,
         @RequestHeader(Headers.ACCESS_TOKEN) accessToken: String
     ): ResponseEntity<String> {
         sendMetricRequest(Endpoints.GENERATOR_CONTROLLER_ARTIST, "POST")
-        generatorService.generateArtistPlaylist(userId, artistId, accessToken)
+        generatorService.generateArtistPlaylist(userId, artistId, playlistId, accessToken)
         return ResponseEntity.ok("Playlist generated")
     }
 
