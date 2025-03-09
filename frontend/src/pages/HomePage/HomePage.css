@@ -1,199 +1,199 @@
 .home {
-  padding: 2rem;
-  padding-top: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+    padding: 2rem;
+    padding-top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 @media (max-width: 768px) {
-  .home {
-    padding: 1rem;
-  }
+    .home {
+        padding: 1rem;
+    }
 }
 
 .login {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
 }
 
 .login__title {
-  font-size: 3rem;
-  margin: 0 0 1rem 0;
+    font-size: 3rem;
+    margin: 0 0 1rem 0;
 }
 
 .login__title--white {
-  color: white;
+    color: white;
 }
 
 .login__title--green {
-  color: var(--primary);
+    color: var(--primary);
 }
 
 .login__link {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 .login__button {
-  display: flex;
-  gap: 0.5rem;
-  padding: 1rem 1.5rem;
-  align-items: center;
-  background-color: var(--primary);
-  color: white;
-  border: none;
-  cursor: pointer;
+    display: flex;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    align-items: center;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    cursor: pointer;
 
-  border-radius: 50px;
-  -webkit-border-radius: 50px;
-  -moz-border-radius: 50px;
-  -ms-border-radius: 50px;
-  -o-border-radius: 50px;
+    border-radius: 50px;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    -ms-border-radius: 50px;
+    -o-border-radius: 50px;
 
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  -webkit-transition: background-color 0.3s ease, transform 0.2s ease;
-  -moz-transition: background-color 0.3s ease, transform 0.2s ease;
-  -ms-transition: background-color 0.3s ease, transform 0.2s ease;
-  -o-transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    -webkit-transition: background-color 0.3s ease, transform 0.2s ease;
+    -moz-transition: background-color 0.3s ease, transform 0.2s ease;
+    -ms-transition: background-color 0.3s ease, transform 0.2s ease;
+    -o-transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .login__button:hover {
-  background-color: color-mix(in srgb, var(--primary) 50%, transparent);
-  transform: scale(1.05);
-  -webkit-transform: scale(1.05);
-  -moz-transform: scale(1.05);
-  -ms-transform: scale(1.05);
-  -o-transform: scale(1.05);
+    background-color: color-mix(in srgb, var(--primary) 50%, transparent);
+    transform: scale(1.05);
+    -webkit-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -ms-transform: scale(1.05);
+    -o-transform: scale(1.05);
 }
 
 .login__logo {
-  width: 1.5rem;
-  height: auto;
+    width: 1.5rem;
+    height: auto;
 }
 
 .header {
-  z-index: 99;
-  position: sticky;
-  top: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-  padding: 2rem 0 1rem 0;
-  background-color: var(--background);
+    z-index: 99;
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 2rem 0 1rem 0;
+    background-color: var(--background);
 }
 
 .profile {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .profile__title {
-  margin: 0;
-  display: flex;
-  gap: 0.75rem;
-  font-size: 1.2rem;
+    margin: 0;
+    display: flex;
+    gap: 0.75rem;
+    font-size: 1.2rem;
 }
 
 .profile__title--white {
-  color: white;
+    color: white;
 }
 
 .profile__title--green {
-  color: var(--primary);
+    color: var(--primary);
 }
 
 .profile__image {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  object-fit: cover;
-  display: block;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
 }
 
 .profile__logo {
-  width: 2.5rem;
-  height: auto;
+    width: 2.5rem;
+    height: auto;
 }
 
 @media (max-width: 768px) {
-  .header {
-    padding: 1rem 0 0.5rem 0;
-    gap: 0.5rem;
-  }
+    .header {
+        padding: 1rem 0 0.5rem 0;
+        gap: 0.5rem;
+    }
 }
 
 .profile__user-container {
-  position: relative;
+    position: relative;
 }
 
 .profile__image-container {
-  cursor: pointer;
-  transition: transform 0.2s;
+    cursor: pointer;
+    transition: transform 0.2s;
 }
 
 .profile__image-container:hover {
-  transform: scale(1.05);
+    transform: scale(1.05);
 }
 
 .profile__menu {
-  position: absolute;
-  top: calc(100% + 10px);
-  right: 0;
-  background-color: var(--card);
-  border-radius: 8px;
-  box-shadow: 0 4px 12px var(--box-shadow);
-  padding: 12px;
-  width: 200px;
-  z-index: 1000;
-  animation: fadeIn 0.2s ease;
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background-color: var(--card);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px var(--box-shadow);
+    padding: 12px;
+    width: 200px;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
 }
 
 .profile__menu:before {
-  content: '';
-  position: absolute;
-  top: -6px;
-  right: 20px;
-  width: 12px;
-  height: 12px;
-  background-color: var(--card);
-  transform: rotate(45deg);
+    content: "";
+    position: absolute;
+    top: -6px;
+    right: 20px;
+    width: 12px;
+    height: 12px;
+    background-color: var(--card);
+    transform: rotate(45deg);
 }
 
 .profile__menu-name {
-  color: white;
-  font-weight: 600;
-  margin: 0 0 12px 0;
-  padding-bottom: 10px;
+    color: white;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+    padding-bottom: 10px;
 }
 
 .profile__menu-logout {
-  background-color: var(--red);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 16px;
-  font-weight: 500;
-  cursor: pointer;
-  width: 100%;
-  transition: background-color 0.2s;
+    background-color: var(--red);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.2s;
 }
 
 .profile__menu-logout:hover {
-  background-color: color-mix(in srgb, var(--red) 50%, transparent);
+    background-color: color-mix(in srgb, var(--red) 50%, transparent);
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

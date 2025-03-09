@@ -1,4 +1,4 @@
 export interface TrackWatchArtist {
-  id: string;
-  name: string;
+    id: string;
+    name: string;
 }

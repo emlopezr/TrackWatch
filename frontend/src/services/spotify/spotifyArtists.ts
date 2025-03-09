@@ -1,50 +1,53 @@
-import { SPOTIFY_API_URL } from '../../common/constants';
+import { SPOTIFY_API_URL } from "../../common/constants";
 import { SpotifyArtistResponse } from "../../types/spotify/SpotifyArtistResponse";
-import { TrackWatchArtist } from '../../types/trackwatch/TrackWatchArtist';
+import { TrackWatchArtist } from "../../types/trackwatch/TrackWatchArtist";
 
 const artistCache: { [artistId: string]: SpotifyArtistResponse } = {};
 
 const chunkArray = <T>(array: T[], chunkSize: number): T[][] => {
-  const chunks: T[][] = [];
-  for (let i = 0; i < array.length; i += chunkSize) {
-    chunks.push(array.slice(i, i + chunkSize));
-  }
-  return chunks;
+    const chunks: T[][] = [];
+    for (let i = 0; i < array.length; i += chunkSize) {
+        chunks.push(array.slice(i, i + chunkSize));
+    }
+    return chunks;
 };
 
 export const batchGetArtists = async (
-  accessToken: string,
-  artists: TrackWatchArtist[]
+    accessToken: string,
+    artists: TrackWatchArtist[]
 ): Promise<SpotifyArtistResponse[]> => {
-  try {
-    const allArtistIds = artists.map(artist => artist.id);
-    const idsToFetch = allArtistIds.filter(id => !artistCache[id]);
+    try {
+        const allArtistIds = artists.map((artist) => artist.id);
+        const idsToFetch = allArtistIds.filter((id) => !artistCache[id]);
 
-    if (idsToFetch.length === 0) {
-      return allArtistIds.map(id => artistCache[id]).filter(Boolean);
-    }
+        if (idsToFetch.length === 0) {
+            return allArtistIds.map((id) => artistCache[id]).filter(Boolean);
+        }
 
-    const batches = chunkArray(idsToFetch, 50);
+        const batches = chunkArray(idsToFetch, 50);
 
-    for (const batch of batches) {
-      const idsParam = batch.join(',');
-      const response = await fetch(`${SPOTIFY_API_URL}/artists?ids=${idsParam}`, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-      if (response.status === 401) {
-        console.error('Invalid access token');
+        for (const batch of batches) {
+            const idsParam = batch.join(",");
+            const response = await fetch(
+                `${SPOTIFY_API_URL}/artists?ids=${idsParam}`,
+                {
+                    headers: { Authorization: `Bearer ${accessToken}` },
+                }
+            );
+            if (response.status === 401) {
+                console.error("Invalid access token");
+                return [];
+            }
+            const data = await response.json();
+
+            data.artists.forEach((artist: SpotifyArtistResponse) => {
+                artistCache[artist.id] = artist;
+            });
+        }
+
+        return allArtistIds.map((id) => artistCache[id]).filter(Boolean);
+    } catch {
+        console.error("Error fetching artists");
         return [];
-      }
-      const data = await response.json();
-
-      data.artists.forEach((artist: SpotifyArtistResponse) => {
-        artistCache[artist.id] = artist;
-      });
     }
-
-    return allArtistIds.map(id => artistCache[id]).filter(Boolean);
-  } catch {
-    console.error('Error fetching artists');
-    return [];
-  }
 };

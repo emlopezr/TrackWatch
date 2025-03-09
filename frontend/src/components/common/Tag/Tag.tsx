@@ -6,7 +6,7 @@ interface TagProps {
 }
 
 const Tag = ({ text }: TagProps) => {
-  const randomColor = useMemo(() => Math.floor(Math.random()* 360), []);
+  const randomColor = useMemo(() => Math.floor(Math.random() * 360), []);
   const hslColor = `hsl(${randomColor}, 80%, 35%)`;
 
   return (

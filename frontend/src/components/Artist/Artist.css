@@ -1,146 +1,146 @@
 .artist {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.5rem;
-  border-radius: 1rem;
-  -webkit-border-radius: 1rem;
-  -moz-border-radius: 1rem;
-  -ms-border-radius: 1rem;
-  -o-border-radius: 1rem;
-  background-color: var(--card);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    -webkit-border-radius: 1rem;
+    -moz-border-radius: 1rem;
+    -ms-border-radius: 1rem;
+    -o-border-radius: 1rem;
+    background-color: var(--card);
 }
 
 .artist__content {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .artist__image {
-  display: flex;
-  width: 5rem;
-  height: 5rem;
-  border-radius: 50%;
-  object-fit: cover;
+    display: flex;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .artist__info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
 }
 
 .artist__name {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--white);
-  margin: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--white);
+    margin: 0;
 }
 
 .artist__tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .artist__button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0.5rem;
-  font-weight: bold;
-  color: var(--white);
-  border: none;
-  cursor: pointer;
-  border-radius:50%;
-  -webkit-border-radius:50%;
-  -moz-border-radius:50%;
-  -ms-border-radius:50%;
-  -o-border-radius:50%;
-  transition: background-color 0.2s ease;
-  -webkit-transition: background-color 0.2s ease;
-  -moz-transition: background-color 0.2s ease;
-  -ms-transition: background-color 0.2s ease;
-  -o-transition: background-color 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+    font-weight: bold;
+    color: var(--white);
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    transition: background-color 0.2s ease;
+    -webkit-transition: background-color 0.2s ease;
+    -moz-transition: background-color 0.2s ease;
+    -ms-transition: background-color 0.2s ease;
+    -o-transition: background-color 0.2s ease;
 }
 
 .artist__button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+    opacity: 0.7;
+    cursor: not-allowed;
 }
 
 .artist__button-spinner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .artist__button-spinner .spinner__circle {
-  width: 1rem;
-  height: 1rem;
+    width: 1rem;
+    height: 1rem;
 }
 
 .artist__button-spinner .spinner {
-  padding: 0;
+    padding: 0;
 }
 
 .artist__button--unfollow {
-  background-color: var(--red);
+    background-color: var(--red);
 }
 
 .artist__button--unfollow:hover {
-  background-color: color-mix(in srgb, var(--red) 50%, transparent);
+    background-color: color-mix(in srgb, var(--red) 50%, transparent);
 }
 
 .artist__button--follow {
-  background-color: var(--primary);
+    background-color: var(--primary);
 }
 
 .artist__button--follow:hover {
-  background-color: color-mix(in srgb, var(--primary) 50%, transparent);
+    background-color: color-mix(in srgb, var(--primary) 50%, transparent);
 }
 
 .artist__icon {
-  width: 1.5rem;
-  height: 1.5rem;
-  object-fit: contain;
+    width: 1.5rem;
+    height: 1.5rem;
+    object-fit: contain;
 }
 
 @media (max-width: 768px) {
-  .artist {
-    gap: 1rem;
-    padding: 1rem 1rem;
-  }
+    .artist {
+        gap: 1rem;
+        padding: 1rem 1rem;
+    }
 
-  .artist__content {
-    gap: 0.5rem;
-  }
+    .artist__content {
+        gap: 0.5rem;
+    }
 
-  .artist__image {
-    width: 4rem;
-    height: 4rem;
-  }
+    .artist__image {
+        width: 4rem;
+        height: 4rem;
+    }
 
-  .artist__name {
-    font-size: 1.25rem;
-  }
+    .artist__name {
+        font-size: 1.25rem;
+    }
 
-  .artist__tags {
-    gap: 0.3rem;
-  }
+    .artist__tags {
+        gap: 0.3rem;
+    }
 
-  .artist__tags .tag {
-    font-size: 0.6rem;
-  }
+    .artist__tags .tag {
+        font-size: 0.6rem;
+    }
 
-  .artist__button {
-    padding: 0.5rem;
-  }
+    .artist__button {
+        padding: 0.5rem;
+    }
 
-  .artist__icon {
-    width: 1.3rem;
-    height: 1.3rem;
-  }
+    .artist__icon {
+        width: 1.3rem;
+        height: 1.3rem;
+    }
 }

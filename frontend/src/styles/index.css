@@ -1,22 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 
 :root {
-  --primary: #49b243;
-  --red: #ff4d4d;
-  --background: #242424;
-  --white: #ffffff;
-  --card: #333333;
-  --spinner: #ffffff4d;
-  --box-shadow: #0000004d;
+    --primary: #49b243;
+    --red: #ff4d4d;
+    --background: #242424;
+    --white: #ffffff;
+    --card: #333333;
+    --spinner: #ffffff4d;
+    --box-shadow: #0000004d;
 
-  font-family: "Noto Sans", sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+    font-family: "Noto Sans", sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
 
-  color: var(--white);
-  background-color: var(--background);
+    color: var(--white);
+    background-color: var(--background);
 }
 
-h1, h2, h3, h4, h5, h6 {
-  margin: 0!important;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0 !important;
 }

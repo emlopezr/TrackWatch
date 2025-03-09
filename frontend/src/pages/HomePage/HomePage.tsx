@@ -131,8 +131,8 @@ const HomePage = () => {
                   </h1>
                 </div>
                 <div className="profile__user-container" ref={userMenuRef}>
-                  <div 
-                    className="profile__image-container" 
+                  <div
+                    className="profile__image-container"
                     onClick={() => setShowUserMenu(!showUserMenu)}
                   >
                     <img
@@ -146,7 +146,7 @@ const HomePage = () => {
                   {showUserMenu && (
                     <div className="profile__menu">
                       <p className="profile__menu-name">Hola, {userData.name}</p>
-                      <button 
+                      <button
                         className="profile__menu-logout"
                         onClick={handleLogout}
                       >

@@ -6,7 +6,7 @@ import { useUser } from '../../context/useUser';
 import Spinner from '../../components/Spinner/Spinner';
 
 const CallbackPage = () => {
-  const [ , setAccessToken] = useState<string | null>(null);
+  const [, setAccessToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const { setUserData } = useUser();
