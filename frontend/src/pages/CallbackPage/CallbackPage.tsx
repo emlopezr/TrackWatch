@@ -44,8 +44,8 @@ const CallbackPage = () => {
         setUserData(userData);
         navigate('/');
 
-      } catch (error) {
-        console.error('Error registering user:', error);
+      } catch {
+        console.error('Error registering user');
         setLoading(false);
         navigate('/');
       }

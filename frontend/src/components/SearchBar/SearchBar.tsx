@@ -31,7 +31,7 @@ const SearchBar = ({ accessToken, setArtistsData, setSearching }: SearchBarProps
     }
 
     setSearchTimer(setTimeout(() => {
-      if (query) {  // usamos "query" en lugar de "searchQuery" para asegurarnos de tener el valor actualizado
+      if (query) {
         searchArtists(accessToken, query as string, setArtistsData);
       }
     }, 350));

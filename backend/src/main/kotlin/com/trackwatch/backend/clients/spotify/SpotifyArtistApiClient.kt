@@ -251,7 +251,6 @@ class SpotifyArtistApiClient(metricService: MetricService) : SpotifyApiClient(me
 
         var searchQuery = "artist:${artistName}"
 
-        // if start_date.year == today.year
         searchQuery += if (startDateIso.substring(0, 4) == todayIso.substring(0, 4)) {
             " year:${startDateIso.substring(0, 4)}"
         } else {

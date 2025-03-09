@@ -18,7 +18,6 @@ export const searchArtists = async (
       limit: '50',
     });
 
-    console.log("[SpotifyAPI] Searching artists");
     const response = await fetch(`${SPOTIFY_API_URL}/search?${params}`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
@@ -32,8 +31,8 @@ export const searchArtists = async (
     setArtistsData(data.artists.items);
     return data.artists.items as SpotifyArtistResponse[];
 
-  } catch (error) {
-    console.error('Error fetching artists:', error);
+  } catch {
+    console.error('Error fetching artists');
     return [];
   }
 }

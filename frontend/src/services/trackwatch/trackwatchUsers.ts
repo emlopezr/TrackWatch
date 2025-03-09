@@ -9,7 +9,6 @@ export const registerTrackWatchUser = async (
   retryNumber: number = 0
 ) => {
   try {
-    console.log('{TrackWatchAPI] Registering user');
     const response = await fetch(`${TRACKWATCH_API_BASE_URL}/users/register`, {
       method: 'POST',
       headers: {
@@ -21,7 +20,6 @@ export const registerTrackWatchUser = async (
     const data = await response.json();
 
     if (response.status === 401) {
-      // Si obtenemos un 401 aquí, intentamos renovar el token
       const refreshToken = localStorage.getItem('spotify_refresh_token');
 
       if (refreshToken) {
@@ -58,8 +56,8 @@ export const registerTrackWatchUser = async (
     }
 
     return data;
-  } catch (error) {
-    console.error('Error registering user:', error);
+  } catch {
+    console.error('Error registering user');
   }
 }
 
@@ -80,7 +78,6 @@ export const getTrackWatchUserData = async (
         url = `${url}?userId=${userId}`;
       }
 
-      console.log(`[TrackWatchAPI] Fetching user data (attempt ${retryCount + 1}/${MAX_RETRIES})`);
       const response = await fetch(url, {
         headers: {
           'X-Spotify-Access-Token': localStorage.getItem('spotify_access_token') || '',
@@ -89,7 +86,6 @@ export const getTrackWatchUserData = async (
       });
 
       if (response.status === 401) {
-        // Si obtenemos un 401 aquí, intentamos renovar el token
         const refreshToken = localStorage.getItem('spotify_refresh_token');
 
         if (refreshToken) {
@@ -110,8 +106,6 @@ export const getTrackWatchUserData = async (
       }
 
       if (response.status !== 200) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error('Failed to fetch user data:', errorData);
         throw new Error(`Failed to fetch user data: ${response.status}`);
       }
 
@@ -121,11 +115,9 @@ export const getTrackWatchUserData = async (
 
       return data;
     } catch (error) {
-      console.error(`Error fetching user data (attempt ${retryCount + 1}/${MAX_RETRIES}):`, error);
-
       retryCount++;
+
       if (retryCount < MAX_RETRIES) {
-        console.log(`Retrying... (${retryCount}/${MAX_RETRIES})`);
         // Add a small delay before retrying
         await new Promise(resolve => setTimeout(resolve, 1000));
         return attemptFetch();
@@ -138,8 +130,7 @@ export const getTrackWatchUserData = async (
 
   try {
     return await attemptFetch();
-  } catch (error) {
-    console.error(`Failed to fetch user data after ${MAX_RETRIES} attempts:`, error);
+  } catch {
     return undefined;
   }
 };

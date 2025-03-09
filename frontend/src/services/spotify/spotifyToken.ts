@@ -19,7 +19,6 @@ export const getAccessToken = async (code: string): Promise<string | null> => {
     'grant_type': 'authorization_code'
   });
 
-  console.log("[SpotifyAPI] Getting access token");
   const response = await fetch(`${SPOTIFY_BASE_URL}/api/token`, {method: 'POST', headers, body});
   const data: SpotifyAuthResponse = await response.json();
 
@@ -47,7 +46,6 @@ export const refreshAccessToken = async (): Promise<string | null> => {
     'client_id': SPOTIFY_CLIENT_ID,
   });
 
-  console.log("[SpotifyAPI] Refreshing access token");
   const response = await fetch(`${SPOTIFY_BASE_URL}/api/token`, { method: 'POST', headers, body });
   const data: SpotifyAuthResponse = await response.json();
 
@@ -62,7 +60,6 @@ export const refreshAccessToken = async (): Promise<string | null> => {
 
 export const verifyToken = async (token: string): Promise<boolean> => {
   try {
-    console.log("[SpotifyAPI] Verifying token");
     const response = await fetch(`${SPOTIFY_API_URL}/me`, {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -70,8 +67,8 @@ export const verifyToken = async (token: string): Promise<boolean> => {
       return false;
     }
     return true;
-  } catch (error) {
-    console.error('Error verifying token:', error);
+  } catch {
+    console.error('Error verifying token');
     return false;
   }
 };

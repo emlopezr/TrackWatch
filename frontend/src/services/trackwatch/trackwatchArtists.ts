@@ -4,7 +4,6 @@ import { TrackWatchUser } from "../../types/trackwatch/TrackWatchUser";
 
 export const followArtist = async (userData: TrackWatchUser, setUserData: (value: TrackWatchUser) => void, artist: TrackWatchArtist) => {
   try {
-    console.log("[TrackWatchAPI] Following artist", artist.id);
     const response = await fetch(
       `${TRACKWATCH_API_BASE_URL}/artists/follow?userId=${userData.id}`,
       {
@@ -28,15 +27,13 @@ export const followArtist = async (userData: TrackWatchUser, setUserData: (value
     });
 
     return true;
-  } catch (error) {
-    console.error(error);
+  } catch {
     return false;
   }
 };
 
 export const unfollowArtist = async (artistId: string, userData: TrackWatchUser, setUserData: (value: TrackWatchUser) => void) => {
   try {
-    console.log("[TrackWatchAPI] Unfollowing artist", artistId);
     const response = await fetch(
       `${TRACKWATCH_API_BASE_URL}/artists/unfollow?userId=${userData.id}&artistId=${artistId}`,
       {
@@ -55,8 +52,7 @@ export const unfollowArtist = async (artistId: string, userData: TrackWatchUser,
     });
 
     return true;
-  } catch (error) {
-    console.error(error);
+  } catch {
     return false;
   }
 };

@@ -28,7 +28,6 @@ export const batchGetArtists = async (
 
     for (const batch of batches) {
       const idsParam = batch.join(',');
-      console.log("[SpotifyAPI] Batch fetching artists");
       const response = await fetch(`${SPOTIFY_API_URL}/artists?ids=${idsParam}`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
@@ -44,8 +43,8 @@ export const batchGetArtists = async (
     }
 
     return allArtistIds.map(id => artistCache[id]).filter(Boolean);
-  } catch (error) {
-    console.error('Error fetching artists:', error);
+  } catch {
+    console.error('Error fetching artists');
     return [];
   }
 };

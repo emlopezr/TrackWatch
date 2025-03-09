@@ -23,7 +23,6 @@ const HomePage = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
-  // Función para verificar y renovar el token si es necesario
   const checkAndRefreshToken = async () => {
     const token = localStorage.getItem('spotify_access_token');
     const refreshToken = localStorage.getItem('spotify_refresh_token');
@@ -34,29 +33,27 @@ const HomePage = () => {
       if (isValid) {
         setAccessToken(token);
       } else if (refreshToken) {
-        // Si el token no es válido, intenta renovarlo
+        // If the token is not valid, try to renew it.
         try {
           const newToken = await refreshAccessToken();
           if (newToken) {
             localStorage.setItem('spotify_access_token', newToken);
             setAccessToken(newToken);
-          } else {
-            console.error('Failed to refresh access token');
           }
-        } catch (error) {
-          console.error('Error refreshing token:', error);
+        } catch {
+          console.error('Error refreshing token');
         }
       }
     } else if (refreshToken) {
-      // No hay token, pero hay refresh token: renueva directamente
+      // No access token, but there is refresh token: renew directly
       try {
         const newToken = await refreshAccessToken();
         if (newToken) {
           localStorage.setItem('spotify_access_token', newToken);
           setAccessToken(newToken);
         }
-      } catch (error) {
-        console.error('Error refreshing token:', error);
+      } catch {
+        console.error('Error refreshing token');
       }
     }
 
@@ -88,15 +85,12 @@ const HomePage = () => {
   }, []);
 
   const handleLogout = () => {
-    // Remove tokens from localStorage
     localStorage.removeItem('spotify_access_token');
     localStorage.removeItem('spotify_refresh_token');
 
-    // Reset states
     setAccessToken(null);
     setUserData(null);
 
-    // Redirect to the login page or refresh
     window.location.href = '/';
   };
 
