@@ -51,7 +51,10 @@ class GlobalExceptionHandler(private val metricService: MetricService) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response)
     }
 
-    private fun buildErrorResponse(httpStatus: HttpStatus, exception: CustomException): ResponseEntity<ExceptionResponseDTO> {
+    private fun buildErrorResponse(
+        httpStatus: HttpStatus,
+        exception: CustomException
+    ): ResponseEntity<ExceptionResponseDTO> {
         val response = ExceptionResponseDTO(
             status = httpStatus.value(),
             code = exception.errorCode.name,

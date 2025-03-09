@@ -2,9 +2,9 @@ package com.trackwatch.backend.model
 
 import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
-import java.util.Date
+import java.util.*
 
-data class Track (
+data class Track(
     val id: String,
     val uri: String,
 
@@ -22,19 +22,23 @@ data class Track (
     val durationMs: Int,
 ) {
     fun isEqualTo(other: Any): Boolean {
-        if (other !is Track) { return false }
+        if (other !is Track) {
+            return false
+        }
         return this.name == other.name && isEqualArtists(other)
     }
 
     fun isEqualStrict(other: Any): Boolean {
-        if (other !is Track) { return false }
+        if (other !is Track) {
+            return false
+        }
         return this.name == other.name
-            && this.isExplicit == other.isExplicit
-            && this.albumType == other.albumType
-            && this.discNumber == other.discNumber
-            && this.albumOrder == other.albumOrder
-            && this.albumName == other.albumName
-            && isEqualArtists(other)
+                && this.isExplicit == other.isExplicit
+                && this.albumType == other.albumType
+                && this.discNumber == other.discNumber
+                && this.albumOrder == other.albumOrder
+                && this.albumName == other.albumName
+                && isEqualArtists(other)
     }
 
     private fun isEqualArtists(other: Track): Boolean {
@@ -42,7 +46,7 @@ data class Track (
         val otherOrderedArtists = other.artists.sortedBy { it.name }
 
         return orderedArtists.size == otherOrderedArtists.size
-            && orderedArtists.zip(otherOrderedArtists).all { (a, b) -> a.isEqualTo(b) }
+                && orderedArtists.zip(otherOrderedArtists).all { (a, b) -> a.isEqualTo(b) }
     }
 
     fun toPersistedTrack(): PersistedTrack {
@@ -57,7 +61,7 @@ data class TrackImage(
 )
 
 @Embeddable
-data class PersistedTrack (
+data class PersistedTrack(
     @Column(name = "track_id")
     val id: String,
 

@@ -1,13 +1,13 @@
 package com.trackwatch.backend.clients.spotify
 
+import com.trackwatch.backend.exception.ErrorCode
 import com.trackwatch.backend.exception.InternalServerErrorException
 import com.trackwatch.backend.model.User
 import com.trackwatch.backend.service.MetricService
-import com.trackwatch.backend.exception.ErrorCode
 import org.springframework.stereotype.Component
 
 @Component
-class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(metricService) {
+class SpotifyPlaylistApiClient(metricService: MetricService) : SpotifyApiClient(metricService) {
 
     fun addTracksToPlaylist(user: User, playlistId: String, trackUris: List<String>): Map<*, *> {
         val body = mapOf("uris" to trackUris)
@@ -21,7 +21,10 @@ class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(m
                 .header("Authorization", "Bearer ${user.auth.current.accessToken}")
                 .retrieve()
                 .bodyToMono(Map::class.java)
-                .block() ?: throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Failed to add tracks to playlist")
+                .block() ?: throw InternalServerErrorException(
+                ErrorCode.UNHANDLED_EXCEPTION,
+                "Failed to add tracks to playlist"
+            )
 
             return response
 
@@ -49,7 +52,10 @@ class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(m
                     .header("Authorization", "Bearer ${user.auth.current.accessToken}")
                     .retrieve()
                     .bodyToMono(Map::class.java)
-                    .block() ?: throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Failed to get playlist tracks")
+                    .block() ?: throw InternalServerErrorException(
+                    ErrorCode.UNHANDLED_EXCEPTION,
+                    "Failed to get playlist tracks"
+                )
 
                 val uris = mapResponseToTrackUris(response)
                 trackUris.addAll(uris)
@@ -84,7 +90,10 @@ class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(m
                     .header("Authorization", "Bearer ${user.auth.current.accessToken}")
                     .retrieve()
                     .bodyToMono(List::class.java)
-                    .block() ?: throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Failed to check saved tracks")
+                    .block() ?: throw InternalServerErrorException(
+                    ErrorCode.UNHANDLED_EXCEPTION,
+                    "Failed to check saved tracks"
+                )
 
                 val savedStatuses = response as List<Boolean>
 
@@ -118,7 +127,10 @@ class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(m
                 .header("Authorization", "Bearer ${user.auth.current.accessToken}")
                 .retrieve()
                 .bodyToMono(Map::class.java)
-                .block() ?: throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Failed to create playlist")
+                .block() ?: throw InternalServerErrorException(
+                ErrorCode.UNHANDLED_EXCEPTION,
+                "Failed to create playlist"
+            )
 
             return response["id"] as String
 
@@ -145,7 +157,10 @@ class SpotifyPlaylistApiClient(metricService: MetricService): SpotifyApiClient(m
                     .header("Authorization", "Bearer ${user.auth.current.accessToken}")
                     .retrieve()
                     .bodyToMono(Map::class.java)
-                    .block() ?: throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Failed to get user playlists")
+                    .block() ?: throw InternalServerErrorException(
+                    ErrorCode.UNHANDLED_EXCEPTION,
+                    "Failed to get user playlists"
+                )
 
                 val items = response["items"] as List<*>
                 val playlistIds = items.map { (it as Map<*, *>)["id"] as String }

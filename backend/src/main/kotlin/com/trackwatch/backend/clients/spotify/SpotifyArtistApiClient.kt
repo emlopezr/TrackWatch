@@ -1,11 +1,11 @@
 package com.trackwatch.backend.clients.spotify
 
+import com.trackwatch.backend.exception.ErrorCode
 import com.trackwatch.backend.exception.InternalServerErrorException
 import com.trackwatch.backend.model.Artist
 import com.trackwatch.backend.model.Track
 import com.trackwatch.backend.model.TrackImage
 import com.trackwatch.backend.service.MetricService
-import com.trackwatch.backend.exception.ErrorCode
 import com.trackwatch.backend.utils.values.Constants
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @Component
-class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(metricService) {
+class SpotifyArtistApiClient(metricService: MetricService) : SpotifyApiClient(metricService) {
 
     private val log = LoggerFactory.getLogger(SpotifyArtistApiClient::class.java)
 
@@ -27,19 +27,35 @@ class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(met
                 .header("Authorization", "Bearer $accessToken")
                 .retrieve()
                 .bodyToMono(Map::class.java)
-                .block() ?: throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "No data returned from Spotify API")
+                .block() ?: throw InternalServerErrorException(
+                ErrorCode.UNHANDLED_EXCEPTION,
+                "No data returned from Spotify API"
+            )
 
             return parseArtistInfo(response)
 
         } catch (e: WebClientResponseException) {
-            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API: ${e.message}")
+            throw InternalServerErrorException(
+                ErrorCode.UNHANDLED_EXCEPTION,
+                "Error while calling Spotify API: ${e.message}"
+            )
 
         } catch (e: Exception) {
-            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API", e.toString())
+            throw InternalServerErrorException(
+                ErrorCode.UNHANDLED_EXCEPTION,
+                "Error while calling Spotify API",
+                e.toString()
+            )
         }
     }
 
-    fun searchArtistTracksWithRetries(artist: Artist, accessToken: String, daysLimit: Int?, page: Int, maxAttempts: Int = 3): List<Track> {
+    fun searchArtistTracksWithRetries(
+        artist: Artist,
+        accessToken: String,
+        daysLimit: Int?,
+        page: Int,
+        maxAttempts: Int = 3
+    ): List<Track> {
         var lastException: Exception? = null
 
         for (attempt in 1..maxAttempts) {
@@ -65,7 +81,10 @@ class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(met
         }
 
         if (lastException is WebClientResponseException) {
-            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API after $maxAttempts attempts: ${lastException.message}")
+            throw InternalServerErrorException(
+                ErrorCode.UNHANDLED_EXCEPTION,
+                "Error while calling Spotify API after $maxAttempts attempts: ${lastException.message}"
+            )
         }
 
         throw InternalServerErrorException(
@@ -88,10 +107,17 @@ class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(met
                 .block() ?: return emptyList()
             return parseTracks(response)
         } catch (e: WebClientResponseException) {
-            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API: ${e.message}")
+            throw InternalServerErrorException(
+                ErrorCode.UNHANDLED_EXCEPTION,
+                "Error while calling Spotify API: ${e.message}"
+            )
 
         } catch (e: Exception) {
-            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API", e.toString())
+            throw InternalServerErrorException(
+                ErrorCode.UNHANDLED_EXCEPTION,
+                "Error while calling Spotify API",
+                e.toString()
+            )
         }
     }
 
@@ -118,7 +144,7 @@ class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(met
                 artists = parseArtists(artists),
                 releaseDate = releaseDate,
                 isExplicit = mapTrack["explicit"] as Boolean,
-                albumName= album["name"] as String,
+                albumName = album["name"] as String,
                 albumImages = parseAlbumImages(album),
                 albumType = album["album_type"] as String,
                 discNumber = mapTrack["disc_number"] as Int,
@@ -140,15 +166,21 @@ class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(met
                 val year = releaseDateString.substring(0, 4)
                 dateFormat.parse("$year-01-01")
             }
+
             "month" -> {
                 val year = releaseDateString.substring(0, 4)
                 val month = releaseDateString.substring(5, 7)
                 dateFormat.parse("$year-$month-01")
             }
+
             "day" -> {
                 dateFormat.parse(releaseDateString)
             }
-            else -> throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Invalid release date precision: $releaseDatePrecision")
+
+            else -> throw InternalServerErrorException(
+                ErrorCode.UNHANDLED_EXCEPTION,
+                "Invalid release date precision: $releaseDatePrecision"
+            )
         }
 
         return releaseDate
@@ -202,7 +234,9 @@ class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(met
 
     private fun buildQuery(artistName: String, daysLimit: Int?): String {
 
-        if (daysLimit == null) {  return "artist:${artistName}" }
+        if (daysLimit == null) {
+            return "artist:${artistName}"
+        }
 
         val calendar = Calendar.getInstance(TimeZone.getTimeZone(Constants.SERVER_TIMEZONE))
 
@@ -210,7 +244,7 @@ class SpotifyArtistApiClient(metricService: MetricService): SpotifyApiClient(met
         val today = calendar.time
         val todayIso = dateFormat.format(today)
 
-        calendar.add(Calendar.DAY_OF_YEAR, - daysLimit)
+        calendar.add(Calendar.DAY_OF_YEAR, -daysLimit)
 
         val startDate = calendar.time
         val startDateIso = dateFormat.format(startDate)

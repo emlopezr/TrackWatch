@@ -2,15 +2,13 @@ package com.trackwatch.backend.clients.spotify
 
 import com.trackwatch.backend.clients.spotify.dto.SpotifyUserDTO
 import com.trackwatch.backend.exception.*
-import com.trackwatch.backend.exception.ErrorCode
 import com.trackwatch.backend.service.MetricService
 import org.slf4j.LoggerFactory
-
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClientResponseException
 
 @Component
-class SpotifyUserApiClient(metricService: MetricService): SpotifyApiClient(metricService) {
+class SpotifyUserApiClient(metricService: MetricService) : SpotifyApiClient(metricService) {
 
     private val log = LoggerFactory.getLogger(SpotifyUserApiClient::class.java)
 
@@ -31,7 +29,11 @@ class SpotifyUserApiClient(metricService: MetricService): SpotifyApiClient(metri
             throw handleSpotifyApiException(e)
 
         } catch (e: Exception) {
-            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API", e.toString())
+            throw InternalServerErrorException(
+                ErrorCode.UNHANDLED_EXCEPTION,
+                "Error while calling Spotify API",
+                e.toString()
+            )
         }
     }
 
@@ -55,7 +57,10 @@ class SpotifyUserApiClient(metricService: MetricService): SpotifyApiClient(metri
             401 -> UnauthorizedException(ErrorCode.SPOTIFY_INVALID_ACCESS_TOKEN, details = e.message)
             403 -> ForbiddenException(ErrorCode.SPOTIFY_FORBIDDEN_REQUEST, details = e.message)
             404 -> BadRequestException(ErrorCode.SPOTIFY_USER_NOT_FOUND)
-            else -> InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API: ${e.message}")
+            else -> InternalServerErrorException(
+                ErrorCode.UNHANDLED_EXCEPTION,
+                "Error while calling Spotify API: ${e.message}"
+            )
         }
     }
 

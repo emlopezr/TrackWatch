@@ -1,8 +1,8 @@
 package com.trackwatch.backend.controller
 
+import com.trackwatch.backend.exception.ErrorCode
 import com.trackwatch.backend.exception.UnauthorizedException
 import com.trackwatch.backend.service.MetricService
-import com.trackwatch.backend.exception.ErrorCode
 import com.trackwatch.backend.utils.values.Metrics
 import org.springframework.http.HttpMethod
 
@@ -18,7 +18,8 @@ abstract class AbstractController(private val metricService: MetricService) {
     }
 
     protected fun sendMetricRequest(endpoint: String, httpMethod: HttpMethod) {
-        metricService.incrementCounter(Metrics.REST_REQUEST,
+        metricService.incrementCounter(
+            Metrics.REST_REQUEST,
             "controller", this.javaClass.simpleName,
             "endpoint", endpoint,
             "method", httpMethod.name()

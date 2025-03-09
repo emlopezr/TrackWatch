@@ -55,7 +55,7 @@ class SearchFollowedReleasesUseCase(
     }
 
     private fun findNewReleasesForUser(user: User, accessToken: String, daysLimit: Int): List<Track> {
-        val newReleases  = mutableSetOf<Track>()
+        val newReleases = mutableSetOf<Track>()
 
         user.followedArtists.forEach { artist ->
             collectArtistTracks(user, artist, accessToken, newReleases, daysLimit)

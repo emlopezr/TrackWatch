@@ -1,8 +1,8 @@
 package com.trackwatch.backend.controller
 
+import com.trackwatch.backend.service.MetricService
 import com.trackwatch.backend.use_case.GenerateArtistPlaylistUseCase
 import com.trackwatch.backend.use_case.SearchFollowedReleasesUseCase
-import com.trackwatch.backend.service.MetricService
 import com.trackwatch.backend.utils.values.Constants
 import com.trackwatch.backend.utils.values.Endpoints
 import com.trackwatch.backend.utils.values.Headers
@@ -16,7 +16,7 @@ class ActionsController(
     private val generateArtistPlaylistUseCase: GenerateArtistPlaylistUseCase,
     private val searchFollowedReleasesUseCase: SearchFollowedReleasesUseCase,
     metricService: MetricService
-): AbstractController(metricService) {
+) : AbstractController(metricService) {
 
     @PostMapping(Endpoints.ACTIONS_GENERATE_ARTIST_PLAYLIST)
     fun generateArtistPlaylist(

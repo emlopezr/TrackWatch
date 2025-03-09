@@ -11,7 +11,7 @@ import javax.sql.DataSource
 class DataSourceConfig {
 
     @Bean
-    fun dataSource(@Value ("\${DATABASE_URL}") url: String): DataSource {
+    fun dataSource(@Value("\${DATABASE_URL}") url: String): DataSource {
         val uri = URI(url)
         val (username, password) = uri.userInfo.split(":")
         val jdbcUrl = "jdbc:postgresql://${uri.host}:${uri.port}${uri.path}?sslmode=require"

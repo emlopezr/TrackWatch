@@ -1,20 +1,10 @@
 package com.trackwatch.backend.model
 
 import com.trackwatch.backend.clients.spotify.dto.SpotifyUserDTO
+import com.trackwatch.backend.exception.ErrorCode
 import com.trackwatch.backend.exception.UnauthorizedException
 import com.trackwatch.backend.utils.values.Constants
-import com.trackwatch.backend.exception.ErrorCode
-import jakarta.persistence.AttributeOverride
-import jakarta.persistence.AttributeOverrides
-import jakarta.persistence.CollectionTable
-import jakarta.persistence.Column
-import jakarta.persistence.ElementCollection
-import jakarta.persistence.Embeddable
-import jakarta.persistence.Embedded
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.Table
+import jakarta.persistence.*
 
 @Entity
 @Table(name = Constants.USER_DB_TABLE)
@@ -47,7 +37,6 @@ data class User(
     )
     var followedArtists: MutableList<Artist> = mutableListOf(),
 
-    // I want to add a list of recently added tracks
     @ElementCollection
     @CollectionTable(
         name = Constants.USER_RECENTLY_ADDED_TRACKS_DB_TABLE,
@@ -56,7 +45,7 @@ data class User(
     var recentlyAddedTracks: MutableList<PersistedTrack> = mutableListOf()
 ) {
 
-    constructor(dto: SpotifyUserDTO, accessToken: String, refreshToken: String): this(
+    constructor(dto: SpotifyUserDTO, accessToken: String, refreshToken: String) : this(
         id = dto.id,
         playlistId = "",
         email = dto.email,

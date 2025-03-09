@@ -1,18 +1,17 @@
 package com.trackwatch.backend.clients.spotify
 
 import com.trackwatch.backend.clients.spotify.dto.SpotifyTokenDTO
-import com.trackwatch.backend.exception.*
 import com.trackwatch.backend.exception.ErrorCode
+import com.trackwatch.backend.exception.InternalServerErrorException
 import com.trackwatch.backend.service.MetricService
 import org.slf4j.LoggerFactory
-
 import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
-import java.util.Base64
+import java.util.*
 
 @Component
-class SpotifyAuthApiClient(metricService: MetricService): SpotifyApiClient(metricService) {
+class SpotifyAuthApiClient(metricService: MetricService) : SpotifyApiClient(metricService) {
 
     private val log = LoggerFactory.getLogger(SpotifyAuthApiClient::class.java)
 
@@ -65,12 +64,20 @@ class SpotifyAuthApiClient(metricService: MetricService): SpotifyApiClient(metri
                 .bodyValue(bodyFormEncoded)
                 .retrieve()
                 .bodyToMono(Map::class.java)
-                .block() ?: throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API", "Response is null")
+                .block() ?: throw InternalServerErrorException(
+                ErrorCode.UNHANDLED_EXCEPTION,
+                "Error while calling Spotify API",
+                "Response is null"
+            )
 
             return mapToSpotifyTokenDTO(response, refreshToken)
 
         } catch (e: Exception) {
-            throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, "Error while calling Spotify API", e.toString())
+            throw InternalServerErrorException(
+                ErrorCode.UNHANDLED_EXCEPTION,
+                "Error while calling Spotify API",
+                e.toString()
+            )
         }
     }
 

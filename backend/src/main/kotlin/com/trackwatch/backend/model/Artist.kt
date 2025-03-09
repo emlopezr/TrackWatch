@@ -14,7 +14,9 @@ data class Artist(
     val imageUrl: String = ""
 ) {
     fun isEqualTo(other: Any): Boolean {
-        if (other !is Artist) {  return false  }
-        return this.id == other.id  && this.name == other.name
+        if (other !is Artist) {
+            return false
+        }
+        return this.id == other.id && this.name == other.name
     }
 }

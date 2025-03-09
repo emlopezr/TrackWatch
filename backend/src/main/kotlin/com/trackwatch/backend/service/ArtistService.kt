@@ -1,10 +1,10 @@
 package com.trackwatch.backend.service
 
 import com.trackwatch.backend.exception.BadRequestException
+import com.trackwatch.backend.exception.ErrorCode
 import com.trackwatch.backend.exception.NotFoundException
 import com.trackwatch.backend.model.Artist
 import com.trackwatch.backend.repository.UserRepository
-import com.trackwatch.backend.exception.ErrorCode
 import org.springframework.stereotype.Service
 
 @Service

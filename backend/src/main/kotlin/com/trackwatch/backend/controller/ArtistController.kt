@@ -2,9 +2,9 @@ package com.trackwatch.backend.controller
 
 import com.trackwatch.backend.model.Artist
 import com.trackwatch.backend.service.ArtistService
+import com.trackwatch.backend.service.MetricService
 import com.trackwatch.backend.utils.values.Endpoints
 import com.trackwatch.backend.utils.values.Headers
-import com.trackwatch.backend.service.MetricService
 import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*
 class ArtistController(
     private val artistService: ArtistService,
     metricService: MetricService
-): AbstractController(metricService) {
+) : AbstractController(metricService) {
 
     @PostMapping(Endpoints.ARTIST_CONTROLLER_FOLLOW)
     fun followArtist(

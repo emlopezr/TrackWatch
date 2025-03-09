@@ -1,8 +1,8 @@
 package com.trackwatch.backend.scheluded
 
 import com.trackwatch.backend.use_case.SearchFollowedReleasesUseCase
-import org.springframework.stereotype.Service
 import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service

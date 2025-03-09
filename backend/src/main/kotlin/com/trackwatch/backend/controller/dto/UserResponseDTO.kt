@@ -13,7 +13,7 @@ data class UserResponseDTO(
     val settings: UserSettings,
     val followedArtists: List<Artist>
 ) {
-    constructor(user: User): this (
+    constructor(user: User) : this(
         id = user.id,
         playlistId = user.playlistId,
         email = user.email,

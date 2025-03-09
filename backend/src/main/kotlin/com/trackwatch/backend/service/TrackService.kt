@@ -6,9 +6,7 @@ import com.trackwatch.backend.model.Track
 import com.trackwatch.backend.model.User
 import com.trackwatch.backend.utils.values.Constants
 import org.springframework.stereotype.Service
-import java.util.Calendar
-import java.util.Date
-import java.util.TimeZone
+import java.util.*
 
 @Service
 class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
@@ -22,7 +20,8 @@ class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
         val newTracks = mutableListOf<Track>()
 
         for (page in 0 until pagesToFetch) {
-            val pageNewTracks = spotifyArtistApiClient.searchArtistTracksWithRetries(artist, accessToken, daysLimit, page)
+            val pageNewTracks =
+                spotifyArtistApiClient.searchArtistTracksWithRetries(artist, accessToken, daysLimit, page)
             newTracks.addAll(pageNewTracks)
         }
 
@@ -50,7 +49,8 @@ class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
         val isCorrectArtist = !shouldCheckCorrectArtist || isCorrectArtist(track, artist)
         val isTrackInTimeRange = !shouldCheckTrackInTimeRange || isTrackInTimeRange(track, startDate, today)
         val isCompilationAlbum = shouldCheckCompilationAlbum && isCompilationAlbum(track)
-        val isSongBlockedByUserSettings = shouldCheckSongBlockedByUserSettings && isSongBlockedByUserSettings(track, user)
+        val isSongBlockedByUserSettings =
+            shouldCheckSongBlockedByUserSettings && isSongBlockedByUserSettings(track, user)
         val isTrackRecentlyAdded = shouldCheckTrackRecentlyAdded && isTrackRecentlyAdded(user, track)
 
         if (
@@ -61,7 +61,9 @@ class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
             !isTrackRecentlyAdded
         ) {
             val selectedTrack = selectTrack(track, tracksToAdd)
-            if (isSameTrackInList(selectedTrack, tracksToAdd)) { return null }
+            if (isSameTrackInList(selectedTrack, tracksToAdd)) {
+                return null
+            }
             tracksToAdd.add(selectedTrack)
             return selectedTrack
         }
@@ -70,11 +72,12 @@ class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
     }
 
     fun sortTracks(tracks: Set<Track>): Set<Track> {
-        val sortedList = tracks.sortedWith(compareBy(
-            { it.releaseDate },
-            { it.albumName },
-            { it.discNumber },
-            { it.albumOrder })
+        val sortedList = tracks.sortedWith(
+            compareBy(
+                { it.releaseDate },
+                { it.albumName },
+                { it.discNumber },
+                { it.albumOrder })
         )
         return sortedList.toSet()
     }
@@ -97,7 +100,9 @@ class TrackService(private val spotifyArtistApiClient: SpotifyArtistApiClient) {
 
     private fun selectTrack(track: Track, tracksToAdd: Set<Track>): Track {
         val equalTrack = tracksToAdd.find { it.isEqualTo(track) }
-        if (equalTrack == null) {  return track  }
+        if (equalTrack == null) {
+            return track
+        }
 
         var selectedTrack = track
         var nonSelectedTrack = equalTrack

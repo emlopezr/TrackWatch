@@ -114,7 +114,7 @@ class EmailHelper {
     }
 
     private fun generateTodayDate(): String {
-        val calendar =  Calendar.getInstance(TimeZone.getTimeZone(Constants.SERVER_TIMEZONE))
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone(Constants.SERVER_TIMEZONE))
         val locale = Locale("es", "ES")
 
         val dayOfWeek = generateLocaleDayOfWeek(calendar, locale)
@@ -134,7 +134,7 @@ class EmailHelper {
     }
 
     private fun generateCurrentYear(): String {
-        val calendar =  Calendar.getInstance(TimeZone.getTimeZone(Constants.SERVER_TIMEZONE))
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone(Constants.SERVER_TIMEZONE))
         return calendar.get(Calendar.YEAR).toString()
     }
 }

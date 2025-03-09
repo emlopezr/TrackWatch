@@ -1,8 +1,8 @@
 package com.trackwatch.backend.clients.spotify
 
-import com.trackwatch.backend.utils.values.Metrics
-import com.trackwatch.backend.utils.values.Constants
 import com.trackwatch.backend.service.MetricService
+import com.trackwatch.backend.utils.values.Constants
+import com.trackwatch.backend.utils.values.Metrics
 import org.springframework.web.reactive.function.client.ExchangeStrategies
 import org.springframework.web.reactive.function.client.WebClient
 
@@ -27,9 +27,10 @@ abstract class SpotifyApiClient(private val metricService: MetricService) {
 
     private fun configWebClient(): ExchangeStrategies {
         return ExchangeStrategies.builder()
-            .codecs { configurer -> configurer
-                .defaultCodecs()
-                .maxInMemorySize(Constants.MAX_IN_MEMORY_SIZE)
+            .codecs { configurer ->
+                configurer
+                    .defaultCodecs()
+                    .maxInMemorySize(Constants.MAX_IN_MEMORY_SIZE)
             }
             .build()
     }
