@@ -31,12 +31,18 @@ class ResendClient(private val metricService: MetricService) {
     }
 
     private fun createEmailParams(recipient: User, emailSubject: String, emailBody: String): CreateEmailOptions {
+        val emailFrom = generateEmailFrom(Constants.APP_NAME, Constants.DOMAIN)
         return CreateEmailOptions.builder()
-            .from("${Constants.APP_NAME} <${Constants.APP_NAME.lowercase()}@>${Constants.DOMAIN}")
+            .from(emailFrom)
             .to(recipient.email)
             .subject(emailSubject)
             .html(emailBody)
             .build()
+    }
+
+    private fun generateEmailFrom(appName: String, domain: String): String {
+        val subdomain = appName.lowercase()
+        return "$appName <$subdomain@$domain>"
     }
 
     private fun sendMetricEmail() {
