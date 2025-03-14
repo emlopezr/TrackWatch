@@ -6,6 +6,7 @@ import com.trackwatch.backend.model.User
 import com.trackwatch.backend.repository.UserRepository
 import com.trackwatch.backend.utils.helper.ImageHelper
 import com.trackwatch.backend.utils.values.Constants
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
@@ -14,6 +15,8 @@ class PlaylistService(
     val imageHelper: ImageHelper,
     val userRepository: UserRepository
 ) {
+
+    private val log = LoggerFactory.getLogger(this::class.java)
 
     fun createPlaylist(
         user: User,
@@ -53,6 +56,8 @@ class PlaylistService(
         val playlistExists = spotifyPlaylistApiClient.checkPlaylistExists(user)
 
         if (!playlistExists) {
+            log.info("Playlist ${user.playlistId} not found, creating a new one")
+
             val playlistId = createPlaylist(user)
             updatePlaylistCover(user, playlistId, Constants.DEFAULT_PLAYLIST_COVER_URL)
 
@@ -62,9 +67,13 @@ class PlaylistService(
     }
 
     fun updatePlaylistCover(user: User, playlistId: String, coverUrl: String) {
-        Thread.sleep(Constants.DEFAULT_WAIT_TIME)
-        val coverBase64 = imageHelper.encodeImageToBase64(coverUrl) ?: return
-        spotifyPlaylistApiClient.updatePlaylistCover(user, playlistId, coverBase64)
+        try {
+            Thread.sleep(Constants.DEFAULT_WAIT_TIME)
+            val coverBase64 = imageHelper.encodeImageToBase64(coverUrl) ?: return
+            spotifyPlaylistApiClient.updatePlaylistCover(user, playlistId, coverBase64)
+        } catch (e: Exception) {
+            log.error("Error while updating playlist cover: ${e.message}")
+        }
     }
 
     private fun getTrackUris(tracks: Set<Track>): Set<String> {

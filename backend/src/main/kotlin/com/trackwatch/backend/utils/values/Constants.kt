@@ -3,13 +3,11 @@ package com.trackwatch.backend.utils.values
 object Constants {
     const val APP_NAME = "TrackWatch"
     const val DOMAIN = "emlopezr.com"
+    const val DEVELOPER = "emlopezr"
 
     const val FRONTEND_PRODUCTION_DOMAIN = "https://trackwatch.emlopezr.com"
     const val FRONTEND_DEVELOPMENT_DOMAIN = "http://localhost:5173"
-
-    const val GITHUB_USERNAME = "emlopezr"
-    const val GITHUB_USER_PROFILE = "https://github.com/$GITHUB_USERNAME"
-    const val GITHUB_REPOSITORY = "$GITHUB_USER_PROFILE/$APP_NAME"
+    const val GITHUB_USER_PROFILE = "https://github.com/$DEVELOPER"
 
     const val USER_DB_TABLE = "users"
     const val USER_FOLLOWED_ARTIST_DB_TABLE = "users_followed_artists"
@@ -35,7 +33,7 @@ object Constants {
     const val COLOR_WHITE = "#FFFFFF"
     const val COLOR_GREEN = "#49B243"
 
-    const val ASSETS_BASE_PATH = "https://raw.githubusercontent.com/$GITHUB_REPOSITORY/refs/heads/develop/assets/"
+    private const val ASSETS_BASE_PATH = "https://raw.githubusercontent.com/$DEVELOPER/refs/heads/develop/assets/"
     const val DEFAULT_PLAYLIST_COVER_URL = "${ASSETS_BASE_PATH}default_playlist_cover.png"
     const val DEFAULT_TRACK_IMAGE_URL = "${ASSETS_BASE_PATH}track_placeholder.png"
 }

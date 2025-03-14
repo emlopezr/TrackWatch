@@ -45,7 +45,7 @@ class EmailHelper {
                     <p>¡Que disfrutes de la música! 🎧</p>
                 </div>
                 <div class="footer">
-                    © $year - ${Constants.APP_NAME} - Desarrollado por <a href="${Constants.GITHUB_USER_PROFILE}" style="color: ${Constants.COLOR_GREEN}; text-decoration: none;">@${Constants.GITHUB_USERNAME}</a>
+                    © $year - ${Constants.APP_NAME} - Desarrollado por <a href="${Constants.GITHUB_USER_PROFILE}" style="color: ${Constants.COLOR_GREEN}; text-decoration: none;">@${Constants.DEVELOPER}</a>
                 </div>
             </div>
         </body>
@@ -105,7 +105,7 @@ class EmailHelper {
                     <p style="margin-top: 20px;">Disfruta de los nuevos lanzamientos! 🎧</p>
                 </div>
                 <div class="footer">
-                    © $year - ${Constants.APP_NAME} - Desarrollado por <a href="${Constants.GITHUB_USER_PROFILE}" style="color: ${Constants.COLOR_GREEN}; text-decoration: none;">@${Constants.GITHUB_USERNAME}</a>
+                    © $year - ${Constants.APP_NAME} - Desarrollado por <a href="${Constants.GITHUB_USER_PROFILE}" style="color: ${Constants.COLOR_GREEN}; text-decoration: none;">@${Constants.DEVELOPER}</a>
                 </div>
             </div>
         </body>
