@@ -13,6 +13,7 @@ import logo from '../../assets/svg/logo.svg';
 import homeFilled from '../../assets/svg/home-filled.svg';
 import homeOutline from '../../assets/svg/home-outline.svg';
 import menuIcon from '../../assets/svg/menu.svg';
+import playlistIcon from '../../assets/svg/playlist.svg';
 import './HomePage.css';
 
 type PageType = 'home' | 'generator';
@@ -240,7 +241,7 @@ const HomePage = () => {
                 }}
               >
                 <img 
-                  src={activePage === 'generator' ? homeFilled : homeOutline} 
+                  src={playlistIcon}
                   alt="Generator" 
                   className="sidebar__link-icon icon-white"
                 />
@@ -266,7 +267,7 @@ const HomePage = () => {
                 />
               </div>
               <div className="profile__title">
-                <img src={logo} alt="Logo" className="profile__logo icon-white" />
+                <img src={logo} alt="Logo" className="profile__logo" />
                 <h1>
                   <span className="profile__title--green">Track</span>
                   <span className="profile__title--white">Watch</span>
