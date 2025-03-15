@@ -3,10 +3,7 @@ import { useUser } from '../../context/useUser';
 import { refreshAccessToken, verifyToken } from '../../services/spotify/spotifyToken';
 import { getTrackWatchUserData } from '../../services/trackwatch/trackwatchUsers';
 import SpotifyArtistResponse from '../../types/spotify/SpotifyArtistResponse';
-import FollowedArtists from '../../layout/FollowedArtists/FollowedArtists';
-import ArtistList from '../../layout/ArtistList/ArtistList';
 import LandingPage from '../../layout/LandingPage/LandingPage';
-import SearchBar from '../../layout/SearchBar/SearchBar';
 import Spinner from '../../components/Spinner/Spinner';
 import logo from '../../assets/svg/logo.svg';
 import homeFilled from '../../assets/svg/home-filled.svg';
@@ -17,6 +14,7 @@ import coffeeIcon from '../../assets/svg/coffee.svg';
 import closeIcon from '../../assets/svg/delete.svg';
 import logoutIcon from '../../assets/svg/logout.svg';
 import './MainPage.css';
+import HomePage from '../../layout/HomePage/HomePage';
 
 type PageType = 'home' | 'generator';
 
@@ -24,8 +22,8 @@ const MainPage = () => {
   const { userData, setUserData } = useUser();
 
   const [loading, setLoading] = useState(true);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [searching, setSearching] = useState(false)
+  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [artistsData, setArtistsData] = useState<SpotifyArtistResponse[]>([]);
 
   const [activePage, setActivePage] = useState<PageType>('home');
@@ -80,7 +78,9 @@ const MainPage = () => {
     const handleResize = () => {
       const mobile = window.innerWidth <= 768;
       setIsMobile(mobile);
-      setSidebarOpen(!mobile); // Open by default on desktop, closed on mobile
+
+      // Open by default on desktop, closed on mobile
+      setSidebarOpen(!mobile);
     };
 
     window.addEventListener('resize', handleResize);
@@ -102,9 +102,7 @@ const MainPage = () => {
     };
 
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => { document.removeEventListener('mousedown', handleClickOutside); };
   }, []);
 
   const handleLogout = () => {
@@ -121,53 +119,23 @@ const MainPage = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
-  // Handler for changing pages
   const handlePageChange = (page: PageType) => {
     setActivePage(page);
-    if (isMobile) {
-      setSidebarOpen(false);
-    }
+    if (isMobile) setSidebarOpen(false);
   };
 
-  // Render page content based on active page
   const renderPageContent = () => {
     switch (activePage) {
       case 'home':
-        return (
-          <div className="page-content">
-            {accessToken && (
-              <div className="search-container sticky-element">
-                <SearchBar
-                  accessToken={accessToken}
-                  setArtistsData={setArtistsData}
-                  setSearching={setSearching}
-                />
-              </div>
-            )}
-
-            {searching ? (
-              <ArtistList
-                title="Search Results"
-                artistsData={artistsData}
-              />
-            ) : (
-              userData && accessToken && (
-                <FollowedArtists
-                  accessToken={accessToken}
-                  followedArtists={userData.followedArtists}
-                />
-              )
-            )}
-          </div>
-        );
+        return <HomePage
+          accessToken={accessToken}
+          searching={searching}
+          artistsData={artistsData}
+          setArtistsData={setArtistsData}
+          setSearching={setSearching}
+        />
       case 'generator':
-        return (
-          <div className="page-content">
-            <div className="generator-page">
-              <p>This is a placeholder for the Generator functionality.</p>
-            </div>
-          </div>
-        );
+        return null;
       default:
         return null;
     }
@@ -181,143 +149,145 @@ const MainPage = () => {
     return <LandingPage />;
   }
 
+  if (!userData) {
+    return <Spinner />;
+  }
+
   return (
     <div className={`home ${sidebarOpen ? 'with-sidebar' : ''}`}>
-      {userData ? (
-        <>
-          <div
-            ref={sidebarRef}
-            className={`sidebar ${!sidebarOpen ? 'sidebar-hidden' : 'sidebar-visible'}`}
+      <div
+        ref={sidebarRef}
+        className={`sidebar ${!sidebarOpen ? 'sidebar-hidden' : 'sidebar-visible'}`}
+      >
+        {/* Desktop Burger Menu */}
+        <img
+          src={menuIcon}
+          alt="Toggle menu"
+          className={`menu-icon sidebar__burger-menu icon-white ${sidebarOpen ? 'open' : ''}`}
+          onClick={toggleSidebar}
+        />
+
+        {/* Mobile Close Button */}
+        <img
+          src={closeIcon}
+          alt="Close menu"
+          className={`menu-icon sidebar__mobile-close icon-white ${sidebarOpen ? 'open' : ''}`}
+          onClick={toggleSidebar}
+        />
+
+        <nav className="sidebar__nav">
+          {/* Home Link */}
+          <a
+            href="#home"
+            className={`sidebar__link ${activePage === 'home' ? 'active' : ''}`}
+            onClick={(e) => {
+              e.preventDefault();
+              handlePageChange('home');
+            }}
           >
-            {/* Desktop Burger Menu */}
+            <img
+              src={activePage === 'home' ? homeFilled : homeOutline}
+              alt="Home"
+              className="sidebar__link-icon icon-white"
+            />
+            Home
+          </a>
+
+          {/* Generator Link */}
+          <a
+            href="#generator"
+            className={`sidebar__link ${activePage === 'generator' ? 'active' : ''}`}
+            onClick={(e) => {
+              e.preventDefault();
+              handlePageChange('generator');
+            }}
+          >
+            <img
+              src={playlistIcon}
+              alt="Generator"
+              className="sidebar__link-icon icon-white"
+            />
+            Generator
+          </a>
+
+          {/* Ko-fi Link */}
+          <a
+            href="https://ko-fi.com/emlopezr"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="sidebar__link kofi-link"
+          >
+            <div className="kofi-button">
+              <img
+                src={coffeeIcon}
+                alt="Ko-Fi"
+                className="sidebar__link-icon icon-white"
+              />
+              Buy me a coffee {"<3"}
+            </div>
+          </a>
+        </nav>
+      </div>
+
+      {/* Dark overlay for mobile when sidebar is open */}
+      <div
+        className={`overlay ${isMobile && sidebarOpen ? 'active' : ''}`}
+        onClick={toggleSidebar}
+      ></div>
+
+      <div className="header">
+        <div className='profile'>
+          <div className="menu-icon-wrapper">
             <img
               src={menuIcon}
               alt="Toggle menu"
-              className={`menu-icon sidebar__burger-menu icon-white ${sidebarOpen ? 'open' : ''}`}
+              className={`menu-icon icon-white ${sidebarOpen ? 'open' : ''}`}
               onClick={toggleSidebar}
             />
-
-            {/* Mobile Close Button */}
-            <img
-              src={closeIcon}
-              alt="Close menu"
-              className={`menu-icon sidebar__mobile-close icon-white ${sidebarOpen ? 'open' : ''}`}
-              onClick={toggleSidebar}
-            />
-
-            <nav className="sidebar__nav">
-              {/* Home Link */}
-              <a
-                href="#home"
-                className={`sidebar__link ${activePage === 'home' ? 'active' : ''}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handlePageChange('home');
-                }}
-              >
-                <img
-                  src={activePage === 'home' ? homeFilled : homeOutline}
-                  alt="Home"
-                  className="sidebar__link-icon icon-white"
-                />
-                Home
-              </a>
-
-              {/* Generator Link */}
-              <a
-                href="#generator"
-                className={`sidebar__link ${activePage === 'generator' ? 'active' : ''}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handlePageChange('generator');
-                }}
-              >
-                <img
-                  src={playlistIcon}
-                  alt="Generator"
-                  className="sidebar__link-icon icon-white"
-                />
-                Generator
-              </a>
-
-              {/* Ko-fi Link */}
-              <a
-                href="https://ko-fi.com/emlopezr"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="sidebar__link kofi-link"
-              >
-                <div className="kofi-button">
-                  <img
-                    src={coffeeIcon}
-                    alt="Ko-Fi"
-                    className="sidebar__link-icon icon-white"
-                  />
-                  Buy me a coffee {"<3"}
-                </div>
-              </a>
-            </nav>
           </div>
+          <div className="profile__title">
+            <img src={logo} alt="Logo" className="profile__logo" />
+            <h1>
+              <span className="profile__title--green">Track</span>
+              <span className="profile__title--white">Watch</span>
+            </h1>
+          </div>
+          <div className="profile__user-container" ref={userMenuRef}>
+            <div
+              className="profile__image-container"
+              onClick={() => setShowUserMenu(!showUserMenu)}
+            >
+              <img
+                src={userData.imageUrl}
+                alt='Profile image'
+                width={100}
+                className='profile__image'
+              />
+            </div>
 
-          {/* Dark overlay for mobile when sidebar is open */}
-          <div
-            className={`overlay ${isMobile && sidebarOpen ? 'active' : ''}`}
-            onClick={toggleSidebar}
-          ></div>
-
-          <div className="header">
-            <div className='profile'>
-              <div className="menu-icon-wrapper">
-                <img
-                  src={menuIcon}
-                  alt="Toggle menu"
-                  className={`menu-icon icon-white ${sidebarOpen ? 'open' : ''}`}
-                  onClick={toggleSidebar}
-                />
-              </div>
-              <div className="profile__title">
-                <img src={logo} alt="Logo" className="profile__logo" />
-                <h1>
-                  <span className="profile__title--green">Track</span>
-                  <span className="profile__title--white">Watch</span>
-                </h1>
-              </div>
-              <div className="profile__user-container" ref={userMenuRef}>
-                <div
-                  className="profile__image-container"
-                  onClick={() => setShowUserMenu(!showUserMenu)}
+            {showUserMenu && (
+              <div className="profile__menu">
+                <p className="profile__menu-name">{userData.name}</p>
+                <button
+                  className="profile__menu-logout"
+                  onClick={handleLogout}
                 >
-                  <img
-                    src={userData.imageUrl}
-                    alt='Profile image'
-                    width={100}
-                    className='profile__image'
-                  />
-                </div>
-
-                {showUserMenu && (
-                  <div className="profile__menu">
-                    <p className="profile__menu-name">{userData.name}</p>
-                    <button
-                      className="profile__menu-logout"
-                      onClick={handleLogout}
-                    >
-                      <img src={logoutIcon} alt="Log Out" className='icon-white' />
-                      Log Out
-                    </button>
-                  </div>
-                )}
+                  <img src={logoutIcon} alt="Log Out" className='icon-white' />
+                  Log Out
+                </button>
               </div>
-            </div>
+            )}
           </div>
+        </div>
+      </div>
 
-          <div className="app-layout">
-            <div className="main-content">
-              {renderPageContent()}
-            </div>
+      <div className="app-layout">
+        <div className="main-content">
+          <div className="page-content">
+            {renderPageContent()}
           </div>
-        </>
-      ) : <Spinner />}
+        </div>
+      </div>
     </div>
   );
 };
