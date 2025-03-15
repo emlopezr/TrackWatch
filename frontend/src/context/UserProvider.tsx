@@ -2,7 +2,7 @@ import { useState, ReactNode } from 'react';
 import TrackWatchUser from '../types/trackwatch/TrackWatchUser';
 import { UserContext } from './UserContext';
 
-export const UserProvider = ({ children }: { children: ReactNode }) => {
+const UserProvider = ({ children }: { children: ReactNode }) => {
   const [userData, setUserData] = useState<TrackWatchUser | null>(null);
 
   return (
@@ -11,3 +11,5 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     </UserContext.Provider>
   );
 };
+
+export default UserProvider;

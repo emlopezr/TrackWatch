@@ -1,4 +1,4 @@
-import { UserProvider } from './context/UserProvider';
+import UserProvider from './context/UserProvider';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import MainPage from './pages/MainPage/MainPage';
 import CallbackPage from './pages/CallbackPage/CallbackPage';
