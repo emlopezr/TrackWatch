@@ -1,5 +1,5 @@
 import { SPOTIFY_API_URL } from "../../common/constants";
-import { SpotifyArtistResponse } from "../../types/spotify/SpotifyArtistResponse";
+import SpotifyArtistResponse from "../../types/spotify/SpotifyArtistResponse";
 
 export const searchArtists = async (
     accessToken: string,

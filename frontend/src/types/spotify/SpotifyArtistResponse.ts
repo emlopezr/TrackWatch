@@ -1,4 +1,4 @@
-export interface SpotifyArtistResponse {
+export default interface SpotifyArtistResponse {
     id: string;
     name: string;
     external_urls: {

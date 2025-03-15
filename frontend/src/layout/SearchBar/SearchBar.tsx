@@ -3,7 +3,7 @@ import { searchArtists } from "../../services/spotify/spotifySearch";
 import searchIcon from "../../assets/svg/search.svg";
 import closeIcon from "../../assets/svg/delete.svg";
 import './SearchBar.css';
-import { SpotifyArtistResponse } from "../../types/spotify/SpotifyArtistResponse";
+import SpotifyArtistResponse from "../../types/spotify/SpotifyArtistResponse";
 
 interface SearchBarProps {
   accessToken: string;

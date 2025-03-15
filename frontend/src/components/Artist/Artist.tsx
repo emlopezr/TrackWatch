@@ -1,4 +1,4 @@
-import { SpotifyArtistResponse } from "../../types/spotify/SpotifyArtistResponse";
+import SpotifyArtistResponse from "../../types/spotify/SpotifyArtistResponse";
 import unlike from '../../assets/svg/delete.svg';
 import like from '../../assets/svg/follow.svg';
 import blank from '../../assets/png/blank.png';

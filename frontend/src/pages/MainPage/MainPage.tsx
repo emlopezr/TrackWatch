@@ -3,11 +3,11 @@ import { useUser } from '../../context/useUser';
 import { getSpotifyAuthUrl } from '../../services/spotify/spotifyAuth';
 import { refreshAccessToken, verifyToken } from '../../services/spotify/spotifyToken';
 import { getTrackWatchUserData } from '../../services/trackwatch/trackwatchUsers';
+import SpotifyArtistResponse from '../../types/spotify/SpotifyArtistResponse';
 import FollowedArtists from '../../layout/FollowedArtists/FollowedArtists';
+import ArtistList from '../../layout/ArtistList/ArtistList';
 import spotifyLogo from '../../assets/svg/spotify.svg';
 import SearchBar from '../../layout/SearchBar/SearchBar';
-import SearchResults from '../../layout/SearchResults/SearchResults';
-import { SpotifyArtistResponse } from '../../types/spotify/SpotifyArtistResponse';
 import Spinner from '../../components/Spinner/Spinner';
 import logo from '../../assets/svg/logo.svg';
 import homeFilled from '../../assets/svg/home-filled.svg';
@@ -146,7 +146,10 @@ const MainPage = () => {
             )}
 
             {searching ? (
-              <SearchResults artistsData={artistsData} />
+              <ArtistList
+                title="Search Results"
+                artistsData={artistsData}
+              />
             ) : (
               userData && accessToken && (
                 <FollowedArtists
