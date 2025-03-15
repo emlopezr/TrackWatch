@@ -449,7 +449,7 @@ html, body {
 
 .sidebar__mobile-close {
     position: absolute;
-    top: 3rem;
+    top: 2rem;
     left: 1.5rem;
     display: none;
 }
