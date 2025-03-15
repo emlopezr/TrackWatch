@@ -1,6 +1,6 @@
 import { SPOTIFY_API_URL } from "../../common/constants";
 import SpotifyArtistResponse from "../../types/spotify/SpotifyArtistResponse";
-import { TrackWatchArtist } from "../../types/trackwatch/TrackWatchArtist";
+import TrackWatchArtist from "../../types/trackwatch/TrackWatchArtist";
 
 const artistCache: { [artistId: string]: SpotifyArtistResponse } = {};
 
