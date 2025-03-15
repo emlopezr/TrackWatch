@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component
 @Component
 class ResendClient(private val metricService: MetricService) {
 
-    private val log = LoggerFactory.getLogger(ResendClient::class.java)
+    private val log = LoggerFactory.getLogger(this::class.java)
     private val resend = Resend(System.getenv("RESEND_API_KEY"))
 
     fun sendEmail(recipient: User, emailSubject: String, emailBody: String) {

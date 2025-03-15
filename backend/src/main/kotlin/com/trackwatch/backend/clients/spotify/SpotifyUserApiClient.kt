@@ -10,7 +10,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 @Component
 class SpotifyUserApiClient(metricService: MetricService) : SpotifyApiClient(metricService) {
 
-    private val log = LoggerFactory.getLogger(SpotifyUserApiClient::class.java)
+    private val log = LoggerFactory.getLogger(this::class.java)
 
     fun getUser(accessToken: String): SpotifyUserDTO {
         try {

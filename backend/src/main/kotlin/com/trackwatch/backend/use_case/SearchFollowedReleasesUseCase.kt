@@ -20,7 +20,7 @@ class SearchFollowedReleasesUseCase(
     private val emailService: EmailService
 ) {
 
-    private val log = LoggerFactory.getLogger(SearchFollowedReleasesUseCase::class.java)
+    private val log = LoggerFactory.getLogger(this::class.java)
 
     fun updateNewReleasesForAllUsers(daysLimit: Int = Constants.FILTER_DAYS_LIMIT) {
         val users = userService.getAllUsers()
@@ -42,8 +42,9 @@ class SearchFollowedReleasesUseCase(
         val accessToken = activeUser.auth.current.accessToken
 
         val newReleaseTracks = findNewReleasesForUser(activeUser, accessToken, daysLimit)
-        val addedTracks = updateNewReleasesPlaylist(activeUser, newReleaseTracks)
+        val filteredTracks = trackService.removeDuplicateTracks(newReleaseTracks).toSet()
 
+        val addedTracks = updateNewReleasesPlaylist(activeUser, filteredTracks)
         updateUserRecentlyAddedTracks(activeUser, addedTracks)
 
         userService.saveUser(activeUser)
@@ -90,9 +91,9 @@ class SearchFollowedReleasesUseCase(
         }
     }
 
-    private fun updateNewReleasesPlaylist(user: User, tracks: List<Track>): List<Track> {
+    private fun updateNewReleasesPlaylist(user: User, tracks: Set<Track>): List<Track> {
         playlistService.checkPlaylist(user)
-        return playlistService.addTracksToPlaylist(user, user.playlistId, tracks.toSet()).toList()
+        return playlistService.addTracksToPlaylist(user, user.playlistId, tracks).toList()
     }
 
     private fun updateUserRecentlyAddedTracks(user: User, addedTracks: List<Track>) {

@@ -16,7 +16,7 @@ import java.util.*
 @Component
 class SpotifyArtistApiClient(metricService: MetricService) : SpotifyApiClient(metricService) {
 
-    private val log = LoggerFactory.getLogger(SpotifyArtistApiClient::class.java)
+    private val log = LoggerFactory.getLogger(this::class.java)
 
     fun getArtistInfo(artistId: String, accessToken: String): Artist {
         try {

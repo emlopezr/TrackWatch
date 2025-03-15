@@ -13,7 +13,7 @@ import java.util.*
 @Component
 class SpotifyAuthApiClient(metricService: MetricService) : SpotifyApiClient(metricService) {
 
-    private val log = LoggerFactory.getLogger(SpotifyAuthApiClient::class.java)
+    private val log = LoggerFactory.getLogger(this::class.java)
 
     fun refreshAccessTokenWithRetries(refreshToken: String, maxAttempts: Int = 3): SpotifyTokenDTO {
         var lastException: Exception? = null

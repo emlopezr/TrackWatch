@@ -22,7 +22,7 @@ class GenerateArtistPlaylistUseCase(
     private val spotifyArtistApiClient: SpotifyArtistApiClient
 ) {
 
-    private val log = LoggerFactory.getLogger(GenerateArtistPlaylistUseCase::class.java)
+    private val log = LoggerFactory.getLogger(this::class.java)
 
     fun generateArtistPlaylist(userId: String, artistId: String, playlistId: String?, accessToken: String) {
         val user = retrieveAndValidateUser(userId, accessToken)
@@ -90,44 +90,10 @@ class GenerateArtistPlaylistUseCase(
             )
         }
 
-        val sortedTracks = trackService.sortTracks(tracksToAdd)
-        return removeDuplicateTracks(sortedTracks.toList())
-    }
+        val sortedTracks = trackService.sortTracks(tracksToAdd).toList()
+        val filteredTracks = trackService.removeDuplicateTracks(sortedTracks)
 
-    private fun removeDuplicateTracks(tracks: List<Track>): List<Track> {
-        val uniqueTracks = mutableListOf<Track>()
-        val processedTracks = mutableMapOf<String, Track>()
-
-        for (track in tracks) {
-            val baseSignature = generateTrackSignatureWithoutDuration(track)
-
-            if (processedTracks.containsKey(baseSignature)) {
-                val existingTrack = processedTracks[baseSignature]!!
-                val durationDifference = abs(track.durationMs - existingTrack.durationMs)
-
-                // If duration differs by more than 1000ms (1 second), consider it a different track
-                if (durationDifference > 1000) {
-                    val uniqueSignature = "$baseSignature|${track.durationMs}"
-                    processedTracks[uniqueSignature] = track
-                    uniqueTracks.add(track)
-                }
-            } else {
-                processedTracks[baseSignature] = track
-                uniqueTracks.add(track)
-            }
-        }
-
-        return uniqueTracks
-    }
-
-    private fun generateTrackSignatureWithoutDuration(track: Track): String {
-        val normalizedName = track.name.lowercase()
-        val artistsSignature = track.artists
-            .map { it.name.lowercase() }
-            .sorted()
-            .joinToString(",")
-
-        return "$normalizedName|$artistsSignature"
+        return filteredTracks
     }
 
     private fun createOrUpdatePlaylist(user: User, artistName: String, existingPlaylistId: String?): String {

@@ -8,7 +8,7 @@ import org.springframework.web.reactive.function.client.WebClient
 class ImageHelper() {
 
     private val webClient = WebClient.builder().build()
-    private val log = LoggerFactory.getLogger(ImageHelper::class.java)
+    private val log = LoggerFactory.getLogger(this::class.java)
 
     fun encodeImageToBase64(imageUrl: String): String? {
         return try {
