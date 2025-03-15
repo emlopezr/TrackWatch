@@ -12,7 +12,7 @@ const FeatureCard = ({ icon, title, description, tag }: FeatureCardProps) => {
     <div className="feature-card">
       <div className="feature-card__header">
         <div className="feature-card__icon">
-          <img src={icon} alt={`${title} icon`} className="feature-card__icon-svg" />
+          <img src={icon} alt={`${title} icon`} className="feature-card__icon-svg icon-white" />
         </div>
         <h3 className="feature-card__title">
           {title} {tag && <span className="feature-card__tag">{tag}</span>}

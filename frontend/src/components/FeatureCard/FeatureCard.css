@@ -26,7 +26,6 @@
 .feature-card__icon-svg {
   width: 2.5rem;
   height: 2.5rem;
-  filter: var(--svg-filter, brightness(0) invert(1));
 }
 
 .feature-card__title {

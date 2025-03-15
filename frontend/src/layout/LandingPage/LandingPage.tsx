@@ -1,11 +1,11 @@
 import React from 'react';
 import { getSpotifyAuthUrl } from '../../services/spotify/spotifyAuth';
-import spotifyLogo from '../../assets/svg/spotify.svg';
+import FeatureCard from '../../components/FeatureCard/FeatureCard';
 import logo from '../../assets/svg/logo.svg';
+import spotifyLogo from '../../assets/svg/spotify.svg';
 import musicIcon from '../../assets/svg/music.svg';
 import notificationIcon from '../../assets/svg/notification.svg';
 import playlistIcon from '../../assets/svg/playlist.svg';
-import FeatureCard from '../../components/FeatureCard/FeatureCard';
 import './LandingPage.css';
 
 const LandingPage: React.FC = () => {
@@ -42,33 +42,28 @@ const LandingPage: React.FC = () => {
             </a>
           </div>
           <div className="hero__image-container">
-            {/* Placeholder for a hero image */}
             <div className="hero__image-placeholder"></div>
           </div>
         </section>
 
         <section className="features">
           <div className="features__grid">
-
             <FeatureCard
               icon={musicIcon}
               title="Track Your Artists"
               description="Add the artists you want to follow, and as soon as they make a new release, we'll add it to a playlist in your Spotify account."
             />
-
             <FeatureCard
               icon={notificationIcon}
               title="Release Notifications"
               description="Receive notifications when your favorite artists release new songs, albums, EPs, or be featured in songs by other artists."
             />
-
             <FeatureCard
               icon={playlistIcon}
               title="Playlist Generator"
               description="Generate playlists with all the songs of any artist you want. Perfect for discovering the complete discography of your favorite artists."
               tag="NEW"
             />
-
           </div>
         </section>
       </main>
