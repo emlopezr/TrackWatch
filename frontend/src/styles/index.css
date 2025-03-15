@@ -6,6 +6,7 @@
     --card: #333333;
     --spinner: #ffffff4d;
     --box-shadow: #0000004d;
+    --text-tertiary: #ffffff80;
 
     font-family: system-ui, sans-serif;
     line-height: 1.5;
@@ -21,7 +22,7 @@ h3,
 h4,
 h5,
 h6 {
-    margin: 0 !important;
+    margin: 0;
 }
 
 .icon-white {

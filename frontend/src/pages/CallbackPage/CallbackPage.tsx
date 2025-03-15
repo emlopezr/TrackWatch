@@ -7,7 +7,6 @@ import Spinner from '../../components/Spinner/Spinner';
 
 const CallbackPage = () => {
   const [, setAccessToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
 
   const { setUserData } = useUser();
 
@@ -21,7 +20,6 @@ const CallbackPage = () => {
       const code = urlParams.get('code');
 
       if (!code) {
-        setLoading(false);
         navigate('/');
         return;
       }
@@ -29,7 +27,6 @@ const CallbackPage = () => {
       const usedCode = localStorage.getItem('spotify_callback_code');
 
       if (usedCode === code) {
-        setLoading(false);
         return;
       }
 
@@ -46,7 +43,6 @@ const CallbackPage = () => {
 
       } catch {
         console.error('Error registering user');
-        setLoading(false);
         navigate('/');
       }
     };
@@ -54,9 +50,7 @@ const CallbackPage = () => {
     fetchData();
   }, [location, navigate, setUserData]);
 
-  return (
-    <div> {loading && <Spinner />} </div>
-  );
+  return <Spinner />
 };
 
 export default CallbackPage;

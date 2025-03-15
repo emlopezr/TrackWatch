@@ -1,12 +1,11 @@
 import { useEffect, useState, useRef } from 'react';
 import { useUser } from '../../context/useUser';
-import { getSpotifyAuthUrl } from '../../services/spotify/spotifyAuth';
 import { refreshAccessToken, verifyToken } from '../../services/spotify/spotifyToken';
 import { getTrackWatchUserData } from '../../services/trackwatch/trackwatchUsers';
 import SpotifyArtistResponse from '../../types/spotify/SpotifyArtistResponse';
 import FollowedArtists from '../../layout/FollowedArtists/FollowedArtists';
 import ArtistList from '../../layout/ArtistList/ArtistList';
-import spotifyLogo from '../../assets/svg/spotify.svg';
+import LandingPage from '../../layout/LandingPage/LandingPage';
 import SearchBar from '../../layout/SearchBar/SearchBar';
 import Spinner from '../../components/Spinner/Spinner';
 import logo from '../../assets/svg/logo.svg';
@@ -16,6 +15,7 @@ import menuIcon from '../../assets/svg/menu.svg';
 import playlistIcon from '../../assets/svg/playlist.svg';
 import coffeeIcon from '../../assets/svg/coffee.svg';
 import closeIcon from '../../assets/svg/delete.svg';
+import logoutIcon from '../../assets/svg/logout.svg';
 import './MainPage.css';
 
 type PageType = 'home' | 'generator';
@@ -178,20 +178,7 @@ const MainPage = () => {
   }
 
   if (!accessToken) {
-    return (
-      <div className='login'>
-        <h1 className='login__title'>
-          <span className="login__title--green">Track</span>
-          <span className="login__title--white">Watch</span>
-        </h1>
-        <a href={getSpotifyAuthUrl()} className='login__link'>
-          <button className='login__button'>
-            <img src={spotifyLogo} alt='Spotify Logo' className='login__logo' />
-            Sign in with Spotify
-          </button>
-        </a>
-      </div>
-    );
+    return <LandingPage />;
   }
 
   return (
@@ -315,6 +302,7 @@ const MainPage = () => {
                       className="profile__menu-logout"
                       onClick={handleLogout}
                     >
+                      <img src={logoutIcon} alt="Log Out" className='icon-white' />
                       Log Out
                     </button>
                   </div>

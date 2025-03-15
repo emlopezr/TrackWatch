@@ -268,75 +268,13 @@ html, body {
     }
 }
 
-.login {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 2rem;
-    height: 100vh;
-}
-
-.login__title {
-    font-size: 3rem;
-    margin: 0 0 1rem 0;
-}
-
-.login__title--white {
-    color: white;
-}
-
-.login__title--green {
-    color: var(--primary);
-}
-
-.login__link {
-    text-decoration: none;
-}
-
-.login__button {
-    display: flex;
-    gap: 0.5rem;
-    padding: 1rem 1.5rem;
-    align-items: center;
-    background-color: var(--primary);
-    color: white;
-    border: none;
-    cursor: pointer;
-
-    border-radius: 50px;
-    -webkit-border-radius: 50px;
-    -moz-border-radius: 50px;
-    -ms-border-radius: 50px;
-    -o-border-radius: 50px;
-
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    -webkit-transition: background-color 0.3s ease, transform 0.2s ease;
-    -moz-transition: background-color 0.3s ease, transform 0.2s ease;
-    -ms-transition: background-color 0.3s ease, transform 0.2s ease;
-    -o-transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.login__button:hover {
-    background-color: color-mix(in srgb, var(--primary) 50%, transparent);
-    transform: scale(1.05);
-    -webkit-transform: scale(1.05);
-    -moz-transform: scale(1.05);
-    -ms-transform: scale(1.05);
-    -o-transform: scale(1.05);
-}
-
-.login__logo {
-    width: 1.5rem;
-    height: auto;
-}
+/* Login styles removed - moved to LandingPage.css */
 
 .profile {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    position: relative;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .menu-icon-wrapper {
@@ -439,8 +377,11 @@ html, body {
     padding: 0.5rem 1rem;
     font-weight: 500;
     cursor: pointer;
-    width: 100%;
     transition: background-color 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .profile__menu-logout:hover {
@@ -569,6 +510,6 @@ html, body {
 }
 
 .kofi-link:hover {
-    transform: scale(1.05);
+    transform: scale(1.025);
     background-color: color-mix(in srgb, var(--primary) 80%, transparent);
 }
