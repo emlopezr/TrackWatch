@@ -5,7 +5,7 @@ import {
     SPOTIFY_BASE_URL,
     SPOTIFY_API_URL,
 } from "../../common/constants";
-import { SpotifyAuthResponse } from "../../types/spotify/SpotifyAuthResponse";
+import SpotifyAuthResponse from "../../types/spotify/SpotifyAuthResponse";
 
 const getAuthString = (): string => {
     return btoa(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`);

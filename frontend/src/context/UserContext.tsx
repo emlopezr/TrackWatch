@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { TrackWatchUser } from '../types/trackwatch/TrackWatchUser';
+import TrackWatchUser from '../types/trackwatch/TrackWatchUser';
 
 type UserContextType = {
   userData: TrackWatchUser | null;

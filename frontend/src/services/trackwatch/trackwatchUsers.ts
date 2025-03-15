@@ -1,5 +1,5 @@
 import { TRACKWATCH_API_BASE_URL } from "../../common/constants";
-import { TrackWatchUser } from "../../types/trackwatch/TrackWatchUser";
+import TrackWatchUser from "../../types/trackwatch/TrackWatchUser";
 import { refreshAccessToken } from "../spotify/spotifyToken";
 
 export const registerTrackWatchUser = async (

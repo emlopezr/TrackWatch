@@ -1,5 +1,5 @@
 import { useState, ReactNode } from 'react';
-import { TrackWatchUser } from '../types/trackwatch/TrackWatchUser';
+import TrackWatchUser from '../types/trackwatch/TrackWatchUser';
 import { UserContext } from './UserContext';
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {

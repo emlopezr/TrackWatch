@@ -1,6 +1,6 @@
-import { TrackWatchArtist } from "./TrackWatchArtist";
+import TrackWatchArtist from "./TrackWatchArtist";
 
-export interface TrackWatchUser {
+export default interface TrackWatchUser {
     id: string;
     email: string;
     name: string;

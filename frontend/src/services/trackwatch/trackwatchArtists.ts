@@ -1,6 +1,6 @@
-import { TrackWatchArtist } from "../../types/trackwatch/TrackWatchArtist";
+import TrackWatchArtist from "../../types/trackwatch/TrackWatchArtist";
 import { TRACKWATCH_API_BASE_URL } from "../../common/constants";
-import { TrackWatchUser } from "../../types/trackwatch/TrackWatchUser";
+import TrackWatchUser from "../../types/trackwatch/TrackWatchUser";
 
 export const followArtist = async (
     userData: TrackWatchUser,

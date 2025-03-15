@@ -1,4 +1,4 @@
-export interface SpotifyAuthResponse {
+export default interface SpotifyAuthResponse {
     access_token?: string;
     token_type?: string;
     expires_in?: number;

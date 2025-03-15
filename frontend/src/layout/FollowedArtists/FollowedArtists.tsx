@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import SpotifyArtistResponse from '../../types/spotify/SpotifyArtistResponse';
-import { TrackWatchArtist } from '../../types/trackwatch/TrackWatchArtist';
+import TrackWatchArtist from '../../types/trackwatch/TrackWatchArtist';
 import { batchGetArtists } from '../../services/spotify/spotifyArtists';
 import ArtistList from '../ArtistList/ArtistList';
 
