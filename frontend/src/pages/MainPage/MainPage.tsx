@@ -15,6 +15,7 @@ import homeOutline from '../../assets/svg/home-outline.svg';
 import menuIcon from '../../assets/svg/menu.svg';
 import playlistIcon from '../../assets/svg/playlist.svg';
 import coffeeIcon from '../../assets/svg/coffee.svg';
+import closeIcon from '../../assets/svg/delete.svg';
 import './MainPage.css';
 
 type PageType = 'home' | 'generator';
@@ -208,7 +209,7 @@ const MainPage = () => {
 
             {/* Mobile Close Button */}
             <img
-              src={menuIcon}
+              src={closeIcon}
               alt="Close menu"
               className={`menu-icon sidebar__mobile-close icon-white ${sidebarOpen ? 'open' : ''}`}
               onClick={toggleSidebar}
