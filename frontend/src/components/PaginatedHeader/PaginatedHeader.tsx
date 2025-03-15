@@ -28,43 +28,41 @@ export const PaginatedHeader = ({
       <h2 className="paginated-header__title">{title}</h2>
 
       <div className="paginated-header__bottom">
-        {(
-          <div className="pagination-inline">
-            <button 
-              onClick={() => onPageChange(1)} 
-              disabled={currentPage === 1}
-              className="pagination-inline__btn"
-            >
-              <img src={firstIcon} alt="First" className="pagination-inline__icon icon-white" />
-            </button>
-            <button 
-              onClick={() => onPageChange(currentPage - 1)} 
-              disabled={currentPage === 1}
-              className="pagination-inline__btn"
-            >
-              <img src={prevIcon} alt="Prev" className="pagination-inline__icon icon-white" />
-            </button>
-            
-            <span className="pagination-inline__text">
-              { totalPages > 1 ? `${currentPage} / ${totalPages}` : "Todos" }
-            </span>
-            
-            <button 
-              onClick={() => onPageChange(currentPage + 1)} 
-              disabled={currentPage === totalPages}
-              className="pagination-inline__btn"
-            >
-              <img src={nextIcon} alt="Next" className="pagination-inline__icon icon-white" />
-            </button>
-            <button 
-              onClick={() => onPageChange(totalPages)} 
-              disabled={currentPage === totalPages}
-              className="pagination-inline__btn"
-            >
-              <img src={lastIcon} alt="Last" className="pagination-inline__icon icon-white" />
-            </button>
-          </div>
-        )}
+        <div className="pagination-inline">
+          <button 
+            onClick={() => onPageChange(1)} 
+            disabled={currentPage === 1}
+            className="pagination-inline__btn"
+          >
+            <img src={firstIcon} alt="First" className="pagination-inline__icon icon-white" />
+          </button>
+          <button 
+            onClick={() => onPageChange(currentPage - 1)} 
+            disabled={currentPage === 1}
+            className="pagination-inline__btn"
+          >
+            <img src={prevIcon} alt="Prev" className="pagination-inline__icon icon-white" />
+          </button>
+          
+          <span className="pagination-inline__text">
+            { totalPages > 1 ? `${currentPage} / ${totalPages}` : "Todos" }
+          </span>
+          
+          <button 
+            onClick={() => onPageChange(currentPage + 1)} 
+            disabled={currentPage === totalPages}
+            className="pagination-inline__btn"
+          >
+            <img src={nextIcon} alt="Next" className="pagination-inline__icon icon-white" />
+          </button>
+          <button 
+            onClick={() => onPageChange(totalPages)} 
+            disabled={currentPage === totalPages}
+            className="pagination-inline__btn"
+          >
+            <img src={lastIcon} alt="Last" className="pagination-inline__icon icon-white" />
+          </button>
+        </div>
 
         <div className="records-per-page">
           <label htmlFor="recordsPerPage">Mostrar</label>
