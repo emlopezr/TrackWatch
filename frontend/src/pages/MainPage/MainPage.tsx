@@ -14,11 +14,12 @@ import homeFilled from '../../assets/svg/home-filled.svg';
 import homeOutline from '../../assets/svg/home-outline.svg';
 import menuIcon from '../../assets/svg/menu.svg';
 import playlistIcon from '../../assets/svg/playlist.svg';
-import './HomePage.css';
+import coffeeIcon from '../../assets/svg/coffee.svg';
+import './MainPage.css';
 
 type PageType = 'home' | 'generator';
 
-const HomePage = () => {
+const MainPage = () => {
   const { userData, setUserData } = useUser();
 
   const [loading, setLoading] = useState(true);
@@ -142,7 +143,7 @@ const HomePage = () => {
                 />
               </div>
             )}
-            
+
             {searching ? (
               <SearchResults artistsData={artistsData} />
             ) : (
@@ -198,54 +199,71 @@ const HomePage = () => {
             className={`sidebar ${!sidebarOpen ? 'sidebar-hidden' : 'sidebar-visible'}`}
           >
             {/* Desktop Burger Menu */}
-            <img 
-              src={menuIcon} 
-              alt="Toggle menu" 
-              className={`menu-icon sidebar__burger-menu icon-white ${sidebarOpen ? 'open' : ''}`} 
+            <img
+              src={menuIcon}
+              alt="Toggle menu"
+              className={`menu-icon sidebar__burger-menu icon-white ${sidebarOpen ? 'open' : ''}`}
               onClick={toggleSidebar}
             />
-            
+
             {/* Mobile Close Button */}
-            <img 
-              src={menuIcon} 
-              alt="Close menu" 
-              className={`menu-icon sidebar__mobile-close icon-white ${sidebarOpen ? 'open' : ''}`} 
+            <img
+              src={menuIcon}
+              alt="Close menu"
+              className={`menu-icon sidebar__mobile-close icon-white ${sidebarOpen ? 'open' : ''}`}
               onClick={toggleSidebar}
             />
 
             <nav className="sidebar__nav">
               {/* Home Link */}
-              <a 
-                href="#home" 
+              <a
+                href="#home"
                 className={`sidebar__link ${activePage === 'home' ? 'active' : ''}`}
                 onClick={(e) => {
                   e.preventDefault();
                   handlePageChange('home');
                 }}
               >
-                <img 
-                  src={activePage === 'home' ? homeFilled : homeOutline} 
-                  alt="Home" 
+                <img
+                  src={activePage === 'home' ? homeFilled : homeOutline}
+                  alt="Home"
                   className="sidebar__link-icon icon-white"
                 />
                 Home
               </a>
 
               {/* Generator Link */}
-              <a 
-                href="#generator" 
+              <a
+                href="#generator"
                 className={`sidebar__link ${activePage === 'generator' ? 'active' : ''}`}
                 onClick={(e) => {
                   e.preventDefault();
                   handlePageChange('generator');
                 }}
               >
-                <img 
+                <img
                   src={playlistIcon}
-                  alt="Generator" 
+                  alt="Generator"
                   className="sidebar__link-icon icon-white"
                 />
                 Generator
+              </a>
+
+              {/* Ko-fi Link */}
+              <a
+                href="https://ko-fi.com/emlopezr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="sidebar__link kofi-link"
+              >
+                <div className="kofi-button">
+                  <img
+                    src={coffeeIcon}
+                    alt="Ko-Fi"
+                    className="sidebar__link-icon icon-white"
+                  />
+                  Buy me a coffee {"<3"}
+                </div>
               </a>
             </nav>
           </div>
@@ -259,10 +277,10 @@ const HomePage = () => {
           <div className="header">
             <div className='profile'>
               <div className="menu-icon-wrapper">
-                <img 
-                  src={menuIcon} 
-                  alt="Toggle menu" 
-                  className={`menu-icon icon-white ${sidebarOpen ? 'open' : ''}`} 
+                <img
+                  src={menuIcon}
+                  alt="Toggle menu"
+                  className={`menu-icon icon-white ${sidebarOpen ? 'open' : ''}`}
                   onClick={toggleSidebar}
                 />
               </div>
@@ -312,4 +330,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default MainPage;

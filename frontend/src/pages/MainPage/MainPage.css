@@ -6,6 +6,8 @@ html, body {
     padding: 0;
 }
 
+
+
 .home {
     height: 100vh;
     padding: 2rem;
@@ -159,23 +161,23 @@ html, body {
 
 .main-content {
     flex: 1;
-    overflow-y: auto; /* Only this element should scroll */
+    overflow-y: auto;
+    overflow-x: hidden;
     height: calc(100vh - 130px); /* Adjust based on your header height */
-    scrollbar-color: rgba(255, 255, 255, 0.2) transparent; /* For Firefox */
-    padding-right: 8px; /* Add some space for the scrollbar */
-    padding-left: 8px; /* Add padding on the left side */
-    transition: margin-left 0.3s ease, width 0.3s ease; /* Smooth transition for content */
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+    transition: margin-left 0.3s ease, width 0.3s ease;
 }
 
-/* WebKit browsers (Chrome, Safari, Edge) */
 .main-content::-webkit-scrollbar {
-    width: 6px; /* Narrow scrollbar */
-    margin-left: 8px; /* This doesn't work directly but we'll compensate */
+    width: 0.5rem;
+    margin-left: 0.5rem;
 }
 
 .main-content::-webkit-scrollbar-track {
-    background: transparent; /* Transparent track */
-    margin-left: 8px; /* Attempt to add left margin */
+    background: transparent;
+    margin-left: 0.5rem;
 }
 
 .main-content::-webkit-scrollbar-thumb {
@@ -430,7 +432,7 @@ html, body {
     top: calc(100% + 10px);
     right: 0;
     background-color: var(--card);
-    border-radius: 8px;
+    border-radius: 0.5rem;
     box-shadow: 0 4px 12px var(--box-shadow);
     padding: 12px;
     width: 200px;
@@ -439,16 +441,6 @@ html, body {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-}
-
-.profile__menu:before {
-    content: "";
-    position: absolute;
-    top: -6px;
-    right: 20px;
-    width: 12px;
-    height: 12px;
-    background-color: var(--card);
 }
 
 .profile__menu-name {
@@ -461,8 +453,8 @@ html, body {
     background-color: var(--red);
     color: white;
     border: none;
-    border-radius: 4px;
-    padding: 8px 16px;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
     font-weight: 500;
     cursor: pointer;
     width: 100%;
@@ -539,4 +531,66 @@ html, body {
 .generator-page p {
     color: white;
     line-height: 1.5;
+}
+
+.kofi-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    background-color: var(--primary);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 0.75rem;
+}
+
+/* Remove previous separator targeting */
+.sidebar__link:last-of-type {
+    position: relative;
+}
+
+.sidebar__link:last-of-type::after {
+    display: none;
+}
+
+/* Add separator after the second-to-last navigation link */
+.sidebar__nav a:nth-last-child(2) {
+    position: relative;
+}
+
+.sidebar__nav a:nth-last-child(2)::after {
+    content: "";
+    position: absolute;
+    bottom: -1rem;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #ffffff1a;
+}
+
+.kofi-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.kofi-text {
+    display: inline-block;
+    color: white;
+    width: 100%;
+    text-align: center;
+}
+
+.kofi-link:hover {
+    transform: scale(1.05);
+    background-color: color-mix(in srgb, var(--primary) 80%, transparent);
 }
