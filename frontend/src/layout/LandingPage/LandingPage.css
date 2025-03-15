@@ -161,8 +161,8 @@ html, body {
 
 .hero__image-container {
   display: flex;
-  justify-content: left;
-  align-items: left;
+  justify-content: right;
+  align-items: right;
 }
 
 .features {
