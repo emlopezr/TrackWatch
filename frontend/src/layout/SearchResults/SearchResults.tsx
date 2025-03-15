@@ -1,9 +1,9 @@
 import { SpotifyArtistResponse } from "../../types/spotify/SpotifyArtistResponse";
-import Artist from "../Artist/Artist";
+import Artist from "../../components/Artist/Artist";
 import './SearchResults.css';
 import { useUser } from "../../context/useUser";
 import { followArtist, unfollowArtist } from "../../services/trackwatch/trackwatchArtists";
-import Spinner from "../Spinner/Spinner";
+import Spinner from "../../components/Spinner/Spinner";
 import { useEffect, useState } from "react";
 import { PaginatedHeader } from '../PaginatedHeader/PaginatedHeader';
 

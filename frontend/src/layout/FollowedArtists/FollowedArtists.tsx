@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { SpotifyArtistResponse } from '../../types/spotify/SpotifyArtistResponse';
-import Artist from '../Artist/Artist';
+import Artist from '../../components/Artist/Artist';
 import './FollowedArtists.css';
 import { TrackWatchArtist } from '../../types/trackwatch/TrackWatchArtist';
 import { useUser } from '../../context/useUser';
 import { followArtist, unfollowArtist } from '../../services/trackwatch/trackwatchArtists';
-import Spinner from '../Spinner/Spinner';
+import Spinner from '../../components/Spinner/Spinner';
 import { batchGetArtists } from '../../services/spotify/spotifyArtists';
 import { PaginatedHeader } from '../PaginatedHeader/PaginatedHeader';
 
