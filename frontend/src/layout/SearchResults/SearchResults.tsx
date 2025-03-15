@@ -15,7 +15,7 @@ const SearchResults = ({ artistsData }: SearchResultsProps) => {
   const { userData, setUserData } = useUser();
 
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [recordsPerPage, setRecordsPerPage] = useState<number>(10);
+  const [recordsPerPage, setRecordsPerPage] = useState<number>(15);
 
   const totalPages = artistsData ? Math.ceil(artistsData.length / recordsPerPage) : 0;
 

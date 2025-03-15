@@ -21,7 +21,7 @@ const FollowedArtists = ({ accessToken, followedArtists }: FollowedArtistsProps)
   const [loadingPage, setLoadingPage] = useState<boolean>(false);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [recordsPerPage, setRecordsPerPage] = useState<number>(10);
+  const [recordsPerPage, setRecordsPerPage] = useState<number>(15);
 
   useEffect(() => {
     const loadArtists = async () => {
@@ -61,7 +61,7 @@ const FollowedArtists = ({ accessToken, followedArtists }: FollowedArtistsProps)
       <div className="followed-artists__empty">
         <p className="followed-artists__empty">
           You're not following any artists yet 😔 <br />
-          Follow your first artist by searching him!
+          Follow your first artist by searching in the bar above!
         </p>
       </div>
     );
