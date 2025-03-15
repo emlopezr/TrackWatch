@@ -1,14 +1,276 @@
+/* Global styles to prevent body scroll */
+html, body {
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
 .home {
+    height: 100vh;
     padding: 2rem;
     padding-top: 0;
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    position: relative; /* For overlay positioning */
+    overflow: hidden; /* Prevent home container from scrolling */
 }
 
+/* Add base styles for header and app-layout with transitions */
+.header,
+.app-layout {
+    margin-left: 0;
+    width: 100%;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+/* Main layout with sidebar */
+.app-layout {
+    display: flex;
+    flex: 1;
+    position: relative;
+    overflow: hidden; /* Prevent app-layout container from scrolling */
+}
+
+.sidebar {
+    background-color: var(--card);
+    width: 250px;
+    padding: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 200;
+    overflow-y: auto;
+}
+
+.sidebar-hidden {
+    transform: translateX(-100%);
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    animation: fadeIn 0.3s ease;
+}
+
+.sidebar__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 4rem;
+}
+
+.sidebar__link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    text-decoration: none;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.sidebar__link:hover,
+.sidebar__link.active {
+    background-color: color-mix(in srgb, var(--primary) 25%, transparent);
+}
+
+.sidebar__link-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    filter: brightness(0) invert(1);
+}
+
+.burger-menu {
+    display: none;
+}
+
+.menu-icon {
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+    filter: brightness(0) invert(1);
+    transition: transform 0.3s ease;
+}
+
+/* Burger menu inside sidebar for desktop */
+.sidebar__burger-menu {
+    position: absolute;
+    top: 2.5rem;
+    left: 2rem;
+    display: none; /* Hidden by default, shown in desktop when sidebar is open */
+}
+
+/* Show sidebar burger menu in desktop mode */
+@media (min-width: 769px) {
+    .with-sidebar .header .menu-icon {
+        display: none; /* Hide the header burger menu when sidebar is open */
+    }
+    
+    .sidebar-visible .sidebar__burger-menu {
+        display: block; /* Show the sidebar burger menu when sidebar is visible in desktop */
+    }
+}
+
+.sidebar__close-btn {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    display: none;
+}
+
+/* Remove these styles since we don't have spans anymore */
+.burger-menu span {
+    display: none;
+}
+
+/* Adjusted layout for desktop - now with transitions applied in base styles */
+.with-sidebar .header,
+.with-sidebar .app-layout {
+    margin-left: calc(270px + 2rem); /* Sidebar width + margin */
+    width: calc(100% - 270px - 2rem);
+}
+
+.header {
+    z-index: 99;
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2rem 0 1rem 0;
+    background-color: var(--background);
+}
+
+.main-content {
+    flex: 1;
+    overflow-y: auto; /* Only this element should scroll */
+    height: calc(100vh - 130px); /* Adjust based on your header height */
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent; /* For Firefox */
+    padding-right: 8px; /* Add some space for the scrollbar */
+    transition: margin-left 0.3s ease, width 0.3s ease; /* Smooth transition for content */
+}
+
+/* WebKit browsers (Chrome, Safari, Edge) */
+.main-content::-webkit-scrollbar {
+    width: 6px; /* Narrow scrollbar */
+    margin-left: 8px; /* This doesn't work directly but we'll compensate */
+}
+
+.main-content::-webkit-scrollbar-track {
+    background: transparent; /* Transparent track */
+    margin-left: 8px; /* Attempt to add left margin */
+}
+
+.main-content::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2); /* Subtle light color for dark mode */
+    border-radius: 10px; /* Rounded corners */
+    border: 2px solid transparent; /* Creates padding effect */
+    background-clip: padding-box; /* Prevents the background color from extending into the border */
+}
+
+.main-content::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.3); /* Slightly brighter on hover */
+}
+
+/* Create a pseudo-element to add padding for the scrollbar in WebKit browsers */
+.main-content {
+    position: relative;
+}
+
+.main-content::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 12px; /* Wider than the scrollbar */
+    height: 100%;
+    pointer-events: none; /* So it doesn't interfere with scrolling */
+}
+
+/* Mobile responsive behavior */
 @media (max-width: 768px) {
+    /* Reset transitions for mobile to prevent visual glitches */
+    .header,
+    .app-layout,
+    .main-content {
+        transition: none;
+    }
+    
     .home {
         padding: 1rem;
+    }
+    
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 80%;
+        max-width: 300px;
+        transform: translateX(-100%);
+        z-index: 200;
+        border-radius: 0;
+        margin-right: 0;
+        padding-top: 2rem;
+    }
+    
+    .sidebar.sidebar-visible {
+        transform: translateX(0);
+        box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .overlay.active {
+        display: block;
+    }
+    
+    /* Show mobile close button */
+    .sidebar-visible .sidebar__mobile-close {
+        display: block;
+    }
+    
+    /* Burger menu when open */
+    .burger-menu.open span:nth-child(1),
+    .burger-menu.open span:nth-child(2),
+    .burger-menu.open span:nth-child(3) {
+        display: none;
+    }
+    
+    .with-sidebar .header,
+    .with-sidebar .app-layout {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding-left: 0;
+        height: calc(100vh - 100px); /* Adjust for mobile header height */
+    }
+
+    .header {
+        padding: 1rem 0 0.5rem 0;
+        gap: 0.5rem;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
     }
 }
 
@@ -19,6 +281,7 @@
     align-items: center;
     text-align: center;
     padding: 2rem;
+    height: 100vh;
 }
 
 .login__title {
@@ -75,21 +338,35 @@
     height: auto;
 }
 
-.header {
-    z-index: 99;
-    position: sticky;
-    top: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.7rem;
-    padding: 2rem 0 1rem 0;
-    background-color: var(--background);
-}
-
 .profile {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative; /* Add positioning context */
+}
+
+/* Create menu icon wrapper to maintain space */
+.menu-icon-wrapper {
+    width: 2rem;
+    height: 2rem;
+    position: relative;
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+/* Position menu icon within its wrapper */
+.profile .menu-icon {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 1;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Hide the icon with opacity rather than display */
+.with-sidebar .profile .menu-icon {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .profile__title {
@@ -97,6 +374,14 @@
     display: flex;
     gap: 0.75rem;
     font-size: 1.2rem;
+    transition: transform 0.3s ease; /* Add transition for smooth movement */
+    position: absolute; /* Position it absolutely */
+    left: 3rem; /* Position after menu icon */
+}
+
+/* When sidebar is open, shift the title to where the menu icon was */
+.with-sidebar .profile__title {
+    transform: translateX(-3rem); /* Move to where menu icon was */
 }
 
 .profile__title--white {
@@ -118,13 +403,6 @@
 .profile__logo {
     width: 2.5rem;
     height: auto;
-}
-
-@media (max-width: 768px) {
-    .header {
-        padding: 1rem 0 0.5rem 0;
-        gap: 0.5rem;
-    }
 }
 
 .profile__user-container {
@@ -161,7 +439,6 @@
     width: 12px;
     height: 12px;
     background-color: var(--card);
-    transform: rotate(45deg);
 }
 
 .profile__menu-name {
@@ -187,13 +464,22 @@
     background-color: color-mix(in srgb, var(--red) 50%, transparent);
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
+/* Mobile close button */
+.sidebar__mobile-close {
+    position: absolute;
+    top: 3rem;
+    left: 1.5rem;
+    display: none; /* Hidden by default */
+}
+
+@media (max-width: 768px) {
+    /* Keep the title in place on mobile */
+    .profile__title {
+        position: relative; 
+        left: 0;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    
+    .with-sidebar .profile__title {
+        transform: none;
     }
 }
