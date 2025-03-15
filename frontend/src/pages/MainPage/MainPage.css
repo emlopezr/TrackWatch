@@ -250,7 +250,7 @@ html, body {
         margin-left: 0;
         width: 100%;
         padding-left: 0;
-        height: calc(100vh - 10rem);
+        height: calc(100vh - 12rem);
     }
 
     .header {
