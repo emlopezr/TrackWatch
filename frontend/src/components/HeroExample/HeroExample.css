@@ -1,0 +1,266 @@
+.hero-example {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* Followed Artists Box */
+.followed-artists-box {
+  background-color: #222;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+  width: 270px;
+  z-index: 10;
+  margin-right: 1rem;
+}
+
+.box-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  color: white;
+}
+
+.box-header-icon {
+  margin-right: 0.5rem;
+  width: 18px;
+  height: 18px;
+}
+
+.icon-white {
+  filter: brightness(0) invert(1);
+}
+
+.box-title {
+  font-weight: 700;
+  font-size: 1.125rem;
+  margin: 0;
+}
+
+.artist-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.artist-card {
+  background-color: #333;
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+}
+
+.artist-image {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin-right: 0.75rem;
+  object-fit: cover;
+}
+
+.artist-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.artist-name {
+  font-weight: 500;
+  color: white;
+  margin: 0 0 0.25rem 0;
+}
+
+.artist-genre {
+  color: #aaa;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* New Releases Box */
+.new-releases-box {
+  background-color: #222;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+  width: 260px;
+  transform: rotate(3deg);
+  z-index: 10;
+}
+
+.songs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.song-card {
+  background-color: #333;
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  position: relative;
+}
+
+.song-image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.song-image {
+  width: 100%;
+  border-radius: 0.375rem;
+  display: block;
+}
+
+.song-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+}
+
+.song-card:hover .song-overlay {
+  opacity: 1;
+}
+
+.play-button {
+  background-color: var(--primary);
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.play-icon {
+  width: 12px;
+  height: 12px;
+  filter: brightness(0) invert(1);
+}
+
+.song-title {
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin: 0.25rem 0 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song-artist {
+  color: #aaa;
+  font-size: 0.75rem;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Large desktop screens (1200px+) - center the component */
+@media (min-width: 1200px) {
+  .hero-example {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+/* Medium to large screens - maintain separation */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .hero-example {
+    max-width: 550px;
+  }
+}
+
+/* Tablet and smaller screens - maintain horizontal layout */
+@media (max-width: 992px) {
+  .hero-example {
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  .followed-artists-box {
+    margin-right: 1rem;
+    margin-bottom: 0;
+    width: 35%;
+    min-width: 230px;
+  }
+  
+  .new-releases-box {
+    transform: rotate(3deg);
+    width: 30%;
+    min-width: 220px;
+  }
+  
+  /* Adjust the songs grid to be more compact */
+  .songs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.375rem;
+    width: 100%;
+  }
+  
+  /* Control song card and image size */
+  .song-card {
+    width: 100%;
+    max-width: 100px;
+    margin: 0 auto;
+  }
+  
+  .song-image-container {
+    width: 100%;
+    height: auto;
+  }
+  
+  .song-image {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* Additional adjustments for very small screens */
+@media (max-width: 600px) {
+  .hero-example {
+    padding: 0.5rem;
+  }
+  
+  .followed-artists-box,
+  .new-releases-box {
+    min-width: auto;
+    width: 48%;
+  }
+  
+  .artist-image {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .song-card {
+    max-width: 85px;
+  }
+  
+  .song-title {
+    font-size: 0.65rem;
+  }
+  
+  .song-artist {
+    font-size: 0.65rem;
+  }
+}

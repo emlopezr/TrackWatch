@@ -1,6 +1,7 @@
 import React from 'react';
 import { getSpotifyAuthUrl } from '../../services/spotify/spotifyAuth';
 import FeatureCard from '../../components/FeatureCard/FeatureCard';
+import HeroExample from '../../components/HeroExample/HeroExample';
 import logo from '../../assets/svg/logo.svg';
 import spotifyLogo from '../../assets/svg/spotify.svg';
 import musicIcon from '../../assets/svg/music.svg';
@@ -42,7 +43,7 @@ const LandingPage: React.FC = () => {
             </a>
           </div>
           <div className="hero__image-container">
-            <div className="hero__image-placeholder"></div>
+            <HeroExample />
           </div>
         </section>
 
@@ -62,7 +63,7 @@ const LandingPage: React.FC = () => {
               icon={playlistIcon}
               title="Playlist Generator"
               description="Generate playlists with all the songs of any artist you want. Perfect for discovering the complete discography of your favorite artists."
-              tag="NEW"
+              tag="New"
             />
           </div>
         </section>
