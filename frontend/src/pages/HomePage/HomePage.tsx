@@ -11,8 +11,12 @@ import { SpotifyArtistResponse } from '../../types/spotify/SpotifyArtistResponse
 import Spinner from '../../components/Spinner/Spinner';
 import logo from '../../assets/svg/logo.svg';
 import homeFilled from '../../assets/svg/home-filled.svg';
+import homeOutline from '../../assets/svg/home-outline.svg';
 import menuIcon from '../../assets/svg/menu.svg';
 import './HomePage.css';
+
+// Define page types for our SPA
+type PageType = 'home' | 'generator';
 
 const HomePage = () => {
   const { userData, setUserData } = useUser();
@@ -21,6 +25,9 @@ const HomePage = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [searching, setSearching] = useState(false)
   const [artistsData, setArtistsData] = useState<SpotifyArtistResponse[]>([]);
+
+  // Add state for active page in our SPA
+  const [activePage, setActivePage] = useState<PageType>('home');
 
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768); // Open by default on desktop
@@ -112,6 +119,54 @@ const HomePage = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
+  // Handler for changing pages
+  const handlePageChange = (page: PageType) => {
+    setActivePage(page);
+    if (isMobile) {
+      setSidebarOpen(false); // Close sidebar on mobile when page changes
+    }
+  };
+
+  // Render page content based on active page
+  const renderPageContent = () => {
+    switch (activePage) {
+      case 'home':
+        return (
+          <div className="page-content">
+            {accessToken && (
+              <div className="search-container sticky-element">
+                <SearchBar
+                  accessToken={accessToken}
+                  setArtistsData={setArtistsData}
+                  setSearching={setSearching}
+                />
+              </div>
+            )}
+            
+            {searching ? (
+              <SearchResults artistsData={artistsData} />
+            ) : (
+              userData && accessToken && (
+                <FollowedArtists
+                  accessToken={accessToken}
+                  followedArtists={userData.followedArtists}
+                />
+              )
+            )}
+          </div>
+        );
+      case 'generator':
+        return (
+          <div className="page-content">
+            <div className="generator-page">
+              <p>This is a placeholder for the Generator functionality.</p>
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
 
   if (loading) {
     return <Spinner />;
@@ -159,13 +214,38 @@ const HomePage = () => {
             />
 
             <nav className="sidebar__nav">
-              <a href="/" className="sidebar__link active">
+              {/* Home Link */}
+              <a 
+                href="#home" 
+                className={`sidebar__link ${activePage === 'home' ? 'active' : ''}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handlePageChange('home');
+                }}
+              >
                 <img 
-                  src={homeFilled} 
+                  src={activePage === 'home' ? homeFilled : homeOutline} 
                   alt="Home" 
                   className="sidebar__link-icon"
                 />
                 Home
+              </a>
+
+              {/* Generator Link */}
+              <a 
+                href="#generator" 
+                className={`sidebar__link ${activePage === 'generator' ? 'active' : ''}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handlePageChange('generator');
+                }}
+              >
+                <img 
+                  src={activePage === 'generator' ? homeFilled : homeOutline} 
+                  alt="Generator" 
+                  className="sidebar__link-icon"
+                />
+                Generator
               </a>
             </nav>
           </div>
@@ -219,23 +299,11 @@ const HomePage = () => {
                 )}
               </div>
             </div>
-            <SearchBar
-              accessToken={accessToken}
-              setArtistsData={setArtistsData}
-              setSearching={setSearching}
-            />
           </div>
 
           <div className="app-layout">
             <div className="main-content">
-              {searching && <SearchResults artistsData={artistsData} />}
-
-              {!searching && (
-                <FollowedArtists
-                  accessToken={accessToken}
-                  followedArtists={userData.followedArtists}
-                />
-              )}
+              {renderPageContent()}
             </div>
           </div>
         </>
