@@ -511,5 +511,5 @@ html, body {
 
 .kofi-link:hover {
     transform: scale(1.025);
-    background-color: color-mix(in srgb, var(--primary) 80%, transparent);
+    background-color: color-mix(in srgb, var(--primary), black 25%);
 }

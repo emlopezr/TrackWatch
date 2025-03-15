@@ -5,19 +5,22 @@ import logo from '../../assets/svg/logo.svg';
 import musicIcon from '../../assets/svg/music.svg';
 import notificationIcon from '../../assets/svg/notification.svg';
 import playlistIcon from '../../assets/svg/playlist.svg';
+import FeatureCard from '../../components/FeatureCard/FeatureCard';
 import './LandingPage.css';
 
 const LandingPage: React.FC = () => {
   return (
     <div className="landing-page">
       <header className="landing-header">
-        <div className="landing-logo">
-          <img src={logo} alt="TrackWatch Logo" className="landing-logo__image" />
-          <h1 className="landing-logo__title">
-            <span className="landing-logo__title--green">Track</span>
-            <span className="landing-logo__title--white">Watch</span>
-          </h1>
-        </div>
+        <a href="/" className='landing-logo__link'>
+          <div className="landing-logo">
+            <img src={logo} alt="TrackWatch Logo" className="landing-logo__image" />
+            <h1 className="landing-logo__title">
+              <span className="landing-logo__title--green">Track</span>
+              <span className="landing-logo__title--white">Watch</span>
+            </h1>
+          </div>
+        </a>
         <a href={getSpotifyAuthUrl()} className="login-button-small">
           <img src={spotifyLogo} alt="Spotify Logo" className="login-button-small__logo" />
           Sign In
@@ -46,36 +49,26 @@ const LandingPage: React.FC = () => {
 
         <section className="features">
           <div className="features__grid">
-            <div className="feature-card">
-              <div className="feature-card__icon">
-                <img src={musicIcon} alt="Music icon" className="feature-card__icon-svg" />
-              </div>
-              <h3 className="feature-card__title">Track Your Artists</h3>
-              <p className="feature-card__description">
-                Add the artists you want to follow, and as soon as they make a new release, we'll add it to a playlist in your Spotify account.
-              </p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-card__icon">
-                <img src={notificationIcon} alt="Notification icon" className="feature-card__icon-svg" />
-              </div>
-              <h3 className="feature-card__title">Release Notifications</h3>
-              <p className="feature-card__description">
-              Receive notifications when your favorite artists release new songs, albums, EPs or be featurings on songs by other artists.
-              </p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-card__icon">
-                <img src={playlistIcon} alt="Playlist icon" className="feature-card__icon-svg" />
-              </div>
-              <h3 className="feature-card__title">
-                Playlist Generator
-                <span className="feature-card__tag">NEW</span>
-              </h3>
-              <p className="feature-card__description">
-                Generate playlists with all the songs of any artist you want. Perfect for discovering the complete discography of your favorite artists.
-              </p>
-            </div>
+
+            <FeatureCard
+              icon={musicIcon}
+              title="Track Your Artists"
+              description="Add the artists you want to follow, and as soon as they make a new release, we'll add it to a playlist in your Spotify account."
+            />
+
+            <FeatureCard
+              icon={notificationIcon}
+              title="Release Notifications"
+              description="Receive notifications when your favorite artists release new songs, albums, EPs, or be featured in songs by other artists."
+            />
+
+            <FeatureCard
+              icon={playlistIcon}
+              title="Playlist Generator"
+              description="Generate playlists with all the songs of any artist you want. Perfect for discovering the complete discography of your favorite artists."
+              tag="NEW"
+            />
+
           </div>
         </section>
       </main>

@@ -18,7 +18,6 @@ html, body {
   width: 100%;
 }
 
-/* Header Styles */
 .landing-header {
   display: flex;
   justify-content: space-between;
@@ -28,6 +27,11 @@ html, body {
   max-width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
+}
+
+.landing-logo__link {
+  text-decoration: none;
+  color: var(--white);
 }
 
 .landing-logo {
@@ -59,7 +63,7 @@ html, body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 1.5rem;
+  padding: 0.5rem 2rem;
   background-color: var(--primary);
   color: white;
   border-radius: 3rem;
@@ -170,57 +174,6 @@ html, body {
   max-width: 1200px;
   width: 100%;
   justify-content: center;
-}
-
-.feature-card {
-  background-color: var(--card);
-  border-radius: 20px;
-  padding: 1.5rem 2rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.feature-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-}
-
-.feature-card__icon {
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.feature-card__icon-svg {
-  width: 2.5rem;
-  height: 2.5rem;
-  filter: var(--svg-filter, brightness(0) invert(1));
-}
-
-.feature-card__title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.feature-card__tag {
-  background-color: var(--primary);
-  color: white;
-  font-size: 0.7rem;
-  font-weight: 700;
-  padding: 0.3rem 0.5rem;
-  border-radius: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.feature-card__description {
-  color: var(--text-secondary);
-  line-height: 1.5;
-  margin-top: 0.5rem;
 }
 
 .landing-footer {
