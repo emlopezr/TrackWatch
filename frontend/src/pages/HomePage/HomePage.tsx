@@ -15,7 +15,6 @@ import homeOutline from '../../assets/svg/home-outline.svg';
 import menuIcon from '../../assets/svg/menu.svg';
 import './HomePage.css';
 
-// Define page types for our SPA
 type PageType = 'home' | 'generator';
 
 const HomePage = () => {
@@ -26,12 +25,12 @@ const HomePage = () => {
   const [searching, setSearching] = useState(false)
   const [artistsData, setArtistsData] = useState<SpotifyArtistResponse[]>([]);
 
-  // Add state for active page in our SPA
   const [activePage, setActivePage] = useState<PageType>('home');
 
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768); // Open by default on desktop
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
   const userMenuRef = useRef<HTMLDivElement>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -123,7 +122,7 @@ const HomePage = () => {
   const handlePageChange = (page: PageType) => {
     setActivePage(page);
     if (isMobile) {
-      setSidebarOpen(false); // Close sidebar on mobile when page changes
+      setSidebarOpen(false);
     }
   };
 
@@ -201,7 +200,7 @@ const HomePage = () => {
             <img 
               src={menuIcon} 
               alt="Toggle menu" 
-              className={`menu-icon sidebar__burger-menu ${sidebarOpen ? 'open' : ''}`} 
+              className={`menu-icon sidebar__burger-menu icon-white ${sidebarOpen ? 'open' : ''}`} 
               onClick={toggleSidebar}
             />
             
@@ -209,7 +208,7 @@ const HomePage = () => {
             <img 
               src={menuIcon} 
               alt="Close menu" 
-              className={`menu-icon sidebar__mobile-close ${sidebarOpen ? 'open' : ''}`} 
+              className={`menu-icon sidebar__mobile-close icon-white ${sidebarOpen ? 'open' : ''}`} 
               onClick={toggleSidebar}
             />
 
@@ -226,7 +225,7 @@ const HomePage = () => {
                 <img 
                   src={activePage === 'home' ? homeFilled : homeOutline} 
                   alt="Home" 
-                  className="sidebar__link-icon"
+                  className="sidebar__link-icon icon-white"
                 />
                 Home
               </a>
@@ -243,7 +242,7 @@ const HomePage = () => {
                 <img 
                   src={activePage === 'generator' ? homeFilled : homeOutline} 
                   alt="Generator" 
-                  className="sidebar__link-icon"
+                  className="sidebar__link-icon icon-white"
                 />
                 Generator
               </a>
@@ -262,12 +261,12 @@ const HomePage = () => {
                 <img 
                   src={menuIcon} 
                   alt="Toggle menu" 
-                  className={`menu-icon ${sidebarOpen ? 'open' : ''}`} 
+                  className={`menu-icon icon-white ${sidebarOpen ? 'open' : ''}`} 
                   onClick={toggleSidebar}
                 />
               </div>
               <div className="profile__title">
-                <img src={logo} alt="Logo" className="profile__logo" />
+                <img src={logo} alt="Logo" className="profile__logo icon-white" />
                 <h1>
                   <span className="profile__title--green">Track</span>
                   <span className="profile__title--white">Watch</span>

@@ -1,7 +1,7 @@
-import prevIcon from '../../assets/png/left.png';
-import nextIcon from '../../assets/png/right.png';
-import firstIcon from '../../assets/png/first.png';
-import lastIcon from '../../assets/png/last.png';
+import prevIcon from '../../assets/svg/left.svg';
+import nextIcon from '../../assets/svg/right.svg';
+import firstIcon from '../../assets/svg/first.svg';
+import lastIcon from '../../assets/svg/last.svg';
 import './PaginatedHeader.css';
 
 interface PaginatedHeaderProps {
@@ -30,20 +30,36 @@ export const PaginatedHeader = ({
       <div className="paginated-header__bottom">
         {totalPages > 1 && (
           <div className="pagination-inline">
-            <button onClick={() => onPageChange(1)} disabled={currentPage === 1}>
-              <img src={firstIcon} alt="First" className="pagination-inline__icon" />
+            <button 
+              onClick={() => onPageChange(1)} 
+              disabled={currentPage === 1}
+              className="pagination-inline__btn"
+            >
+              <img src={firstIcon} alt="First" className="pagination-inline__icon icon-white" />
             </button>
-            <button onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
-              <img src={prevIcon} alt="Prev" className="pagination-inline__icon" />
+            <button 
+              onClick={() => onPageChange(currentPage - 1)} 
+              disabled={currentPage === 1}
+              className="pagination-inline__btn"
+            >
+              <img src={prevIcon} alt="Prev" className="pagination-inline__icon icon-white" />
             </button>
-
-            <span>{currentPage} de {totalPages}</span>
-
-            <button onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-              <img src={nextIcon} alt="Next" className="pagination-inline__icon" />
+            
+            <span className="pagination-inline__text">{currentPage} / {totalPages}</span>
+            
+            <button 
+              onClick={() => onPageChange(currentPage + 1)} 
+              disabled={currentPage === totalPages}
+              className="pagination-inline__btn"
+            >
+              <img src={nextIcon} alt="Next" className="pagination-inline__icon icon-white" />
             </button>
-            <button onClick={() => onPageChange(totalPages)} disabled={currentPage === totalPages}>
-              <img src={lastIcon} alt="Last" className="pagination-inline__icon" />
+            <button 
+              onClick={() => onPageChange(totalPages)} 
+              disabled={currentPage === totalPages}
+              className="pagination-inline__btn"
+            >
+              <img src={lastIcon} alt="Last" className="pagination-inline__icon icon-white" />
             </button>
           </div>
         )}

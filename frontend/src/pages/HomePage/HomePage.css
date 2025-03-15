@@ -88,7 +88,6 @@ html, body {
 .sidebar__link-icon {
     width: 1.25rem;
     height: 1.25rem;
-    filter: brightness(0) invert(1);
 }
 
 .burger-menu {
@@ -99,7 +98,6 @@ html, body {
     width: 2rem;
     height: 2rem;
     cursor: pointer;
-    filter: brightness(0) invert(1);
     transition: transform 0.3s ease;
 }
 
@@ -514,14 +512,12 @@ html, body {
     padding-bottom: 0.5rem;
 }
 
-/* Search bar positioning */
 .search-container {
     padding-bottom: 0.5rem;
     border-bottom: none;
     background-color: var(--background); 
 }
 
-/* Generator page styling */
 .generator-page {
     padding: 1.5rem;
     background-color: var(--card);

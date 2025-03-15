@@ -37,7 +37,7 @@ const FollowedArtist = ({ data, onUnfollow }: FollowedArtistProps) => {
         onClick={handleUnfollow}
         className="followed-artist__button"
       >
-        <img src={unlike} alt="Unfollow" className="followed-artist__icon" />
+        <img src={unlike} alt="Unfollow" className="followed-artist__icon icon-white" />
       </button>
     </div>
   );

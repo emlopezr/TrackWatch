@@ -1,7 +1,7 @@
 import { SetStateAction, useState } from "react";
 import { searchArtists } from "../../services/spotify/spotifySearch";
 import searchIcon from "../../assets/svg/search.svg";
-import closeIcon from "../../assets/png/delete.png";
+import closeIcon from "../../assets/svg/delete.svg";
 import './SearchBar.css';
 import { SpotifyArtistResponse } from "../../types/spotify/SpotifyArtistResponse";
 
@@ -46,7 +46,7 @@ const SearchBar = ({ accessToken, setArtistsData, setSearching }: SearchBarProps
 
   return (
     <div className="search-bar">
-      <img src={searchIcon} alt="Buscar" className="search-bar__icon" />
+      <img src={searchIcon} alt="Buscar" className="search-bar__icon icon-white" />
       <input
         type="text"
         className="search-bar__input"

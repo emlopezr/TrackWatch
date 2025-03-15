@@ -1,6 +1,6 @@
 import { SpotifyArtistResponse } from "../../types/spotify/SpotifyArtistResponse";
-import unlike from '../../assets/png/unlike.png';
-import like from '../../assets/png/like.png';
+import unlike from '../../assets/svg/delete.svg';
+import like from '../../assets/svg/follow.svg';
 import blank from '../../assets/png/blank.png';
 import Tag from "../common/Tag/Tag";
 import './Artist.css';
@@ -68,7 +68,7 @@ const Artist = ({ data, isFollowed, onFollow, onUnfollow }: ArtistProps) => {
               <Spinner />
             </div>
           ) : (
-            <img src={unlike} alt="Unfollow" className="artist__icon" />
+            <img src={unlike} alt="Unfollow" className="artist__icon icon-white" />
           )}
         </button>
       )}
@@ -84,7 +84,7 @@ const Artist = ({ data, isFollowed, onFollow, onUnfollow }: ArtistProps) => {
               <Spinner />
             </div>
           ) : (
-            <img src={like} alt="Follow" className="artist__icon" />
+            <img src={like} alt="Follow" className="artist__icon icon-white" />
           )}
         </button>
       )}

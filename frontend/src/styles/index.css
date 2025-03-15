@@ -23,3 +23,7 @@ h5,
 h6 {
     margin: 0 !important;
 }
+
+.icon-white {
+    filter: brightness(0) invert(1); /* Makes any icon white */
+}
