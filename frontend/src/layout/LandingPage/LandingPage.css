@@ -170,13 +170,13 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 
 .features__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 1.5rem;
-  max-width: 1200px;
   width: 100%;
   justify-content: center;
 }
