@@ -28,7 +28,7 @@ export const PaginatedHeader = ({
       <h2 className="paginated-header__title">{title}</h2>
 
       <div className="paginated-header__bottom">
-        {totalPages > 1 && (
+        {(
           <div className="pagination-inline">
             <button 
               onClick={() => onPageChange(1)} 
@@ -45,7 +45,9 @@ export const PaginatedHeader = ({
               <img src={prevIcon} alt="Prev" className="pagination-inline__icon icon-white" />
             </button>
             
-            <span className="pagination-inline__text">{currentPage} / {totalPages}</span>
+            <span className="pagination-inline__text">
+              { totalPages > 1 ? `${currentPage} / ${totalPages}` : "Todos" }
+            </span>
             
             <button 
               onClick={() => onPageChange(currentPage + 1)} 
