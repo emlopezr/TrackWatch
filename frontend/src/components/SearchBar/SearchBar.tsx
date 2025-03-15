@@ -46,17 +46,17 @@ const SearchBar = ({ accessToken, setArtistsData, setSearching }: SearchBarProps
 
   return (
     <div className="search-bar">
-      <img src={searchIcon} alt="Buscar" className="search-bar__icon icon-white" />
+      <img src={searchIcon} alt="Search" className="search-bar__icon icon-white" />
       <input
         type="text"
         className="search-bar__input"
-        placeholder="Buscar artistas..."
+        placeholder="Search artists..."
         value={searchQuery}
         onChange={handleInputChange}
       />
       {searchQuery && (
         <button onClick={clearSearch} className="search-bar__clear-btn">
-          <img src={closeIcon} alt="Borrar" />
+          <img src={closeIcon} alt="Clear" />
         </button>
       )}
     </div>

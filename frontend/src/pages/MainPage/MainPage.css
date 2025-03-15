@@ -6,19 +6,16 @@ html, body {
     padding: 0;
 }
 
-
-
 .home {
     height: 100vh;
     padding: 2rem;
     padding-top: 0;
     display: flex;
     flex-direction: column;
-    position: relative; /* For overlay positioning */
-    overflow: hidden; /* Prevent home container from scrolling */
+    position: relative;
+    overflow: hidden;
 }
 
-/* Add base styles for header and app-layout with transitions */
 .header,
 .app-layout {
     margin-left: 0;
@@ -26,12 +23,11 @@ html, body {
     transition: margin-left 0.3s ease, width 0.3s ease;
 }
 
-/* Main layout with sidebar */
 .app-layout {
     display: flex;
     flex: 1;
     position: relative;
-    overflow: hidden; /* Prevent app-layout container from scrolling */
+    overflow: hidden;
 }
 
 .sidebar {
@@ -93,7 +89,6 @@ html, body {
     background-color: color-mix(in srgb, var(--primary) 10%, transparent);
 }
 
-
 .sidebar__link-icon {
     width: 1.25rem;
     height: 1.25rem;
@@ -115,10 +110,9 @@ html, body {
     position: absolute;
     top: 2.5rem;
     left: 2rem;
-    display: none; /* Hidden by default, shown in desktop when sidebar is open */
+    display: none; /* Hidden by default */
 }
 
-/* Show sidebar burger menu in desktop mode */
 @media (min-width: 769px) {
     .with-sidebar .header .menu-icon {
         display: none; /* Hide the header burger menu when sidebar is open */
@@ -136,16 +130,10 @@ html, body {
     display: none;
 }
 
-/* Remove these styles since we don't have spans anymore */
-.burger-menu span {
-    display: none;
-}
-
-/* Adjusted layout for desktop - now with transitions applied in base styles */
 .with-sidebar .header,
 .with-sidebar .app-layout {
-    margin-left: calc(270px + 2rem); /* Sidebar width + margin */
-    width: calc(100% - 270px - 2rem);
+    margin-left: calc(250px + 4rem);
+    width: calc(100% - 250px - 4rem);
 }
 
 .header {
@@ -163,8 +151,8 @@ html, body {
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
-    height: calc(100vh - 130px); /* Adjust based on your header height */
-    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    height: calc(100vh - 8rem);
+    scrollbar-color: #ffffff33 transparent;
     padding-right: 0.5rem;
     padding-left: 0.5rem;
     transition: margin-left 0.3s ease, width 0.3s ease;
@@ -181,17 +169,16 @@ html, body {
 }
 
 .main-content::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.2); /* Subtle light color for dark mode */
-    border-radius: 10px; /* Rounded corners */
-    border: 2px solid transparent; /* Creates padding effect */
-    background-clip: padding-box; /* Prevents the background color from extending into the border */
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 0.5rem;
+    border: 2px solid transparent;
+    background-clip: padding-box;
 }
 
 .main-content::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(255, 255, 255, 0.3); /* Slightly brighter on hover */
+    background-color: #ffffff4d;
 }
 
-/* Create a pseudo-element to add padding for the scrollbar in WebKit browsers */
 .main-content {
     position: relative;
 }
@@ -201,7 +188,7 @@ html, body {
     position: absolute;
     top: 0;
     right: 0;
-    width: 12px; /* Wider than the scrollbar */
+    width: 1.5rem;
     height: 100%;
     pointer-events: none; /* So it doesn't interfere with scrolling */
 }
@@ -242,7 +229,6 @@ html, body {
         display: block;
     }
     
-    /* Show mobile close button */
     .sidebar-visible .sidebar__mobile-close {
         display: block;
     }
@@ -264,7 +250,7 @@ html, body {
         margin-left: 0;
         width: 100%;
         padding-left: 0;
-        height: calc(100vh - 100px); /* Adjust for mobile header height */
+        height: calc(100vh - 8.5rem);
     }
 
     .header {
@@ -350,10 +336,9 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative; /* Add positioning context */
+    position: relative;
 }
 
-/* Create menu icon wrapper to maintain space */
 .menu-icon-wrapper {
     width: 2rem;
     height: 2rem;
@@ -361,7 +346,6 @@ html, body {
     flex-shrink: 0; /* Prevent shrinking */
 }
 
-/* Position menu icon within its wrapper */
 .profile .menu-icon {
     position: absolute;
     left: 0;
@@ -371,7 +355,6 @@ html, body {
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Hide the icon with opacity rather than display */
 .with-sidebar .profile .menu-icon {
     opacity: 0;
     pointer-events: none;
@@ -382,15 +365,14 @@ html, body {
     display: flex;
     gap: 0.75rem;
     font-size: 1.2rem;
-    transition: transform 0.3s ease; /* Add transition for smooth movement */
-    position: absolute; /* Position it absolutely */
-    left: 3rem; /* Position after menu icon */
+    transition: transform 0.3s ease;
+    position: absolute;
+    left: 3rem;
     margin-left: 0.5rem;
 }
 
-/* When sidebar is open, shift the title to where the menu icon was */
 .with-sidebar .profile__title {
-    transform: translateX(-3rem); /* Move to where menu icon was */
+    transform: translateX(-3rem);
 }
 
 .profile__title--white {
@@ -465,12 +447,11 @@ html, body {
     background-color: color-mix(in srgb, var(--red) 50%, transparent);
 }
 
-/* Mobile close button */
 .sidebar__mobile-close {
     position: absolute;
     top: 3rem;
     left: 1.5rem;
-    display: none; /* Hidden by default */
+    display: none;
 }
 
 @media (max-width: 768px) {
@@ -485,26 +466,24 @@ html, body {
     }
 }
 
-/* Page content layout */
 .page-content {
     display: flex;
     flex-direction: column;
     position: relative;
-    padding-bottom: 2rem; /* Add padding at the bottom to prevent last item cut-off */
+    padding-bottom: 2rem;
 }
 
-/* Sticky elements */
+
 .sticky-element {
     position: sticky;
     top: 0;
     z-index: 10;
     background-color: var(--background);
     padding: 1rem 0;
-    margin-bottom: 0; /* Remove margin to eliminate gap */
-    border-bottom: none; /* Remove border since it will be on the search container */
+    margin-bottom: 0;
+    border-bottom: none;
 }
 
-/* Make paginated-header sticky */
 .paginated-header {
     position: sticky;
     top: 64px;
@@ -550,7 +529,6 @@ html, body {
     padding-top: 0.75rem;
 }
 
-/* Remove previous separator targeting */
 .sidebar__link:last-of-type {
     position: relative;
 }

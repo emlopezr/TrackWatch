@@ -60,8 +60,8 @@ const FollowedArtists = ({ accessToken, followedArtists }: FollowedArtistsProps)
     return (
       <div className="followed-artists__empty">
         <p className="followed-artists__empty">
-          Aún no sigues a ningún artista 😔 <br />
-          Sigue tu primer artista, buscándolo en la barra de arriba!
+          You're not following any artists yet 😔 <br />
+          Follow your first artist by searching him!
         </p>
       </div>
     );
@@ -71,7 +71,7 @@ const FollowedArtists = ({ accessToken, followedArtists }: FollowedArtistsProps)
     <div className="followed-artists">
 
       <PaginatedHeader
-        title="Artistas Seguidos"
+        title="Followed Artists"
         currentPage={currentPage}
         totalPages={totalPages}
         recordsPerPage={recordsPerPage}

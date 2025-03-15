@@ -183,7 +183,7 @@ const MainPage = () => {
         <a href={getSpotifyAuthUrl()} className='login__link'>
           <button className='login__button'>
             <img src={spotifyLogo} alt='Spotify Logo' className='login__logo' />
-            Iniciar sesión con Spotify
+            Sign in with Spotify
           </button>
         </a>
       </div>
@@ -298,7 +298,7 @@ const MainPage = () => {
                 >
                   <img
                     src={userData.imageUrl}
-                    alt='Imagen de perfil'
+                    alt='Profile image'
                     width={100}
                     className='profile__image'
                   />
@@ -306,12 +306,12 @@ const MainPage = () => {
 
                 {showUserMenu && (
                   <div className="profile__menu">
-                    <p className="profile__menu-name">Hola, {userData.name}</p>
+                    <p className="profile__menu-name">{userData.name}</p>
                     <button
                       className="profile__menu-logout"
                       onClick={handleLogout}
                     >
-                      Cerrar sesión
+                      Log Out
                     </button>
                   </div>
                 )}

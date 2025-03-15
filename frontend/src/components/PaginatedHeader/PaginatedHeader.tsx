@@ -45,7 +45,7 @@ export const PaginatedHeader = ({
           </button>
           
           <span className="pagination-inline__text">
-            { totalPages > 1 ? `${currentPage} / ${totalPages}` : "Todos" }
+            { totalPages > 1 ? `${currentPage} / ${totalPages}` : "All" }
           </span>
           
           <button 
@@ -65,17 +65,17 @@ export const PaginatedHeader = ({
         </div>
 
         <div className="records-per-page">
-          <label htmlFor="recordsPerPage">Mostrar</label>
+          <label htmlFor="recordsPerPage">Show</label>
           <select
             id="recordsPerPage"
             value={recordsPerPage}
             onChange={(e) => onRecordsPerPageChange(parseInt(e.target.value))}
           >
-            <option value={10}>10</option>
-            <option value={20}>20</option>
+            <option value={15}>15</option>
+            <option value={25}>25</option>
             <option value={50}>50</option>
             <option value={100}>100</option>
-            <option value={totalRecords}>Todos</option>
+            <option value={totalRecords}>All</option>
           </select>
         </div>
       </div>

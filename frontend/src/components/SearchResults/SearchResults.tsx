@@ -48,7 +48,7 @@ const SearchResults = ({ artistsData }: SearchResultsProps) => {
   return (
     <div className="search-results">
       <PaginatedHeader
-        title="Resultados de búsqueda"
+        title="Search Results"
         currentPage={currentPage}
         totalPages={totalPages}
         recordsPerPage={recordsPerPage}

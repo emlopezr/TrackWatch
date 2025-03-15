@@ -24,7 +24,7 @@ export const followArtist = async (
             }
         );
 
-        if (!response.ok) throw new Error("Error al seguir al artista");
+        if (!response.ok) throw new Error("Error following artist");
 
         setUserData({
             ...userData,
@@ -55,7 +55,7 @@ export const unfollowArtist = async (
         );
 
         if (!response.ok)
-            throw new Error("Error al dejar de seguir al artista");
+            throw new Error("Error unfollowing artist");
 
         setUserData({
             ...userData,
