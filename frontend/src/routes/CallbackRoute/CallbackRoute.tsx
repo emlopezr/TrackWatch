@@ -5,7 +5,7 @@ import { registerTrackWatchUser } from '../../services/trackwatch/trackwatchUser
 import { useUser } from '../../context/useUser';
 import Spinner from '../../components/Spinner/Spinner';
 
-const CallbackPage = () => {
+const CallbackRoute = () => {
   const [, setAccessToken] = useState<string | null>(null);
 
   const { setUserData } = useUser();
@@ -53,4 +53,4 @@ const CallbackPage = () => {
   return <Spinner />
 };
 
-export default CallbackPage;
+export default CallbackRoute;

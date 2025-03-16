@@ -1,21 +1,20 @@
-import React from 'react';
 import { getSpotifyAuthUrl } from '../../services/spotify/spotifyAuth';
 import FeatureCard from '../../layout/FeatureCard/FeatureCard';
 import HeroExample from '../../layout/HeroExample/HeroExample';
-import logo from '../../assets/svg/logo.svg';
+import trackWatchlogo from '../../assets/svg/logo.svg';
 import spotifyLogo from '../../assets/svg/spotify.svg';
 import musicIcon from '../../assets/svg/music.svg';
 import notificationIcon from '../../assets/svg/notification.svg';
 import playlistIcon from '../../assets/svg/playlist.svg';
 import './LandingPage.css';
 
-const LandingPage: React.FC = () => {
+const LandingPage = () => {
   return (
     <div className="landing-page">
       <header className="landing-header">
         <a href="/" className='landing-logo__link'>
           <div className="landing-logo">
-            <img src={logo} alt="TrackWatch Logo" className="landing-logo__image" />
+            <img src={trackWatchlogo} alt="TrackWatch Logo" className="landing-logo__image" />
             <h1 className="landing-logo__title">
               <span className="landing-logo__title--green">Track</span>
               <span className="landing-logo__title--white">Watch</span>

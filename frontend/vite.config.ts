@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import svgr from "vite-plugin-svgr";
+import compression from 'vite-plugin-compression';
 
 export default defineConfig({
-  plugins: [react(), svgr()],
+  plugins: [react(), compression()]
 });

@@ -1,15 +1,15 @@
 import UserProvider from './context/UserProvider';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import MainPage from './routes/MainPage/MainPage';
-import CallbackPage from './routes/CallbackPage/CallbackPage';
+import MainRoute from './routes/MainRoute/MainRoute';
+import CallbackRoute from './routes/CallbackRoute/CallbackRoute';
 
 const App = () => {
   return (
     <UserProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/callback" element={<CallbackPage />} />
+          <Route path="/" element={<MainRoute />} />
+          <Route path="/callback" element={<CallbackRoute />} />
         </Routes>
       </Router>
     </UserProvider>

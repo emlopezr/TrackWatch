@@ -8,11 +8,11 @@ import Spinner from '../../components/Spinner/Spinner';
 import HomePage from '../../pages/HomePage/HomePage';
 import Sidebar from '../../layout/Sidebar/Sidebar';
 import Header from '../../layout/Header/Header';
-import './MainPage.css';
+import './MainRoute.css';
 
 type PageType = 'home' | 'generator';
 
-const MainPage = () => {
+const MainRoute = () => {
   const { userData, setUserData } = useUser();
   const { loading, accessToken, setAccessToken } = useTokenManager();
 
@@ -132,4 +132,4 @@ const MainPage = () => {
   );
 };
 
-export default MainPage;
+export default MainRoute;
