@@ -10,7 +10,7 @@
 ![Grafana](https://img.shields.io/badge/Grafana-F46800?style=for-the-badge&logo=grafana&logoColor=white)
 ![Railway](https://img.shields.io/badge/Railway-131415?style=for-the-badge&logo=railway&logoColor=white)
 
-Automatically track your favorite artists' new releases on Spotify and seamlessly add them to your personalized playlist. Music updates made simple, every day.
+Stay updated on the latest music releases from your favorite artists. TrackWatch connects with your Spotify account to automatically track your favorite artists, notify you of new releases and add their new releases to a playlist in your Spotify account.
 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/57fa5f8c-3878-46a3-ac84-93f3b70f3539" width="40%">
