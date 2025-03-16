@@ -12,10 +12,10 @@
 
 /* Followed Artists Box */
 .followed-artists-box {
-  background-color: #222;
+  background-color: color-mix(in srgb, var(--card) 75%, black);
   border-radius: 0.5rem;
   padding: 1rem;
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 15px var(--box-shadow);
   width: 270px;
   z-index: 10;
   margin-right: 1rem;
@@ -51,7 +51,7 @@
 }
 
 .artist-card {
-  background-color: #333;
+  background-color: var(--card);
   border-radius: 0.375rem;
   padding: 0.75rem;
   display: flex;
@@ -77,18 +77,12 @@
   margin: 0 0 0.25rem 0;
 }
 
-.artist-genre {
-  color: #aaa;
-  font-size: 0.875rem;
-  margin: 0;
-}
-
 /* New Releases Box */
 .new-releases-box {
-  background-color: #222;
+  background-color: color-mix(in srgb, var(--card) 75%, black);
   border-radius: 0.5rem;
   padding: 1rem;
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 15px var(--box-shadow);
   width: 260px;
   transform: rotate(3deg);
   z-index: 10;
@@ -101,7 +95,7 @@
 }
 
 .song-card {
-  background-color: #333;
+  background-color: var(--card);
   border-radius: 0.375rem;
   padding: 0.5rem;
   position: relative;
@@ -121,7 +115,7 @@
 .song-overlay {
   position: absolute;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: var(--box-shadow);
   opacity: 0;
   transition: opacity 0.2s ease;
   display: flex;
@@ -164,7 +158,7 @@
 }
 
 .song-artist {
-  color: #aaa;
+  color: color-mix(in srgb, var(--white) 65%, black);
   font-size: 0.75rem;
   margin: 0;
   white-space: nowrap;

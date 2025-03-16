@@ -4,9 +4,8 @@
     --background: #242424;
     --white: #ffffff;
     --card: #333333;
-    --spinner: #ffffff4d;
     --box-shadow: #0000004d;
-    --text-tertiary: #ffffff80;
+    --overlay: #00000080;
 
     font-family: system-ui, sans-serif;
     line-height: 1.5;
@@ -14,6 +13,10 @@
 
     color: var(--white);
     background-color: var(--background);
+}
+
+* {
+    box-sizing: border-box;
 }
 
 h1,
