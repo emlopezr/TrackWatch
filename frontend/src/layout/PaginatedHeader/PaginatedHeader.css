@@ -4,6 +4,12 @@
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 0.25rem;
+    position: sticky;
+    top: 64px;
+    z-index: 9;
+    background-color: var(--background);
+    padding-top: 0.25rem;
+    padding-bottom: 0.75rem;
 }
 
 .paginated-header__title {

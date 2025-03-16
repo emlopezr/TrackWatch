@@ -78,7 +78,7 @@ html, body {
     right: 0;
     width: 1.5rem;
     height: 100%;
-    pointer-events: none; /* So it doesn't interfere with scrolling */
+    pointer-events: none;
 }
 
 .page-content {
@@ -98,22 +98,12 @@ html, body {
     border-bottom: none;
 }
 
-.paginated-header {
-    position: sticky;
-    top: 64px;
-    z-index: 9;
-    background-color: var(--background);
-    padding-top: 0.25rem;
-    padding-bottom: 0.75rem;
-}
-
 .search-container {
     padding-bottom: 0.5rem;
     border-bottom: none;
     background-color: var(--background); 
 }
 
-/* Mobile responsive behavior */
 @media (max-width: 768px) {
     /* Reset transitions for mobile to prevent visual glitches */
     .header,

@@ -46,7 +46,7 @@ const SearchBar = ({ accessToken, setArtistsData, setSearching }: SearchBarProps
 
   return (
     <div className="search-bar">
-      <img src={searchIcon} alt="Search" className="search-bar__icon icon-white" />
+      <img src={searchIcon} alt="Search" className="search-bar__icon" />
       <input
         type="text"
         className="search-bar__input"
