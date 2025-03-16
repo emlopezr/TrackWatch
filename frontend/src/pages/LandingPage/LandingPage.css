@@ -256,10 +256,6 @@ html, body {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-
-  .landing-footer {
-    padding-bottom: 6rem;
-  }
 }
 
 @media (max-width: 600px) {
