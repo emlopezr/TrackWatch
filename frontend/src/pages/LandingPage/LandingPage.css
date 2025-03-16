@@ -1,8 +1,6 @@
-html, body {
-  height: 100%;
+html,
+body {
   overflow: visible !important;
-  margin: 0;
-  padding: 0;
 }
 
 .landing-page {
@@ -221,17 +219,17 @@ html, body {
   .landing-main {
     padding: 1rem 2rem;
   }
-  
+
   .hero__content {
     align-items: center;
     gap: 1.5rem;
   }
-  
+
   .hero__image-container {
     justify-content: center;
     align-items: center;
   }
-  
+
   .hero__title {
     font-size: 3rem;
   }
@@ -247,7 +245,7 @@ html, body {
     padding: 1rem;
     flex-wrap: wrap;
   }
-  
+
   .landing-main {
     padding: 1rem;
   }
@@ -264,21 +262,21 @@ html, body {
   }
 }
 
-@media (max-width: 480px) {  
+@media (max-width: 480px) {
   .landing-logo__image {
     width: 2rem;
     height: 2rem;
   }
-  
+
   .landing-logo__title {
     font-size: 1.7rem;
   }
-  
+
   .login-button-small {
     padding: 0.4rem 0.8rem;
     font-size: 0.9rem;
   }
-  
+
   .hero__description {
     font-size: 1rem;
   }

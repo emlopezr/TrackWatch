@@ -1,13 +1,15 @@
-html, body {
+html,
+body {
     height: 100%;
-    overflow: hidden;
     margin: 0;
     padding: 0;
+    overflow-x: hidden!important;
 }
 
 .home {
     height: 100vh;
     padding: 2rem;
+    padding-bottom: 0;
     padding-top: 0;
     display: flex;
     flex-direction: column;
@@ -101,27 +103,28 @@ html, body {
 .search-container {
     padding-bottom: 0.5rem;
     border-bottom: none;
-    background-color: var(--background); 
+    background-color: var(--background);
 }
 
 @media (max-width: 768px) {
+
     /* Reset transitions for mobile to prevent visual glitches */
     .header,
     .app-layout,
     .main-content {
         transition: none;
     }
-    
+
     .home {
         padding: 1rem;
     }
-    
+
     .with-sidebar .header,
     .with-sidebar .app-layout {
         margin-left: 0;
         width: 100%;
     }
-    
+
     .main-content {
         margin-left: 0;
         width: 100%;
@@ -139,6 +142,7 @@ html, body {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
