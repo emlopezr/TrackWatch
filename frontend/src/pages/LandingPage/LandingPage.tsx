@@ -1,7 +1,7 @@
 import React from 'react';
 import { getSpotifyAuthUrl } from '../../services/spotify/spotifyAuth';
-import FeatureCard from '../../components/FeatureCard/FeatureCard';
-import HeroExample from '../../components/HeroExample/HeroExample';
+import FeatureCard from '../../layout/FeatureCard/FeatureCard';
+import HeroExample from '../../layout/HeroExample/HeroExample';
 import logo from '../../assets/svg/logo.svg';
 import spotifyLogo from '../../assets/svg/spotify.svg';
 import musicIcon from '../../assets/svg/music.svg';

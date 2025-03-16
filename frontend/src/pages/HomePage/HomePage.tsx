@@ -1,9 +1,9 @@
 import { SetStateAction } from "react";
 import { useUser } from "../../context/useUser";
 import SpotifyArtistResponse from "../../types/spotify/SpotifyArtistResponse";
-import ArtistList from "../ArtistList/ArtistList"
-import FollowedArtists from "../FollowedArtists/FollowedArtists"
-import SearchBar from "../SearchBar/SearchBar";
+import ArtistList from "../../layout/ArtistList/ArtistList"
+import FollowedArtists from "../../layout/FollowedArtists/FollowedArtists"
+import SearchBar from "../../layout/SearchBar/SearchBar";
 import TrackWatchUser from "../../types/trackwatch/TrackWatchUser";
 
 interface HomePageProps {
