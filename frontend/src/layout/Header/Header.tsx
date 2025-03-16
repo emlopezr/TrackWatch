@@ -15,6 +15,7 @@ const Header = ({ sidebarOpen, showUserMenu, setShowUserMenu, toggleSidebar, han
   return (
     <div className="header">
       <div className='profile'>
+        
         <div className="menu-icon-wrapper">
           <img
             src={menuIcon}
@@ -23,6 +24,7 @@ const Header = ({ sidebarOpen, showUserMenu, setShowUserMenu, toggleSidebar, han
             onClick={toggleSidebar}
           />
         </div>
+
         <div className="profile__title">
           <img src={logo} alt="Logo" className="profile__logo" />
           <h1>

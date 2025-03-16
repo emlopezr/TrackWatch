@@ -1,0 +1,70 @@
+.profile__image {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.profile__user-container {
+  position: relative;
+}
+
+.profile__image-container {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.profile__image-container:hover {
+  transform: scale(1.05);
+}
+
+.profile__menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background-color: var(--card);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px var(--box-shadow);
+  padding: 12px;
+  width: 200px;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.profile__menu-name {
+  color: white;
+  font-weight: 600;
+  margin: 0;
+}
+
+.profile__menu-logout {
+  background-color: var(--red);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.profile__menu-logout:hover {
+  background-color: color-mix(in srgb, var(--red) 50%, transparent);
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+}

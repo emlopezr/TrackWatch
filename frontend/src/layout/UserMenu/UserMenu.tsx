@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { useUser } from '../../context/useUser';
 import logoutIcon from '../../assets/svg/logout.svg';
+import './UserMenu.css'
 
 interface UserMenuProps {
   showUserMenu: boolean;
