@@ -6,6 +6,7 @@ import SpotifyArtistResponse from '../../types/spotify/SpotifyArtistResponse';
 import LandingPage from '../../pages/LandingPage/LandingPage';
 import Spinner from '../../components/Spinner/Spinner';
 import HomePage from '../../pages/HomePage/HomePage';
+import GeneratorPage from '../../pages/GeneratorPage/GeneratorPage';
 import Sidebar from '../../layout/Sidebar/Sidebar';
 import Header from '../../layout/Header/Header';
 import './MainRoute.css';
@@ -82,9 +83,9 @@ const MainRoute = () => {
           artistsData={artistsData}
           setArtistsData={setArtistsData}
           setSearching={setSearching}
-        />
+        />;
       case 'generator':
-        return null;
+        return <GeneratorPage />;
       default:
         return null;
     }

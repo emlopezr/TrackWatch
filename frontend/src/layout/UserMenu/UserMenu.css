@@ -28,7 +28,7 @@
   box-shadow: 0 4px 12px var(--box-shadow);
   padding: 12px;
   width: 200px;
-  z-index: 1000;
+  z-index: 9999;
   animation: fadeIn 0.2s ease;
   display: flex;
   flex-direction: column;

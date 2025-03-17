@@ -1,0 +1,52 @@
+.artist-card {
+  background-color: #1e293b;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.artist-card:hover {
+  background-color: #334155;
+  transform: translateY(-3px);
+}
+
+.artist-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.artist-card__image-container {
+  aspect-ratio: 1/1;
+  border-radius: 0.375rem;
+  overflow: hidden;
+}
+
+.artist-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.artist-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.artist-card__name {
+  font-weight: 500;
+  text-align: center;
+  font-size: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.artist-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  justify-content: center;
+}

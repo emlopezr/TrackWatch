@@ -1,0 +1,213 @@
+.generator-page__title {
+  margin-bottom: 1rem;
+}
+
+.generator-page__search-container {
+  position: relative;
+  width: 100%;
+}
+
+.generator-page__search-results {
+  position: absolute;
+  width: 100%;
+  max-height: 500px;
+  overflow-y: auto;
+  background-color: var(--card);
+  margin-top: 0.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 5px 10px var(--box-shadow);
+  z-index: 10;
+}
+
+.generator-page__search-result-item {
+  display: flex;
+  align-items: center;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  gap: 1rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--white) 10%, transparent);
+}
+
+.generator-page__search-result-item:hover {
+  background-color: color-mix(in srgb, var(--card) 90%, var(--white));
+}
+
+.generator-page__search-result-image {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.generator-page__search-result-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.generator-page__search-result-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.generator-page__search-result-name {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 1.1rem;
+}
+
+.generator-page__selected-artist {
+  margin-top: 2rem;
+  padding: 2rem;
+  background-color: var(--card);
+  border-radius: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.generator-page__artist-image-large {
+  width: 14rem;
+  height: 14rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.generator-page__artist-image-large img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.generator-page__artist-info {
+  flex: 1;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 1rem;
+}
+
+.generator-page__artist-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--text);
+  line-height: 1;
+}
+
+@media (max-width: 992px) {
+  .generator-page__artist-info {
+    text-align: center;
+  }
+  
+  .generator-page__actions {
+    justify-content: center !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .generator-page__selected-artist {
+    padding: 2rem;
+    gap: 1.5rem;
+  }
+  
+  .generator-page__artist-image-large {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    max-width: 280px;
+  }
+  
+  .generator-page__artist-title {
+    font-size: 2rem;
+  }
+}
+
+.generator-page__artist-description {
+  font-size: 1rem;
+  color: color-mix(in srgb, var(--text) 80%, transparent);
+  line-height: 1.3;
+  margin: 0;
+}
+
+.generator-page__actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-start;
+}
+
+.generator-page__button {
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  transition: all 0.2s;
+  cursor: pointer;
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  -ms-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  border: none;
+}
+
+.generator-page__button--cancel {
+  background-color: var(--red);
+  color: var(--white);
+}
+
+.generator-page__button--cancel:hover {
+  background-color: color-mix(in srgb, var(--red) 70%, black);
+}
+
+.generator-page__button--generate {
+  background-color: var(--primary);
+  color: white;
+}
+
+.generator-page__button--generate:hover {
+  background-color: color-mix(in srgb, var(--primary) 70%, black);
+}
+
+/* Loading overlay */
+.generator-page__selected-artist {
+  position: relative; /* Needed for absolute positioning of overlay */
+}
+
+.generator-page__loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--overlay);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  border-radius: 0.5rem;
+  backdrop-filter: blur(5px);
+  pointer-events: none;
+}
+
+.generator-page__loading-message {
+  color: white;
+  font-size: 1.2rem;
+  margin-top: 1.5rem;
+  text-align: center;
+  max-width: 80%;
+}
+
+.generator-page__loading-submessage {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  text-align: center;
+  max-width: 80%;
+}

@@ -1,4 +1,4 @@
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useState, useImperativeHandle, forwardRef, useRef } from "react";
 import { searchArtists } from "../../services/spotify/spotifySearch";
 import searchIcon from "../../assets/svg/search.svg";
 import closeIcon from "../../assets/svg/delete.svg";
@@ -9,21 +9,32 @@ interface SearchBarProps {
   accessToken: string;
   setArtistsData: (data: SpotifyArtistResponse[]) => void;
   setSearching: (value: SetStateAction<boolean>) => void;
+  debounceTime?: number; // Optional debounce time in milliseconds
 }
 
-const SearchBar = ({ accessToken, setArtistsData, setSearching }: SearchBarProps) => {
+export interface SearchBarHandle {
+  clearSearch: () => void;
+}
+
+const SearchBar = forwardRef<SearchBarHandle, SearchBarProps>(({ accessToken, setArtistsData, setSearching, debounceTime = 350 }, ref) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchTimer, setSearchTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const isEmptySearch = useRef(false);
 
   const handleInputChange = (event: { target: { value: SetStateAction<string>; }; }) => {
     const query = event.target.value;
     setSearchQuery(query);
 
-    if (query) {
-      setSearching(true);
-    } else {
+    // Flag to track if search is empty to prevent race conditions
+    isEmptySearch.current = !query || query === '';
+
+    // If query is empty, immediately clear results and hide dropdown
+    if (isEmptySearch.current) {
       setSearching(false);
       setArtistsData([]);
+      return; // Exit early, no need to set a timer for empty search
+    } else {
+      setSearching(true);
     }
 
     if (searchTimer) {
@@ -31,18 +42,30 @@ const SearchBar = ({ accessToken, setArtistsData, setSearching }: SearchBarProps
     }
 
     setSearchTimer(setTimeout(() => {
-      if (query) {
-        searchArtists(accessToken, query as string, setArtistsData);
+      if (query && !isEmptySearch.current) {
+        // Only call the API and update results if the search is not empty
+        // This prevents race conditions where API results arrive after clearing
+        searchArtists(accessToken, query as string, (results) => {
+          // Double-check we're not in an empty search state before updating results
+          if (!isEmptySearch.current) {
+            setArtistsData(results);
+          }
+        });
       }
-    }, 350));
+    }, debounceTime));
   };
 
   const clearSearch = () => {
     setSearchQuery('');
     setArtistsData([]);
     setSearching(false);
+    isEmptySearch.current = true;  // Mark search as empty
     if (searchTimer) clearTimeout(searchTimer);
   };
+  
+  useImperativeHandle(ref, () => ({
+    clearSearch
+  }));
 
   return (
     <div className="search-bar">
@@ -61,6 +84,6 @@ const SearchBar = ({ accessToken, setArtistsData, setSearching }: SearchBarProps
       )}
     </div>
   );
-};
+});
 
 export default SearchBar;

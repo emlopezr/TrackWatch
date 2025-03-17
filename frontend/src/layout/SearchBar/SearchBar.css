@@ -1,7 +1,6 @@
 .search-bar {
     position: sticky;
     top: 1rem;
-    z-index: 100;
     display: flex;
     align-items: center;
     gap: 0.5rem;
