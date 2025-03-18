@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service
 class PlaylistService(
     val spotifyPlaylistApiClient: SpotifyPlaylistApiClient,
     val imageHelper: ImageHelper,
-    val userRepository: UserRepository
+    val userService: UserService
 ) {
 
     private val log = LoggerFactory.getLogger(this::class.java)
@@ -60,7 +60,7 @@ class PlaylistService(
             updatePlaylistCover(user, playlistId, Constants.DEFAULT_PLAYLIST_COVER_URL)
 
             val userUpdated = user.copy(playlistId = playlistId)
-            userRepository.save(userUpdated)
+            userService.saveUser(user)
         }
     }
 

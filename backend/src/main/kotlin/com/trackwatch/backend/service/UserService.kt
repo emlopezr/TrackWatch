@@ -10,6 +10,7 @@ import com.trackwatch.backend.model.User
 import com.trackwatch.backend.repository.UserRepository
 import com.trackwatch.backend.utils.values.Constants
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class UserService(
@@ -62,6 +63,10 @@ class UserService(
         user.updateTokens(newTokens.accessToken, newTokens.refreshToken)
 
         return userRepository.save(user)
+    }
+
+    fun findById(id: String): Optional<User> {
+        return userRepository.findById(id)
     }
 
     fun saveUser(user: User): User {
