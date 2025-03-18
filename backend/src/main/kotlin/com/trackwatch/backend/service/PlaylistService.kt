@@ -56,8 +56,6 @@ class PlaylistService(
         val playlistExists = spotifyPlaylistApiClient.checkPlaylistExists(user)
 
         if (!playlistExists) {
-            log.info("Playlist ${user.playlistId} not found, creating a new one")
-
             val playlistId = createPlaylist(user)
             updatePlaylistCover(user, playlistId, Constants.DEFAULT_PLAYLIST_COVER_URL)
 

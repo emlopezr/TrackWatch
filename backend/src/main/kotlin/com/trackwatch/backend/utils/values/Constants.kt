@@ -33,7 +33,7 @@ object Constants {
     const val COLOR_WHITE = "#FFFFFF"
     const val COLOR_GREEN = "#49B243"
 
-    private const val ASSETS_BASE_PATH = "https://raw.githubusercontent.com/$DEVELOPER/refs/heads/develop/assets/"
+    private const val ASSETS_BASE_PATH = "https://raw.githubusercontent.com/$DEVELOPER/$APP_NAME/refs/heads/develop/assets/"
     const val DEFAULT_PLAYLIST_COVER_URL = "${ASSETS_BASE_PATH}default_playlist_cover.png"
     const val DEFAULT_TRACK_IMAGE_URL = "${ASSETS_BASE_PATH}track_placeholder.png"
 }

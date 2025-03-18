@@ -4,10 +4,13 @@ import com.trackwatch.backend.exception.ErrorCode
 import com.trackwatch.backend.exception.InternalServerErrorException
 import com.trackwatch.backend.model.User
 import com.trackwatch.backend.service.MetricService
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
 class SpotifyPlaylistApiClient(metricService: MetricService) : SpotifyApiClient(metricService) {
+
+    private val log = LoggerFactory.getLogger(this::class.java)
 
     fun addTracksToPlaylist(user: User, playlistId: String, trackUris: List<String>): Map<*, *> {
         val body = mapOf("uris" to trackUris)
@@ -141,8 +144,11 @@ class SpotifyPlaylistApiClient(metricService: MetricService) : SpotifyApiClient(
 
     fun checkPlaylistExists(user: User): Boolean {
         val userPlaylistId = user.playlistId
+
         var offset = 0
         val limit = 50
+
+        val allPlaylists = mutableListOf<Map<String, Any>>()
 
         try {
             do {
@@ -163,16 +169,16 @@ class SpotifyPlaylistApiClient(metricService: MetricService) : SpotifyApiClient(
                 )
 
                 val items = response["items"] as List<*>
-                val playlistIds = items.map { (it as Map<*, *>)["id"] as String }
+                collectPlaylistItems(items, allPlaylists)
 
-                if (playlistIds.contains(userPlaylistId)) {
-                    return true
-                }
+                val playlistIds = items.map { (it as Map<*, *>)["id"] as String }
+                if (playlistIds.contains(userPlaylistId)) return true
 
                 offset += limit
                 val total = (response["total"] as Int?) ?: 0
             } while (offset < total)
 
+            logAvailablePlaylists(userPlaylistId, allPlaylists)
             return false
         } catch (e: Exception) {
             throw InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, e.toString())
@@ -197,10 +203,27 @@ class SpotifyPlaylistApiClient(metricService: MetricService) : SpotifyApiClient(
         }
     }
 
+    private fun collectPlaylistItems(items: List<*>, allPlaylists: MutableList<Map<String, Any>>) {
+        items.forEach {
+            val playlist = it as Map<*, *>
+            allPlaylists.add(mapOf(
+                "id" to (playlist["id"] as String),
+                "name" to (playlist["name"] as String)
+            ))
+        }
+    }
+
     private fun mapResponseToTrackUris(response: Map<*, *>): List<String> {
         val items = response["items"] as List<*>
         val tracks = items.map { it as Map<*, *> }
         return tracks.map { it["track"] as Map<*, *> }.map { it["uri"] as String }
+    }
+
+    private fun logAvailablePlaylists(searchedPlaylistId: String, playlists: List<Map<String, Any>>) {
+        log.info("Playlist with ID: $searchedPlaylistId not found. Available playlists:")
+        playlists.forEach { playlist ->
+            log.info("ID: ${playlist["id"]}, Name: ${playlist["name"]}")
+        }
     }
 
 }
