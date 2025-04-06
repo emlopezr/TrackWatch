@@ -53,7 +53,7 @@ class PlaylistService(
     }
 
     fun checkPlaylist(user: User) {
-        val playlistExists = spotifyPlaylistApiClient.checkPlaylistExists(user)
+        val playlistExists = spotifyPlaylistApiClient.checkPlaylistExistsWithRetries(user)
 
         if (!playlistExists) {
             val playlistId = createPlaylist(user)
