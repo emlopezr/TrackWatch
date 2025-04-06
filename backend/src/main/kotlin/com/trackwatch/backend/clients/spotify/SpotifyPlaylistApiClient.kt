@@ -145,7 +145,6 @@ class SpotifyPlaylistApiClient(metricService: MetricService) : SpotifyApiClient(
     fun checkPlaylistExistsWithRetries(user: User, maxRetries: Int = 5, delayMs: Long = 500): Boolean {
         repeat(maxRetries) { attempt ->
             if (checkPlaylistExists(user)) return true
-            println("Intento ${attempt + 1} de $maxRetries fallido. Reintentando en $delayMs ms...")
             Thread.sleep(delayMs)
         }
 
