@@ -12,6 +12,7 @@
 
 Stay updated on the latest music releases from your favorite artists. TrackWatch connects with your Spotify account to automatically track your favorite artists, notify you of new releases and add their new releases to a playlist in your Spotify account.
 
+![image](https://github.com/user-attachments/assets/92061a4d-8d46-4487-9bba-ae62dfdb59de)
 <div align="center">
   <img src="https://github.com/user-attachments/assets/57fa5f8c-3878-46a3-ac84-93f3b70f3539" width="40%">
   <img src="https://github.com/user-attachments/assets/ab667c32-5868-46e2-be7d-fa3705e36812" width="40%">
