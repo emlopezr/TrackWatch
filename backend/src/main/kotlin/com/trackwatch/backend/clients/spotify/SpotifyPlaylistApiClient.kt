@@ -1,5 +1,6 @@
 package com.trackwatch.backend.clients.spotify
 
+import com.trackwatch.backend.clients.spotify.dto.SpotifyPlaylistTracksResponse
 import com.trackwatch.backend.exception.ErrorCode
 import com.trackwatch.backend.exception.InternalServerErrorException
 import com.trackwatch.backend.model.User
@@ -54,7 +55,7 @@ class SpotifyPlaylistApiClient(metricService: MetricService) : SpotifyApiClient(
                     }
                     .header("Authorization", "Bearer ${user.auth.current.accessToken}")
                     .retrieve()
-                    .bodyToMono(Map::class.java)
+                    .bodyToMono(SpotifyPlaylistTracksResponse::class.java)
                     .block() ?: throw InternalServerErrorException(
                     ErrorCode.UNHANDLED_EXCEPTION,
                     "Failed to get playlist tracks"
@@ -63,9 +64,8 @@ class SpotifyPlaylistApiClient(metricService: MetricService) : SpotifyApiClient(
                 val uris = mapResponseToTrackUris(response)
                 trackUris.addAll(uris)
                 offset += limit
-                val total = (response["total"] as Int?) ?: 0
 
-            } while (offset < total)
+            } while (offset < response.total)
 
             return trackUris
 
@@ -222,10 +222,8 @@ class SpotifyPlaylistApiClient(metricService: MetricService) : SpotifyApiClient(
         }
     }
 
-    private fun mapResponseToTrackUris(response: Map<*, *>): List<String> {
-        val items = response["items"] as List<*>
-        val tracks = items.map { it as Map<*, *> }
-        return tracks.map { it["track"] as Map<*, *> }.map { it["uri"] as String }
+    private fun mapResponseToTrackUris(response: SpotifyPlaylistTracksResponse): List<String> {
+        return response.items.mapNotNull { it.track?.uri }
     }
 
     private fun logAvailablePlaylists(searchedPlaylistId: String, playlists: List<Map<String, Any>>) {
