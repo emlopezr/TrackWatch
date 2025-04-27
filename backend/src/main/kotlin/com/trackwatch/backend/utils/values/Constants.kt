@@ -18,7 +18,7 @@ object Constants {
 
     const val PAGES_TO_FETCH = 2
     const val FILTER_DAYS_LIMIT = 2
-    const val CLEANUP_DAYS_LIMIT = 4
+    const val CLEANUP_DAYS_LIMIT = 15
     const val MAX_LOOP_ITERATION = 19
     const val DEFAULT_WAIT_TIME = 2500L
 
