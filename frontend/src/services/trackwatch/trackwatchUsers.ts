@@ -70,6 +70,7 @@ export const registerTrackWatchUser = async (
         return mapTrackWatchUser(data);
     } catch {
         console.error("Error registering user");
+        return null;
     }
 };
 

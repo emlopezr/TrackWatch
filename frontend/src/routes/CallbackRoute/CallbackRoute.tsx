@@ -38,7 +38,9 @@ const CallbackRoute = () => {
         localStorage.removeItem('spotify_callback_code');
 
         const userData = await registerTrackWatchUser(setAccessToken, setUserData);
-        setUserData(userData);
+        if (userData) {
+          setUserData(userData);
+        }
         navigate('/');
 
       } catch {
