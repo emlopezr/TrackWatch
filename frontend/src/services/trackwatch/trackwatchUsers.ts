@@ -1,6 +1,7 @@
 import { TRACKWATCH_API_BASE_URL } from "../../common/constants";
 import TrackWatchUser from "../../types/trackwatch/TrackWatchUser";
 import { refreshAccessToken } from "../spotify/spotifyToken";
+import { mapTrackWatchUser } from "../../utils/apiMapper";
 
 export const registerTrackWatchUser = async (
     setAccessToken: (token: string) => void,
@@ -66,7 +67,7 @@ export const registerTrackWatchUser = async (
             throw new Error(error.code);
         }
 
-        return data;
+        return mapTrackWatchUser(data);
     } catch {
         console.error("Error registering user");
     }
@@ -127,10 +128,11 @@ export const getTrackWatchUserData = async (
             }
 
             const data = await response.json();
-            setUserData(data);
-            localStorage.setItem("trackwatch_user_id", data.id);
+            const mappedData = mapTrackWatchUser(data);
+            setUserData(mappedData);
+            localStorage.setItem("trackwatch_user_id", mappedData.id);
 
-            return data;
+            return mappedData;
         } catch (error) {
             retryCount++;
 

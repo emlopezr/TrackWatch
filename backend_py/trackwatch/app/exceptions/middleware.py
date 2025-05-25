@@ -23,4 +23,6 @@ class GlobalExceptionMiddleware(MiddlewareMixin):
     message = exception.message
     details = exception.details
     response = exception_response_dto(status, code, message, details)
+
+    print(f"response: {response}")
     return JsonResponse(response, status=status)

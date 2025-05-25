@@ -58,15 +58,22 @@ def find_user_by_id(user_id: str):
 
 def user_settings_to_dict(settings):
   return {
-    "blocked_explicit_content": getattr(settings, "blocked_explicit_content", False)
+    "blocked_explicit_content": getattr(settings, "setting_blocked_explicit_content", False)
   }
 
 def artist_to_dict(artist):
-  return {
-    "id": artist.id,
-    "name": artist.name,
-    "image_url": getattr(artist, "image_url", "")
-  }
+  if hasattr(artist, 'artist_name'):  # UserFollowedArtist model instance
+    return {
+      "id": artist.artist_id,
+      "name": artist.artist_name,
+      "image_url": artist.image_url
+    }
+  else:  # Artist class instance
+    return {
+      "id": artist.id,
+      "name": artist.name,
+      "image_url": getattr(artist, "image_url", "")
+    }
 
 def user_response_dict(user):
   return {
@@ -75,6 +82,6 @@ def user_response_dict(user):
     "email": user.email,
     "name": user.name,
     "image_url": user.image_url,
-    "settings": user_settings_to_dict(user.settings),
-    "followed_artists": [artist_to_dict(a) for a in getattr(user, "followed_artists", [])]
+    "settings": user_settings_to_dict(user),
+    "followed_artists": [artist_to_dict(a) for a in user.followed_artists.all()] or []
   }
