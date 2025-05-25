@@ -1,11 +1,17 @@
 asgiref==3.8.1
+certifi==2025.4.26
+charset-normalizer==3.4.2
 Django==5.2.1
 django-cors-headers==4.7.0
 djangorestframework==3.16.0
 gunicorn==23.0.0
+idna==3.10
 packaging==25.0
 psycopg2-binary==2.9.10
 python-decouple==3.8
+requests==2.32.3
+resend==2.10.0
 sqlparse==0.5.3
 typing_extensions==4.13.2
+urllib3==2.4.0
 whitenoise==6.9.0

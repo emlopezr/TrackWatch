@@ -28,8 +28,11 @@ class User(AbstractBaseUser, PermissionsMixin):
   USERNAME_FIELD = 'email'
   REQUIRED_FIELDS = ['id', 'name']
 
-  class Meta:
-    db_table = "users"
+  class Meta: db_table = "users"
+
+  def save_user(self):
+    self.save()
+    return self
 
   def validate_token(self, access_token):
     if self.current_access_token != access_token and self.last_access_token != access_token:
