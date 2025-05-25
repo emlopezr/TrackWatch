@@ -1,0 +1,36 @@
+class CustomException(Exception):
+  def __init__(self, error_code, message=None, details=""):
+    self.error_code = error_code
+    self.message = message or error_code.description
+    self.details = details
+    super().__init__(self.message)
+
+class BadRequestException(CustomException): pass
+class UnauthorizedException(CustomException): pass
+class ForbiddenException(CustomException): pass
+class NotFoundException(CustomException): pass
+class InternalServerErrorException(CustomException): pass
+
+class ErrorCode:
+  UNHANDLED_EXCEPTION = ("UNHANDLED_EXCEPTION", "Unhandled exception")
+  USER_NOT_FOUND = ("USER_NOT_FOUND", "User not found")
+  USER_ALREADY_EXISTS = ("USER_ALREADY_EXISTS", "User already exists")
+  USER_ALREADY_FOLLOWS_THIS_ARTIST = ("USER_ALREADY_FOLLOWS_THIS_ARTIST", "User already follows this artist")
+  USER_DOES_NOT_FOLLOW_THIS_ARTIST = ("USER_DOES_NOT_FOLLOW_THIS_ARTIST", "User does not follow this artist")
+  USER_INVALID_CREDENTIALS = ("USER_INVALID_CREDENTIALS", "Invalid user credentials")
+  SPOTIFY_INVALID_ACCESS_TOKEN = ("SPOTIFY_INVALID_ACCESS_TOKEN", "Invalid Spotify access token")
+  SPOTIFY_FORBIDDEN_REQUEST = ("SPOTIFY_FORBIDDEN_REQUEST", "Spotify API request forbidden request")
+  SPOTIFY_USER_NOT_FOUND = ("SPOTIFY_USER_NOT_FOUND", "Spotify user not found")
+  INVALID_ADMIN_CREDENTIALS = ("INVALID_ADMIN_CREDENTIALS", "Invalid admin credentials")
+
+  def __init__(self, name, description):
+    self.name = name
+    self.description = description
+
+def exception_response_dto(status, code, message, details):
+  return {
+    "status": status,
+    "code": code,
+    "message": message,
+    "details": details
+  }
