@@ -5,8 +5,8 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config("SECRET_KEY")
-DEBUG = config("DEBUG", default=True, cast=bool)
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1").split(",")
+DEBUG = config("DEBUG", default=False, cast=bool)
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="*").split(",")
 
 INSTALLED_APPS = [
   "django.contrib.admin",
@@ -22,6 +22,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
   "django.middleware.security.SecurityMiddleware",
+  "whitenoise.middleware.WhiteNoiseMiddleware",
   "django.contrib.sessions.middleware.SessionMiddleware",
   "django.middleware.common.CommonMiddleware",
   "django.middleware.csrf.CsrfViewMiddleware",
@@ -37,10 +38,10 @@ DATABASES = {
   "default": {
     "ENGINE": "django.db.backends.postgresql",
     "NAME": config("DATABASE_NAME"),
-    "USER": config("DATABASE_USER"),
+    "USER": config("DATABASE_USER", default="postgres"),
     "PASSWORD": config("DATABASE_PASSWORD"),
-    "HOST": config("DATABASE_HOST"),
-    "PORT": config("DATABASE_PORT"),
+    "HOST": config("DATABASE_HOST", default="localhost"),
+    "PORT": config("DATABASE_PORT", default="5432"),
   }
 }
 
@@ -92,5 +93,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = "static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
