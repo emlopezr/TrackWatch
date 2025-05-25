@@ -1,25 +1,31 @@
 from django.urls import path
 from . import views
+from .constants import Endpoints
 
+# Health check endpoints
 health_urlpatterns = [
-  path('ping', views.ping, name='ping'),
+  path(Endpoints.PING, views.ping, name='ping'),
 ]
 
+# Action endpoints
 action_urlpatterns = [
-  path('actions/generate', views.generate_artist_playlist, name='generate_artist_playlist'),
-  path('actions/releases', views.update_new_releases, name='update_new_releases'),
+  path(Endpoints.GENERATE_PLAYLIST, views.generate_artist_playlist, name='generate_artist_playlist'),
+  path(Endpoints.UPDATE_RELEASES, views.update_new_releases, name='update_new_releases'),
 ]
 
+# Artist endpoints
 artist_urlpatterns = [
-  path('artists/follow', views.follow_artist, name='follow_artist'),
-  path('artists/unfollow', views.unfollow_artist, name='unfollow_artist'),
+  path(Endpoints.FOLLOW_ARTIST, views.follow_artist, name='follow_artist'),
+  path(Endpoints.UNFOLLOW_ARTIST, views.unfollow_artist, name='unfollow_artist'),
 ]
 
+# User endpoints
 user_urlpatterns = [
-  path('users/register', views.register_user, name='register_user'),
-  path('users/me', views.get_current_user, name='get_current_user'),
+  path(Endpoints.REGISTER_USER, views.register_user, name='register_user'),
+  path(Endpoints.GET_CURRENT_USER, views.get_current_user, name='get_current_user'),
 ]
 
+# Combine all URL patterns
 urlpatterns = (
   health_urlpatterns +
   action_urlpatterns +

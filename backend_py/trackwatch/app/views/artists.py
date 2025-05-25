@@ -1,13 +1,14 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
+from ..constants import Headers
 import json
 
 @require_POST
 @csrf_exempt
 def follow_artist(request):
   user_id = request.GET.get('userId')
-  access_token = request.headers.get('X-Spotify-Access-Token')
+  access_token = request.headers.get(Headers.SPOTIFY_ACCESS_TOKEN)
   artist = json.loads(request.body)
 
   # --- Call artistService.followArtist(user_id, artist, access_token) ---
@@ -19,7 +20,7 @@ def follow_artist(request):
 def unfollow_artist(request):
   user_id = request.GET.get('userId')
   artist_id = request.GET.get('artistId')
-  access_token = request.headers.get('X-Spotify-Access-Token')
+  access_token = request.headers.get(Headers.SPOTIFY_ACCESS_TOKEN)
 
   # --- Call artistService.unfollowArtist(user_id, artist_id, access_token) ---
   return JsonResponse({"result": []})  # Replace with actual artist list
