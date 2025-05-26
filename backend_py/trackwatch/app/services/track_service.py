@@ -98,7 +98,6 @@ def generate_track_signature_without_duration(track) -> str:
   return f"{normalized_name}|{artists_signature}"
 
 def is_correct_artist(track, artist) -> bool:
-  print(f"{track.name} - {[a.name for a in track.artists]} - {any(a.id == artist.id for a in track.artists)}")
   return any(a.id == artist.id for a in track.artists)
 
 def is_track_in_time_range(track, start_date, end_date) -> bool:
@@ -149,10 +148,10 @@ def select_track(track, tracks_to_add):
     selected_track, non_selected_track, reason = get_track_selection_rule(track, equal_track)
 
     if reason != "existing version":
-        print(f"Track {selected_track.name} from {selected_track.album_name} replaced the {reason} of this track")
+      print(f"Track {selected_track.name} from {selected_track.album_name} replaced the {reason} of this track")
 
     if non_selected_track in tracks_to_add:
-        tracks_to_add.remove(non_selected_track)
+      tracks_to_add.remove(non_selected_track)
 
     return selected_track
 
