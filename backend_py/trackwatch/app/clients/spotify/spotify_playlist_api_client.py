@@ -105,7 +105,6 @@ def check_playlist_exists(user):
       total = response.get("total", 0)
       if offset >= total:
         break
-    log_available_playlists(user_playlist_id, all_playlists)
     return False
   except Exception as e:
     raise InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, str(e))
@@ -138,8 +137,3 @@ def map_response_to_track_uris(response):
     if track and track.get("uri"):
       uris.append(track["uri"])
   return uris
-
-def log_available_playlists(searched_playlist_id, playlists):
-  print(f"Playlist with ID: {searched_playlist_id} not found. Available playlists:")
-  for playlist in playlists:
-    print(f"ID: {playlist['id']}, Name: {playlist['name']}")
