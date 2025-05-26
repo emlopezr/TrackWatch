@@ -16,6 +16,7 @@ def generate_artist_playlist(user_id, artist_id, playlist_id, access_token):
   update_playlist_content(user, final_playlist_id, filtered_tracks, artist.image_url)
 
   print(f"Playlist generated for artist: {artist.name}")
+  return final_playlist_id
 
 def retrieve_and_validate_user(user_id, access_token):
   user = find_user_by_id(user_id)
@@ -26,7 +27,7 @@ def retrieve_and_validate_user(user_id, access_token):
   return user
 
 def collect_artist_tracks(artist, access_token):
-  findings = set()
+  findings = []
   iteration = 0
 
   while True:
@@ -49,9 +50,11 @@ def collect_artist_tracks(artist, access_token):
   return findings
 
 def filter_and_sort_tracks(tracks, user, artist):
-  tracks_to_add = set()
+  sorted_tracks = sort_tracks(tracks)
 
-  for track in tracks:
+  tracks_to_add = []
+
+  for track in sorted_tracks:
     filter_track(
       track,
       user,
@@ -65,8 +68,7 @@ def filter_and_sort_tracks(tracks, user, artist):
       should_check_track_recently_added=False
     )
 
-  sorted_tracks = list(sort_tracks(tracks_to_add))
-  filtered_tracks = remove_duplicate_tracks(sorted_tracks)
+  filtered_tracks = remove_duplicate_tracks(tracks_to_add)
   return filtered_tracks
 
 def create_or_update_playlist(user, artist_name, existing_playlist_id):
@@ -82,7 +84,7 @@ def update_playlist_content(user, playlist_id, tracks, cover_image_url):
   add_tracks_to_playlist(
     user,
     playlist_id,
-    set(tracks),
+    tracks,
     filter_uris_by_saved_by_user=False
   )
   try:
@@ -102,5 +104,5 @@ def generate_playlist_description(artist_name):
 def add_tracks_to_findings(tracks, findings, artist):
   initial_size = len(findings)
   filtered_tracks = filter_tracks(artist, tracks)
-  findings.update(filtered_tracks)
+  findings.extend(filtered_tracks)
   return initial_size != len(findings)

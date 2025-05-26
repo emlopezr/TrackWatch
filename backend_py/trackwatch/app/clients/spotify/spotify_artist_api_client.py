@@ -17,7 +17,7 @@ def get_artist_info(artist_id, access_token):
       f"Error while calling Spotify API: {str(e)}"
     )
 
-def search_artist_tracks_with_retries(artist, access_token, days_limit, page, max_attempts=3):
+def search_artist_tracks_with_retries(artist, access_token, days_limit, page, max_attempts=5):
   last_exception = None
   for attempt in range(1, max_attempts + 1):
     try:

@@ -39,7 +39,7 @@ def get_playlist_tracks(user, playlist_id):
 
 def filter_saved_tracks(user, uris):
   ids = [uri.split(":")[-1] for uri in uris]
-  filtered_uris = set()
+  filtered_uris = []
   limit = 50
   try:
     for i in range(0, len(ids), limit):

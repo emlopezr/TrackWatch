@@ -22,7 +22,7 @@ def update_user_new_releases(user, days_limit: int = System.FILTER_DAYS_LIMIT):
   access_token = getattr(active_user, "current_access_token", None)
 
   new_release_tracks = find_new_releases_for_user(active_user, access_token, days_limit)
-  filtered_tracks = set(remove_duplicate_tracks(new_release_tracks))
+  filtered_tracks = remove_duplicate_tracks(new_release_tracks)
 
   added_tracks = update_new_releases_playlist(active_user, filtered_tracks)
   update_user_recently_added_tracks(active_user, added_tracks)
@@ -34,7 +34,7 @@ def get_user_with_valid_token(user):
   return get_valid_access_token(user)
 
 def find_new_releases_for_user(user, access_token, days_limit: int):
-  new_releases = set()
+  new_releases = []
   for artist in getattr(user, "followed_artists", []):
     collect_artist_tracks(user, artist, access_token, new_releases, days_limit)
   return list(sort_tracks(new_releases))

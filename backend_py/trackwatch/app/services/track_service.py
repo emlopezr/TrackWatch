@@ -1,4 +1,5 @@
 import datetime
+import pytz
 from app.constants import System
 from app.clients.spotify.spotify_artist_api_client import search_artist_tracks_with_retries
 
@@ -25,7 +26,7 @@ def filter_track(
   track,
   user,
   artist,
-  tracks_to_add: set,
+  tracks_to_add,
   days_limit: int = System.FILTER_DAYS_LIMIT,
   should_check_correct_artist: bool = True,
   should_check_track_in_time_range: bool = True,
@@ -33,7 +34,7 @@ def filter_track(
   should_check_song_blocked_by_user_settings: bool = True,
   should_check_track_recently_added: bool = False
 ):
-  tz = datetime.timezone(datetime.timedelta(hours=int(System.SERVER_TIMEZONE)))
+  tz = pytz.timezone(System.SERVER_TIMEZONE)
   today = datetime.datetime.now(tz)
   start_date = today - datetime.timedelta(days=days_limit)
 
@@ -51,13 +52,12 @@ def filter_track(
     not is_track_recently_added_result
   ):
     selected_track = select_track(track, tracks_to_add)
-    if is_same_track_in_list(selected_track, tracks_to_add): return None
-    tracks_to_add.add(selected_track)
+    tracks_to_add.append(selected_track)
     return selected_track
 
   return None
 
-def sort_tracks(tracks: set) -> set:
+def sort_tracks(tracks) -> list:
   sorted_list = sorted(
     tracks,
     key=lambda t: (
@@ -67,7 +67,8 @@ def sort_tracks(tracks: set) -> set:
       t.album_order
     )
   )
-  return set(sorted_list)
+
+  return sorted_list
 
 def remove_duplicate_tracks(tracks: list) -> list:
   unique_tracks = []
@@ -97,6 +98,7 @@ def generate_track_signature_without_duration(track) -> str:
   return f"{normalized_name}|{artists_signature}"
 
 def is_correct_artist(track, artist) -> bool:
+  print(f"{track.name} - {[a.name for a in track.artists]} - {any(a.id == artist.id for a in track.artists)}")
   return any(a.id == artist.id for a in track.artists)
 
 def is_track_in_time_range(track, start_date, end_date) -> bool:
@@ -111,23 +113,53 @@ def is_song_blocked_by_user_settings(track, user) -> bool:
 
   return user.settings.get("blocked_explicit_content", False) and track.is_explicit
 
-def select_track(track, tracks_to_add: set):
-  equal_track = next((t for t in tracks_to_add if t.is_equal_to(track)), None)
-  if equal_track is None: return track
+def get_track_selection_rule(track, equal_track):
+    rules = [
+      {
+        'condition': lambda t, et: t.album_type == "single" and et.album_type == "album",
+        'select': lambda t, et: (et, t, "album version")
+      },
+      {
+        'condition': lambda t, et: t.album_type == "album" and et.album_type == "single",
+        'select': lambda t, et: (t, et, "album version")
+      },
+      # Prefer explicit version
+      {
+        'condition': lambda t, et: not t.is_explicit and et.is_explicit,
+        'select': lambda t, et: (et, t, "explicit version")
+      },
+      {
+        'condition': lambda t, et: not et.is_explicit and t.is_explicit,
+        'select': lambda t, et: (t, et, "explicit version")
+      }
+    ]
 
-  selected_track = track
-  non_selected_track = equal_track
+    for rule in rules:
+      if rule['condition'](track, equal_track):
+        return rule['select'](track, equal_track)
 
-  if selected_track.album_type == "single" and equal_track.album_type == "album":
-    selected_track = equal_track
-    non_selected_track = track
+    return equal_track, track, "existing version"
 
-  if not selected_track.is_explicit and non_selected_track.is_explicit:
-    selected_track = non_selected_track
+def select_track(track, tracks_to_add):
+    equal_tracks = [t for t in tracks_to_add if t.is_equal_to(track)]
+    equal_track = equal_tracks[0] if equal_tracks else None
+    if equal_track is None:
+        return track
 
-  return selected_track
+    selected_track, non_selected_track, reason = get_track_selection_rule(track, equal_track)
 
-def is_same_track_in_list(track, tracks: set) -> bool:
+    if reason != "existing version":
+        print(f"Track {selected_track.name} from {selected_track.album_name} replaced the {reason} of this track")
+
+    if non_selected_track in tracks_to_add:
+        tracks_to_add.remove(non_selected_track)
+
+    return selected_track
+
+def find_equal_track_in_list(track, tracks) -> bool:
+  return next((t for t in tracks if t.is_equal_strict(track)), None)
+
+def is_same_track_in_list(track, tracks) -> bool:
   return any(t.is_equal_strict(track) for t in tracks)
 
 def is_track_recently_added(user, track) -> bool:
