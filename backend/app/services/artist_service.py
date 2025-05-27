@@ -15,8 +15,7 @@ def follow_artist(user_id: str, artist, access_token: str):
   UserFollowedArtist.objects.create(
     user=user,
     artist_id=artist.id,
-    artist_name=artist.name,
-    image_url=artist.image_url
+    artist_name=artist.name
   )
   return user.followed_artists.all()
 

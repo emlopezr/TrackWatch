@@ -5,7 +5,6 @@ class UserFollowedArtist(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followed_artists")
   artist_id = models.CharField(max_length=255)
   artist_name = models.CharField(max_length=255)
-  image_url = models.URLField(blank=True, default="")
 
   class Meta:
     db_table = "users_followed_artists"

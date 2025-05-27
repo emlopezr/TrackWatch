@@ -17,8 +17,7 @@ def follow_artist(request):
 
   artist = Artist(
     id=artist_data["id"],
-    name=artist_data["name"],
-    image_url=artist_data.get("image_url", "")
+    name=artist_data["name"]
   )
 
   artist_list = follow_artist_service(user_id, artist, access_token)
