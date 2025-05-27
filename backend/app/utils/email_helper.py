@@ -6,12 +6,12 @@ def generate_welcome_email_subject():
   return f"🎶 ¡Bienvenido a {AppInfo.APP_NAME}! ❤️"
 
 def generate_added_tracks_email_subject(user_added_tracks):
-  if len(user_added_tracks) == 1:
-    return "🎶 Nueva canción añadida a tu playlist"
+  if len(user_added_tracks) == 1: return "🎶 Nueva canción añadida a tu playlist"
   return f"🎶 {len(user_added_tracks)} nuevas canciones añadidas a tu playlist"
 
 def generate_welcome_email_body(user):
   year = generate_current_year()
+
   return f"""\
 <!DOCTYPE html>
 <html>
@@ -49,6 +49,7 @@ def generate_added_tracks_email_body(user_added_tracks):
   today = generate_today_date()
   year = generate_current_year()
   tracks_html = ""
+
   for track in user_added_tracks:
     image = track.album_images[0].url if track.album_images else Assets.DEFAULT_TRACK_IMAGE_URL
     artists = ", ".join([a.name for a in track.artists])
@@ -68,6 +69,7 @@ def generate_added_tracks_email_body(user_added_tracks):
     "📡 Nuevo lanzamiento! 🎵" if len(user_added_tracks) == 1
     else f"📡 {len(user_added_tracks)} Nuevos lanzamientos! 🎵"
   )
+
   content_msg = (
     "<p>Se ha añadido <strong>una nueva canción</strong> a tu playlist:</p>" if len(user_added_tracks) == 1
     else f"<p>Se han añadido <strong>{len(user_added_tracks)}</strong> nuevas canciones a tu playlist:</p>"
@@ -113,13 +115,26 @@ def generate_added_tracks_email_body(user_added_tracks):
 """
 
 def generate_today_date():
-  locale.setlocale(locale.LC_TIME, "es_ES.UTF-8")
+  locales_to_try = ["es_ES.UTF-8", "es_ES", "en_US.UTF-8", "en_US", "C"]
+
+  for locale_name in locales_to_try:
+    try:
+      locale.setlocale(locale.LC_TIME, locale_name)
+      now = datetime.datetime.now(datetime.timezone.utc)
+
+      day_of_week = now.strftime("%A").capitalize()
+      day_of_month = now.day
+      month = now.strftime("%B")
+      year = now.year
+
+      return f"{day_of_week} {day_of_month} de {month} de {year}"
+
+    except locale.Error:
+      print(f"Error setting locale to {locale_name}")
+      continue
+
   now = datetime.datetime.now(datetime.timezone.utc)
-  day_of_week = now.strftime("%A").capitalize()
-  day_of_month = now.day
-  month = now.strftime("%B")
-  year = now.year
-  return f"{day_of_week} {day_of_month} de {month} de {year}"
+  return now.strftime("%d/%m/%Y")
 
 def generate_current_year():
   now = datetime.datetime.now(datetime.timezone.utc)

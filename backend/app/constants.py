@@ -14,13 +14,11 @@ class Endpoints:
   REGISTER_USER = "users/register"
   GET_CURRENT_USER = "users/me"
 
-
 class AppInfo:
   APP_NAME = "TrackWatch"
   DOMAIN = "emlopezr.com"
   DEVELOPER = "emlopezr"
   GITHUB_USER_PROFILE = f"https://github.com/{DEVELOPER}"
-
 
 class Domains:
   PRODUCTION_DOMAIN = "https://trackwatch.emlopezr.com"
