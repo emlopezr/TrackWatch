@@ -4,6 +4,9 @@ from .track_service import *
 from .playlist_service import *
 from .email_service import *
 import datetime
+import traceback
+from app.classes.artist import Artist
+from app.models.user_recently_added_track import UserRecentlyAddedTrack
 
 def update_new_releases_for_all_users(days_limit: int = System.FILTER_DAYS_LIMIT):
   users = get_all_users()
@@ -14,6 +17,7 @@ def update_new_releases_for_all_users(days_limit: int = System.FILTER_DAYS_LIMIT
       update_user_new_releases(user, days_limit)
     except Exception as e:
       print(f"Error while updating new releases for user {user.id}: {str(e)}")
+      print(traceback.format_exc())
 
   print("New releases update finished")
 
@@ -35,8 +39,11 @@ def get_user_with_valid_token(user):
 
 def find_new_releases_for_user(user, access_token, days_limit: int):
   new_releases = []
-  for artist in getattr(user, "followed_artists", []):
+
+  for followed_artist in user.followed_artists.all():
+    artist = Artist(followed_artist.artist_id, followed_artist.artist_name)
     collect_artist_tracks(user, artist, access_token, new_releases, days_limit)
+
   return list(sort_tracks(new_releases))
 
 def collect_artist_tracks(user, artist, access_token, user_added_tracks, days_limit):
@@ -61,14 +68,22 @@ def update_new_releases_playlist(user, tracks):
   return list(add_tracks_to_playlist(user, user.playlist_id, tracks))
 
 def update_user_recently_added_tracks(user, added_tracks):
-  persisted_tracks = [t.to_persisted_track() for t in added_tracks]
-  if not hasattr(user, "recently_added_tracks"):
-    user.recently_added_tracks = []
-  user.recently_added_tracks.extend(persisted_tracks)
+  for track in added_tracks:
+    track_data = track.to_persisted_track()
+
+    UserRecentlyAddedTrack.objects.create(
+      user=user,
+      track_id=track_data["track_id"],
+      track_name=track_data["track_name"],
+      track_added_at=track_data.get("track_added_at", datetime.datetime.now(datetime.timezone.utc))
+    )
+
   cleanup_old_tracks(user)
 
 def cleanup_old_tracks(user):
   now = datetime.datetime.now(datetime.timezone.utc)
   max_date = now - datetime.timedelta(days=System.CLEANUP_DAYS_LIMIT)
-  cleaned = [t for t in user.recently_added_tracks if t.get("track_added_at") and t["track_added_at"] > max_date]
-  user.recently_added_tracks = cleaned
+  UserRecentlyAddedTrack.objects.filter(
+    user=user,
+    track_added_at__lt=max_date
+  ).delete()

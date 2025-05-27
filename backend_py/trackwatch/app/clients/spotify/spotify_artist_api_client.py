@@ -22,13 +22,16 @@ def search_artist_tracks_with_retries(artist, access_token, days_limit, page, ma
   for attempt in range(1, max_attempts + 1):
     try:
       return search_artist_tracks(artist, access_token, days_limit, page)
+
     except Exception as e:
       last_exception = e
       print(f"Spotify API call failed (attempt {attempt}/{max_attempts}): {e}")
+
       if attempt < max_attempts:
         wait_time = 1 * attempt
         print(f"Retrying in {wait_time}s")
         import time; time.sleep(wait_time)
+
   raise InternalServerErrorException(
     ErrorCode.UNHANDLED_EXCEPTION,
     f"Error while calling Spotify API after {max_attempts} attempts: {str(last_exception)}"
@@ -36,13 +39,16 @@ def search_artist_tracks_with_retries(artist, access_token, days_limit, page, ma
 
 def search_artist_tracks(artist, access_token, days_limit, page):
   query_params = build_query_params(artist.name, days_limit, page)
+
   try:
     response = spotify_api_request(
       method="GET",
       endpoint=f"/search?{query_params}",
       token=access_token
     )
+
     return parse_tracks(response)
+
   except Exception as e:
     raise InternalServerErrorException(
       ErrorCode.UNHANDLED_EXCEPTION,
@@ -133,17 +139,17 @@ def build_query_params(artist_name, days_limit, page):
   return f"q={q_escaped}&type={type_}&limit={limit}&offset={offset}"
 
 def build_query(artist_name, days_limit):
-  if days_limit is None:
-    return f"artist:{artist_name}"
+  if days_limit is None: return f"artist:{artist_name}"
+
   today = datetime.datetime.now(datetime.timezone.utc)
   start_date = today - datetime.timedelta(days=days_limit)
   start_year = start_date.strftime("%Y")
   today_year = today.strftime("%Y")
   search_query = f"artist:{artist_name}"
-  if start_year == today_year:
-    search_query += f" year:{start_year}"
-  else:
-    search_query += f" year:{start_year}-{today_year}"
+
+  if start_year == today_year: search_query += f" year:{start_year}"
+  else: search_query += f" year:{start_year}-{today_year}"
+
   return search_query
 
 def parse_artist_info(response):

@@ -41,10 +41,12 @@ def filter_saved_tracks(user, uris):
   ids = [uri.split(":")[-1] for uri in uris]
   filtered_uris = []
   limit = 50
+
   try:
     for i in range(0, len(ids), limit):
       chunk = ids[i:i+limit]
       ids_param = ",".join(chunk)
+
       response = spotify_api_request(
         method="GET",
         endpoint="/me/tracks/contains",
@@ -52,9 +54,11 @@ def filter_saved_tracks(user, uris):
         params={"ids": ids_param}
       )
       saved_statuses = response
+
       for idx, id_ in enumerate(chunk):
         if not saved_statuses[idx]:
-          filtered_uris.add(f"spotify:track:{id_}")
+          filtered_uris.append(f"spotify:track:{id_}")
+
     return filtered_uris
   except Exception as e:
     raise InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, str(e))
@@ -119,7 +123,8 @@ def update_playlist_cover(user, playlist_id, image_base64):
       headers={"Content-Type": "image/jpeg"}
     )
   except Exception as e:
-    raise InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, str(e))
+    print(f"Error updating playlist cover: {e}")
+    # raise InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, str(e))
 
 def collect_playlist_items(items, all_playlists):
   for playlist in items:

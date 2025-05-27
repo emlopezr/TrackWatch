@@ -53,6 +53,10 @@ class Track:
     if len(sorted_artists) != len(other_sorted_artists): return False
     return all(a.is_equal_to(b) for a, b in zip(sorted_artists, other_sorted_artists))
 
+  def is_equal_to_track(self, other):
+    if hasattr(other, 'track_id'): return self.id == other.track_id
+    return self.id == other.id and self.name == other.name
+
   def to_persisted_track(self):
     return {
       "track_id": self.id,

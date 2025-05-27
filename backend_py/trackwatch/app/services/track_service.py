@@ -18,6 +18,7 @@ def search_artist_tracks(
       days_limit,
       page
     )
+
     new_tracks.extend(page_new_tracks)
 
   return new_tracks
@@ -101,16 +102,17 @@ def is_correct_artist(track, artist) -> bool:
   return any(a.id == artist.id for a in track.artists)
 
 def is_track_in_time_range(track, start_date, end_date) -> bool:
+  # Ensure track.release_date is timezone-aware
+  if track.release_date.tzinfo is None:
+    track.release_date = pytz.timezone(System.SERVER_TIMEZONE).localize(track.release_date)
+
   return start_date <= track.release_date <= end_date
 
 def is_compilation_album(track) -> bool:
   return getattr(track, "album_type", "") == "compilation"
 
 def is_song_blocked_by_user_settings(track, user) -> bool:
-  blocked = getattr(user, "settings", None)
-  if blocked: return getattr(blocked, "blocked_explicit_content", False) and track.is_explicit
-
-  return user.settings.get("blocked_explicit_content", False) and track.is_explicit
+  return user.setting_blocked_explicit_content and track.is_explicit
 
 def get_track_selection_rule(track, equal_track):
     rules = [
@@ -162,5 +164,5 @@ def is_same_track_in_list(track, tracks) -> bool:
   return any(t.is_equal_strict(track) for t in tracks)
 
 def is_track_recently_added(user, track) -> bool:
-  recently_added = getattr(user, "recently_added_tracks", [])
-  return any(t.is_equal_to(track) for t in recently_added)
+  recently_added = user.recently_added_tracks.all()
+  return any(track.is_equal_to_track(t) for t in recently_added)

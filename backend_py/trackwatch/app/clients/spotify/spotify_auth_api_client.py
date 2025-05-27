@@ -10,7 +10,7 @@ def refresh_access_token_with_retries(refresh_token: str, max_attempts: int = 3)
     try: return refresh_access_token(refresh_token)
     except Exception as e:
       last_exception = e
-      print(f"Spotify token refresh failed (attempt {attempt}/{max_attempts}): {e}")
+      print(f"Spotify token refresh failed (attempt {attempt}/{max_attempts}): {e.details}")
       if attempt < max_attempts:
         wait_time = 1 * attempt
         print(f"Retrying in {wait_time}s")

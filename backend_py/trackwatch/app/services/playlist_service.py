@@ -41,7 +41,7 @@ def check_and_create_playlist_if_needed(user: User):
     playlist_id = create_playlist_for_user(user)
     spotify_update_playlist_cover(user, playlist_id, Assets.DEFAULT_PLAYLIST_COVER_URL)
     user.playlist_id = playlist_id
-    user.save_user(user)
+    user.save_user()
 
 def update_playlist_cover(user: User, playlist_id: str, cover_url: str):
   try:

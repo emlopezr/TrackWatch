@@ -7,7 +7,8 @@ from .email_service import send_welcome_email
 from app.constants import Assets
 
 def get_all_users():
-  return list(User.objects.all())
+  users = list(User.objects.all())
+  return [user for user in users if not user.is_staff]
 
 def register_user(access_token: str, refresh_token: str):
   spotify_user = get_spotify_user(access_token)
