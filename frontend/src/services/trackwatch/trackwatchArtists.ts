@@ -30,7 +30,6 @@ export const followArtist = async (
             ...userData,
             followedArtists: [...userData.followedArtists, artist],
         });
-        console.log(userData.followedArtists);
 
         return true;
     } catch {
