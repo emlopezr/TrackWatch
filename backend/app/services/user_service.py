@@ -63,20 +63,9 @@ def user_settings_to_dict(settings):
   }
 
 def artist_to_dict(artist):
-  # if hasattr(artist, 'artist_name'):
-  #   return {
-  #     "id": artist.artist_id,
-  #     "name": artist.artist_name
-  #   }
-  # else:
-  #   return {
-  #     "id": artist.id,
-  #     "name": artist.name
-  #   }
-    
   return {
-    "id": artist.id if hasattr(artist, 'id') else artist.artist_id,
-    "name": artist.name if hasattr(artist, 'name') else artist.artist_name
+    "id": artist.artist_id if hasattr(artist, 'artist_id') else artist.id,
+    "name": artist.artist_name if hasattr(artist, 'artist_name') else artist.name
   }
 
 def user_response_dict(user):
