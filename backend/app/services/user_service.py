@@ -63,18 +63,21 @@ def user_settings_to_dict(settings):
   }
 
 def artist_to_dict(artist):
-  if hasattr(artist, 'artist_name'):  # UserFollowedArtist model instance
-    return {
-      "id": artist.artist_id,
-      "name": artist.artist_name,
-      "image_url": artist.image_url
-    }
-  else:  # Artist class instance
-    return {
-      "id": artist.id,
-      "name": artist.name,
-      "image_url": getattr(artist, "image_url", "")
-    }
+  # if hasattr(artist, 'artist_name'):
+  #   return {
+  #     "id": artist.artist_id,
+  #     "name": artist.artist_name
+  #   }
+  # else:
+  #   return {
+  #     "id": artist.id,
+  #     "name": artist.name
+  #   }
+    
+  return {
+    "id": artist.id if hasattr(artist, 'id') else artist.artist_id,
+    "name": artist.name if hasattr(artist, 'name') else artist.artist_name
+  }
 
 def user_response_dict(user):
   return {
