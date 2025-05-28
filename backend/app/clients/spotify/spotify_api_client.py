@@ -27,7 +27,7 @@ def spotify_api_request(method, endpoint, token=None, params=None, data=None, js
     data=data,
     json=json_data,
     headers=request_headers,
-    timeout=(5, 30)
+    timeout=(10, 60)
   )
 
   response.raise_for_status()
@@ -41,7 +41,8 @@ def spotify_auth_request(method, endpoint, params=None, data=None, auth=None):
     url,
     params=params,
     data=data,
-    auth=auth
+    auth=auth,
+    timeout=(10, 30)
   )
 
   response.raise_for_status()

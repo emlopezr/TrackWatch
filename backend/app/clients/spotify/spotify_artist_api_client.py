@@ -2,6 +2,7 @@ from .spotify_api_client import spotify_api_request
 from app.exceptions import InternalServerErrorException, ErrorCode
 from app.classes import Artist, Track, TrackImage
 import datetime
+import requests
 
 def get_artist_info(artist_id, access_token):
   try:
@@ -23,14 +24,17 @@ def search_artist_tracks_with_retries(artist, access_token, days_limit, page, ma
     try:
       return search_artist_tracks(artist, access_token, days_limit, page)
 
+    except requests.Timeout as e:
+      last_exception = e
+      print(f"Spotify API call timed out (attempt {attempt}/{max_attempts}): {e}")
     except Exception as e:
       last_exception = e
       print(f"Spotify API call failed (attempt {attempt}/{max_attempts}): {e}")
 
-      if attempt < max_attempts:
-        wait_time = 1 * attempt
-        print(f"Retrying in {wait_time}s")
-        import time; time.sleep(wait_time)
+    if attempt < max_attempts:
+      wait_time = 2 * attempt
+      print(f"Retrying in {wait_time}s")
+      import time; time.sleep(wait_time)
 
   raise InternalServerErrorException(
     ErrorCode.UNHANDLED_EXCEPTION,
