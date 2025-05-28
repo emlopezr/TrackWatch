@@ -171,7 +171,7 @@ def generate_admin_notification_email_body(users_count, errors=None):
 <body>
   <div class="email-container">
     <div class="header">
-      📊 Reporte de Ejecución del Servicio de Releases
+      📊 Reporte de Ejecución del Cronjob
       <div class="header-subtitle">{today}</div>
     </div>
     <div class="content">
@@ -188,4 +188,4 @@ def generate_admin_notification_email_body(users_count, errors=None):
 """
 
 def generate_admin_notification_email_subject():
-  return f"📊 Reporte de Ejecución del Servicio de Releases - {AppInfo.APP_NAME}"
+  return f"📊 Reporte de Ejecución del Cronjob - {AppInfo.APP_NAME}"
