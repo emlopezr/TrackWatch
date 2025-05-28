@@ -26,7 +26,8 @@ def spotify_api_request(method, endpoint, token=None, params=None, data=None, js
     params=params,
     data=data,
     json=json_data,
-    headers=request_headers
+    headers=request_headers,
+    timeout=(5, 30)
   )
 
   response.raise_for_status()
