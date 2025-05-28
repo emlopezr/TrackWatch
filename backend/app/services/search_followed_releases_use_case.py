@@ -10,16 +10,21 @@ from app.models.user_recently_added_track import UserRecentlyAddedTrack
 
 def update_new_releases_for_all_users(days_limit: int = System.FILTER_DAYS_LIMIT):
   users = get_all_users()
-  print(f"Running new releases update for {len(users)} users")
+  errors = {}
+  total_users = len(users)
 
+  print(f"Running new releases update for {total_users} users")
   for user in users:
     try:
       update_user_new_releases(user, days_limit)
     except Exception as e:
-      print(f"Error while updating new releases for user {user.id}: {str(e)}")
-      print(traceback.format_exc())
+      error_msg = f"Error while updating new releases for user {user.id}: {str(e)}\n{traceback.format_exc()}"
+      print(error_msg)
+      errors[user.id] = error_msg
 
-  print("New releases update finished")
+  users_with_errors = len(errors)
+  print(f"New releases update finished - {users_with_errors}/{total_users} users with errors")
+  send_admin_notification_email(total_users, errors if errors else None)
 
 def update_user_new_releases(user, days_limit: int = System.FILTER_DAYS_LIMIT):
   active_user = get_user_with_valid_token(user)

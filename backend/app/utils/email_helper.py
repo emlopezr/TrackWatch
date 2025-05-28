@@ -139,3 +139,53 @@ def generate_today_date():
 def generate_current_year():
   now = datetime.datetime.now(datetime.timezone.utc)
   return str(now.year)
+
+def generate_admin_notification_email_body(users_count, errors=None):
+  year = generate_current_year()
+  today = generate_today_date()
+  
+  errors_html = ""
+  if errors:
+    errors_html = "<h3>Errores encontrados:</h3>"
+    for user_id, error in errors.items():
+      errors_html += f"""
+        <div style="margin-bottom: 20px; padding: 10px; background-color: {Colors.LIGHT_GRAY_2}; border-radius: 4px;">
+          <strong>Usuario ID: {user_id}</strong>
+          <pre style="white-space: pre-wrap; margin-top: 10px;">{error}</pre>
+        </div>
+      """
+
+  return f"""\
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {{ font-family: Arial, sans-serif; background-color: {Colors.LIGHT_GRAY_1}; color: {Colors.DARK_GRAY}; }}
+    .email-container {{ max-width: 800px; margin: 20px auto; background-color: {Colors.WHITE}; border-radius: 8px; border: 1px solid {Colors.LIGHT_GRAY_3}; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }}
+    .header {{ background-color: {Colors.GREEN}; color: {Colors.WHITE}; text-align: center; padding: 20px; font-size: 20px; font-weight: bold; }}
+    .header-subtitle {{ font-size: 12px; font-weight: normal; }}
+    .content {{ padding: 20px; }}
+    .footer {{ background-color: {Colors.LIGHT_GRAY_2}; color: #666; text-align: center; padding: 10px; font-size: 12px; }}
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      📊 Reporte de Ejecución del Servicio de Releases
+      <div class="header-subtitle">{today}</div>
+    </div>
+    <div class="content">
+      <h2>Resumen de la ejecución:</h2>
+      <p>Se procesaron <strong>{users_count}</strong> usuarios.</p>
+      {errors_html}
+    </div>
+    <div class="footer">
+      © {year} - {AppInfo.APP_NAME} - Desarrollado por <a href="{AppInfo.GITHUB_USER_PROFILE}" style="color: {Colors.GREEN}; text-decoration: none;">@{AppInfo.DEVELOPER}</a>
+    </div>
+  </div>
+</body>
+</html>
+"""
+
+def generate_admin_notification_email_subject():
+  return f"📊 Reporte de Ejecución del Servicio de Releases - {AppInfo.APP_NAME}"
