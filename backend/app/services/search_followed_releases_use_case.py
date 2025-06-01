@@ -24,7 +24,8 @@ def update_new_releases_for_all_users(days_limit: int = System.FILTER_DAYS_LIMIT
 
   users_with_errors = len(errors)
   print(f"New releases update finished - {users_with_errors}/{total_users} users with errors")
-  send_admin_notification_email(total_users, errors if errors else None)
+
+  if errors: send_admin_notification_email(total_users, errors)
 
 def update_user_new_releases(user, days_limit: int = System.FILTER_DAYS_LIMIT):
   active_user = get_user_with_valid_token(user)
