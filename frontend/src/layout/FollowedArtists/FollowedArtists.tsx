@@ -17,7 +17,9 @@ const FollowedArtists = ({ accessToken, followedArtists }: FollowedArtistsProps)
     const loadArtists = async () => {
       setLoadingPage(true);
       const data = await batchGetArtists(accessToken, followedArtists);
-      setArtistsData(data);
+      const sortedData = data.sort((a, b) => a.name.localeCompare(b.name));
+
+      setArtistsData(sortedData);
       setLoadingPage(false);
     };
 
