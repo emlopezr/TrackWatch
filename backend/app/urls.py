@@ -25,10 +25,17 @@ user_urlpatterns = [
   path(Endpoints.GET_CURRENT_USER, views.get_current_user, name='get_current_user'),
 ]
 
+# Legal endpoints
+legal_urlpatterns = [
+  path(Endpoints.EULA, views.get_eula, name='eula'),
+  path(Endpoints.PRIVACY, views.get_privacy_policy, name='privacy'),
+]
+
 # Combine all URL patterns
 urlpatterns = (
   health_urlpatterns +
   action_urlpatterns +
   artist_urlpatterns +
-  user_urlpatterns
+  user_urlpatterns +
+   legal_urlpatterns
 )

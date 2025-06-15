@@ -54,10 +54,22 @@
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .profile__menu-logout:hover {
   background-color: color-mix(in srgb, var(--red) 50%, transparent);
+}
+
+.profile__menu-link {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.profile__menu-link:hover {
+  color: color-mix(in srgb, var(--primary) 75%, white);
 }
 
 @keyframes fadeIn {

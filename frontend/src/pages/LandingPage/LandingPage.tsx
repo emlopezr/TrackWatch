@@ -72,9 +72,15 @@ const LandingPage = () => {
         <p className="landing-footer__text">
           Made with ♥ by <a className='landing-footer__link' href="https://github.com/emlopezr">@emlopezr</a>
         </p>
-        <p className="landing-footer__disclaimer">
-          TrackWatch is not affiliated with Spotify
-        </p>
+        <div className="landing-footer__legals_container">
+          <p className="landing-footer__links">
+            <a className="landing-footer__link" href="/eula" target="_blank" rel="noopener noreferrer">Terms of Use (EULA)</a> · {" "}
+            <a className="landing-footer__link" href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+          </p>
+          <p className="landing-footer__disclaimer">
+            <span className="landing-footer__disclaimer-text">TrackWatch is not affiliated with Spotify</span>
+          </p>
+        </div>
       </footer>
     </div>
   );

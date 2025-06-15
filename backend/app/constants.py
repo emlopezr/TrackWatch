@@ -13,6 +13,8 @@ class Endpoints:
   UNFOLLOW_ARTIST = "artists/unfollow"
   REGISTER_USER = "users/register"
   GET_CURRENT_USER = "users/me"
+  EULA = "eula"
+  PRIVACY = "privacy"
 
 class AppInfo:
   APP_NAME = "TrackWatch"
