@@ -104,19 +104,19 @@
 }
 
 .modal__button--primary {
-  background-color: var(--primary);
+  background-color: transparent;
   color: white;
 }
 
 .modal__button--primary:hover {
-  background-color: color-mix(in srgb, var(--primary) 70%, black);
+  background-color: color-mix(in srgb, transparent 80%, black);
 }
 
 .modal__button--secondary {
-  background-color: color-mix(in srgb, var(--text) 15%, transparent);
-  color: var(--text);
+  background-color: var(--primary);
+  color: var(--white);
 }
 
 .modal__button--secondary:hover {
-  background-color: color-mix(in srgb, var(--text) 25%, transparent);
+  background-color: color-mix(in srgb, var(--primary) 70%, black);
 }
