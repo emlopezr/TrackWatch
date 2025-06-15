@@ -1,0 +1,33 @@
+.legal-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--text);
+}
+
+.legal-title {
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--primary);
+}
+
+.legal-content {
+  width: 100%;
+  white-space: pre-wrap;
+  line-height: 1.6;
+  font-size: 0.95rem;
+  background-color: var(--card);
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px var(--box-shadow);
+  overflow-x: auto;
+}
+
+.error {
+  color: var(--red);
+}

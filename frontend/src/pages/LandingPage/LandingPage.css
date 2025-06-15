@@ -196,6 +196,20 @@ body {
   margin: 0;
 }
 
+.landing-footer__legals_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0rem;
+}
+
+.landing-footer__links {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
 .landing-footer__link {
   color: var(--primary);
   text-decoration: none;

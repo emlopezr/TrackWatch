@@ -46,6 +46,8 @@ const UserMenu = ({ showUserMenu, setShowUserMenu, handleLogout }: UserMenuProps
       {showUserMenu && (
         <div className="profile__menu">
           <p className="profile__menu-name">{userData.name}</p>
+          <a className="profile__menu-link" href="/eula" target="_blank" rel="noopener noreferrer">Terms of Use</a>
+          <a className="profile__menu-link" href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
           <button className="profile__menu-logout" onClick={handleLogout} >
             <img src={logoutIcon} alt="Log Out" className='icon-white' />
             Log Out
