@@ -7,7 +7,8 @@ from .email_service import send_welcome_email
 from app.constants import Assets
 
 def get_all_users():
-  users = list(User.objects.all())
+  # Only return non-staff users that have automatic updates enabled
+  users = list(User.objects.filter(updates_enabled=True))
   return [user for user in users if not user.is_staff]
 
 def register_user(access_token: str, refresh_token: str):
@@ -59,7 +60,8 @@ def find_user_by_id(user_id: str):
 
 def user_settings_to_dict(settings):
   return {
-    "blocked_explicit_content": getattr(settings, "setting_blocked_explicit_content", False)
+    "blocked_explicit_content": getattr(settings, "setting_blocked_explicit_content", False),
+    "updates_enabled": getattr(settings, "updates_enabled", True)
   }
 
 def artist_to_dict(artist):

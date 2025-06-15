@@ -154,3 +154,33 @@ export const getTrackWatchUserData = async (
         return undefined;
     }
 };
+
+export const togglePlaylistUpdates = async (
+    userId: string,
+    updatesEnabled: boolean
+) => {
+    try {
+        const response = await fetch(
+            `${TRACKWATCH_API_BASE_URL}/users/${userId}/playlist-updates`,
+            {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Spotify-Access-Token": localStorage.getItem("spotify_access_token") || "",
+                    "X-Spotify-Refresh-Token": localStorage.getItem("spotify_refresh_token") || "",
+                },
+                body: JSON.stringify({ updatesEnabled }),
+            }
+        );
+
+        if (response.status !== 200) {
+            throw new Error(`Failed to update setting: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.updatesEnabled as boolean;
+    } catch (error) {
+        console.error("Error toggling playlist updates", error);
+        throw error;
+    }
+};

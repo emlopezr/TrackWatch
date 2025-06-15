@@ -22,6 +22,7 @@ const GeneratorPage = () => {
     content: ReactNode;
     type: 'success' | 'error' | 'info';
     secondaryButtonText?: string;
+    secondaryButtonIcon?: ReactNode;
     onSecondaryAction?: () => void;
   }>({ title: '', content: '', type: 'info' });
 
@@ -77,6 +78,7 @@ const GeneratorPage = () => {
         ),
         type: 'success',
         secondaryButtonText: 'Ver en Spotify',
+        secondaryButtonIcon: <img src={spotifyLogo} alt="Spotify" />,
         onSecondaryAction: () => window.open(link, '_blank')
       });
       setShowModal(true);
@@ -219,6 +221,7 @@ const GeneratorPage = () => {
         type={modalData.type}
         primaryButtonText="OK"
         secondaryButtonText={modalData.secondaryButtonText}
+        secondaryButtonIcon={modalData.secondaryButtonIcon}
         onSecondaryAction={modalData.onSecondaryAction}
       />
     </>

@@ -19,6 +19,8 @@ class User(AbstractBaseUser, PermissionsMixin):
   last_refresh_token = models.TextField(blank=True)
 
   setting_blocked_explicit_content = models.BooleanField(default=False)
+  # Indicates whether TrackWatch should keep adding new releases automatically to the user's playlist
+  updates_enabled = models.BooleanField(default=True)
 
   is_active = models.BooleanField(default=True)
   is_staff = models.BooleanField(default=False)

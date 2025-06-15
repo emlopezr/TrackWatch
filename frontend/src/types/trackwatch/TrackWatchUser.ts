@@ -11,4 +11,5 @@ export default interface TrackWatchUser {
 
 interface TrackWatchUserSettings {
     blockedExplicitContent: boolean;
+    updatesEnabled: boolean;
 }
