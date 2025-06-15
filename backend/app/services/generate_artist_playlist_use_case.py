@@ -87,10 +87,10 @@ def update_playlist_content(user, playlist_id, tracks, cover_image_url):
     tracks,
     filter_uris_by_saved_by_user=False
   )
-  try:
-    update_playlist_cover(user, playlist_id, cover_image_url)
-  except Exception:
-    print(f"Failed to upload playlist cover for playlist: {playlist_id}")
+  # try:
+  #   update_playlist_cover(user, playlist_id, cover_image_url)
+  # except Exception:
+  #   print(f"Failed to upload playlist cover for playlist: {playlist_id}")
 
 def filter_tracks(artist, tracks):
   return [track for track in tracks if is_correct_artist(track, artist)]

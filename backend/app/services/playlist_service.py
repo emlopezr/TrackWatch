@@ -39,7 +39,7 @@ def check_and_create_playlist_if_needed(user: User):
 
   if not playlist_exists:
     playlist_id = create_playlist_for_user(user)
-    spotify_update_playlist_cover(user, playlist_id, Assets.DEFAULT_PLAYLIST_COVER_URL)
+    # spotify_update_playlist_cover(user, playlist_id, Assets.DEFAULT_PLAYLIST_COVER_URL)
     user.playlist_id = playlist_id
     user.save_user()
 

@@ -28,7 +28,7 @@ def register_user(access_token: str, refresh_token: str):
   user.save()
 
   playlist_id = create_playlist_for_user(user)
-  update_playlist_cover(user, playlist_id, Assets.DEFAULT_PLAYLIST_COVER_URL)
+  # update_playlist_cover(user, playlist_id, Assets.DEFAULT_PLAYLIST_COVER_URL)
 
   user.playlist_id = playlist_id
   user.save()
