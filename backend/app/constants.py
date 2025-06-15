@@ -15,6 +15,7 @@ class Endpoints:
   GET_CURRENT_USER = "users/me"
   EULA = "eula"
   PRIVACY = "privacy"
+  TOGGLE_PLAYLIST_UPDATES = "users/<id>/playlist-updates"
 
 class AppInfo:
   APP_NAME = "TrackWatch"

@@ -101,6 +101,10 @@
   cursor: pointer;
   border: none;
   transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .modal__button--primary {
@@ -119,4 +123,44 @@
 
 .modal__button--secondary:hover {
   background-color: color-mix(in srgb, var(--primary) 70%, black);
+}
+
+.modal__button--cancel {
+  background-color: var(--red);
+  color: var(--white);
+}
+
+.modal__button--cancel:hover {
+  background-color: color-mix(in srgb, var(--red) 70%, black);
+}
+
+.modal__button--save {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+.modal__button--save:hover {
+  background-color: color-mix(in srgb, var(--primary) 70%, black);
+}
+
+.modal__content input[type="checkbox"]:checked {
+  accent-color: var(--primary);
+}
+
+.modal__loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.modal__button-icon img, .modal__button-icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
 }

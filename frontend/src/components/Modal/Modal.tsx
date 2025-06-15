@@ -1,5 +1,6 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import './Modal.css';
+import Spinner from '../Spinner/Spinner';
 
 type ModalType = 'success' | 'error' | 'info';
 
@@ -11,8 +12,12 @@ interface ModalProps {
   type?: ModalType;
   primaryButtonText?: string;
   secondaryButtonText?: string;
-  onPrimaryAction?: () => void;
+  onPrimaryAction?: () => Promise<void> | void;
   onSecondaryAction?: () => void;
+  secondaryButtonModificator?: string;
+  primaryButtonModificator?: string;
+  secondaryButtonIcon?: ReactNode;
+  primaryButtonIcon?: ReactNode;
 }
 
 const Modal = ({
@@ -24,10 +29,15 @@ const Modal = ({
   primaryButtonText = 'OK',
   secondaryButtonText,
   onPrimaryAction,
-  onSecondaryAction
+  onSecondaryAction,
+  secondaryButtonModificator,
+  primaryButtonModificator,
+  secondaryButtonIcon,
+  primaryButtonIcon
 }: ModalProps) => {
+  const [loading, setLoading] = useState(false);
   if (!isOpen) return null;
-  
+
   const getIconByType = () => {
     switch (type) {
       case 'success':
@@ -57,10 +67,21 @@ const Modal = ({
     }
   };
 
-  const handlePrimaryAction = () => {
+  const handlePrimaryAction = async () => {
     if (onPrimaryAction) {
-      onPrimaryAction();
+      setLoading(true);
+      try {
+        const result = onPrimaryAction();
+        if (result instanceof Promise) {
+          await result;
+        }
+      } catch (error) {
+        console.error('Modal primary action error', error);
+        setLoading(false);
+        return;
+      }
     }
+    setLoading(false);
     onClose();
   };
 
@@ -73,25 +94,30 @@ const Modal = ({
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className={`modal modal--${type}`} onClick={(e) => e.stopPropagation()}>
+      <div className={`modal modal--${type}`} onClick={(e) => e.stopPropagation()} style={{position:'relative'}}>
         <div className="modal__header">
           {getIconByType()}
           <h2 className="modal__title">{title}</h2>
         </div>
         <div className="modal__content">{content}</div>
+        {loading && (
+          <div className="modal__loading-overlay"><Spinner /></div>
+        )}
         <div className="modal__actions">
           {secondaryButtonText && (
             <button
-              className="modal__button modal__button--secondary"
+              className={`modal__button modal__button--secondary ${secondaryButtonModificator}`}
               onClick={handleSecondaryAction}
             >
+              {secondaryButtonIcon && <span className="modal__button-icon">{secondaryButtonIcon}</span>}
               {secondaryButtonText}
             </button>
           )}
           <button
-            className="modal__button modal__button--primary"
+            className={`modal__button modal__button--primary ${primaryButtonModificator}`}
             onClick={handlePrimaryAction}
           >
+            {primaryButtonIcon && <span className="modal__button-icon">{primaryButtonIcon}</span>}
             {primaryButtonText}
           </button>
         </div>

@@ -23,6 +23,7 @@ artist_urlpatterns = [
 user_urlpatterns = [
   path(Endpoints.REGISTER_USER, views.register_user, name='register_user'),
   path(Endpoints.GET_CURRENT_USER, views.get_current_user, name='get_current_user'),
+  path(Endpoints.TOGGLE_PLAYLIST_UPDATES, views.toggle_playlist_updates, name='toggle_playlist_updates'),
 ]
 
 # Legal endpoints

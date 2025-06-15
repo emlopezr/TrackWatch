@@ -15,6 +15,10 @@ def update_new_releases_for_all_users(days_limit: int = System.FILTER_DAYS_LIMIT
 
   print(f"Running new releases update for {total_users} users")
   for user in users:
+    # Skip users that have disabled automatic updates
+    if hasattr(user, "updates_enabled") and not user.updates_enabled:
+      continue
+
     try:
       update_user_new_releases(user, days_limit)
     except Exception as e:

@@ -21,6 +21,7 @@ class ErrorCode:
   USER_ALREADY_FOLLOWS_THIS_ARTIST = ("USER_ALREADY_FOLLOWS_THIS_ARTIST", "User already follows this artist")
   USER_DOES_NOT_FOLLOW_THIS_ARTIST = ("USER_DOES_NOT_FOLLOW_THIS_ARTIST", "User does not follow this artist")
   USER_INVALID_CREDENTIALS = ("USER_INVALID_CREDENTIALS", "Invalid user credentials")
+  INVALID_REQUEST_BODY = ("INVALID_REQUEST_BODY", "Invalid request body")
   SPOTIFY_INVALID_ACCESS_TOKEN = ("SPOTIFY_INVALID_ACCESS_TOKEN", "Invalid Spotify access token")
   SPOTIFY_FORBIDDEN_REQUEST = ("SPOTIFY_FORBIDDEN_REQUEST", "Spotify API request forbidden request")
   SPOTIFY_USER_NOT_FOUND = ("SPOTIFY_USER_NOT_FOUND", "Spotify user not found")
