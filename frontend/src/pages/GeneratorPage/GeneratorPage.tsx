@@ -69,7 +69,7 @@ const GeneratorPage = () => {
 
       // Show success modal
       setModalData({
-        title: '¡Playlist creada!',
+        title: 'Playlist created!',
         content: (
           <>
             Playlist has been successfully generated! Enjoy all the tracks from {selectedArtist.name}! :)
@@ -77,7 +77,7 @@ const GeneratorPage = () => {
           </>
         ),
         type: 'success',
-        secondaryButtonText: 'Ver en Spotify',
+        secondaryButtonText: 'View on Spotify',
         secondaryButtonIcon: <img src={spotifyLogo} alt="Spotify" />,
         onSecondaryAction: () => window.open(link, '_blank')
       });
