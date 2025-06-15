@@ -20,8 +20,8 @@ const SettingsModal = ({ isOpen, onClose, currentValue, onSave }: SettingsModalP
           onChange={(e) => setEnabled(e.target.checked)}
         />
         <span style={{ textAlign: 'left' }}>
-          <strong>Actualización automática: </strong>
-          TrackWatch añadirá nuevos lanzamientos a tu playlist mientras esta opción esté activa.
+          <strong>Automatic update: </strong>
+          TrackWatch will add new releases to your playlist while this option is active.
         </span>
       </label>
     </div>
@@ -31,10 +31,10 @@ const SettingsModal = ({ isOpen, onClose, currentValue, onSave }: SettingsModalP
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Configuración"
+      title="Settings"
       content={content}
-      primaryButtonText="Guardar"
-      secondaryButtonText="Cancelar"
+      primaryButtonText="Save"
+      secondaryButtonText="Cancel"
       onPrimaryAction={() => onSave(enabled)}
       onSecondaryAction={onClose}
       secondaryButtonModificator="modal__button--cancel"
