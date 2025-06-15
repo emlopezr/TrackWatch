@@ -1,5 +1,10 @@
 import { TRACKWATCH_API_BASE_URL } from "../../common/constants";
 
+export interface GeneratePlaylistResponse {
+  message: string;
+  playlistId: string;
+}
+
 /**
  * Generates a playlist based on the selected artist
  * @param accessToken Spotify access token
@@ -11,7 +16,7 @@ export const generatePlaylist = async (
   accessToken: string,
   userId: string,
   artistId: string
-): Promise<any> => {
+): Promise<GeneratePlaylistResponse> => {
   try {
     const response = await fetch(
       `${TRACKWATCH_API_BASE_URL}/actions/generate?userId=${userId}&artistId=${artistId}`,
@@ -27,7 +32,7 @@ export const generatePlaylist = async (
       throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
 
-    return await response.text();
+    return await response.json();
   } catch (error) {
     console.error('Error generating playlist:', error);
     throw error;

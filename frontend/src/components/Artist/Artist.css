@@ -32,6 +32,10 @@
     gap: 0.1rem;
 }
 
+.artist__info a {
+    text-decoration: none;
+}
+
 .artist__name {
     font-size: 1.5rem;
     font-weight: bold;

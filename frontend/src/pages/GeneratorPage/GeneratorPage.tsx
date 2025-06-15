@@ -1,13 +1,14 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, type ReactNode } from 'react';
 import { useTokenManager } from '../../hooks/useTokenManager';
 import SearchBar, { SearchBarHandle } from '../../layout/SearchBar/SearchBar';
 import type SpotifyArtistResponse from '../../types/spotify/SpotifyArtistResponse';
 import './GeneratorPage.css';
 import blank from '../../assets/png/blank.png';
 import { useUser } from '../../context/useUser';
-import { generatePlaylist } from '../../services/trackwatch/playlistGeneration';
+import { generatePlaylist, GeneratePlaylistResponse } from '../../services/trackwatch/playlistGeneration';
 import Spinner from '../../components/Spinner/Spinner';
 import Modal from '../../components/Modal/Modal';
+import spotifyLogo from '../../assets/svg/spotify.svg';
 
 const GeneratorPage = () => {
   const { accessToken } = useTokenManager();
@@ -16,7 +17,13 @@ const GeneratorPage = () => {
   const [showResults, setShowResults] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [modalData, setModalData] = useState({ title: '', content: '', type: 'info' as 'success' | 'error' | 'info' });
+  const [modalData, setModalData] = useState<{
+    title: string;
+    content: ReactNode;
+    type: 'success' | 'error' | 'info';
+    secondaryButtonText?: string;
+    onSecondaryAction?: () => void;
+  }>({ title: '', content: '', type: 'info' });
 
   // Reference to the SearchBar component
   const searchBarRef = useRef<SearchBarHandle>(null);
@@ -47,27 +54,35 @@ const GeneratorPage = () => {
       setShowModal(true);
       return;
     }
-    
+
     setIsGenerating(true);
-    
-    try {      
-      await generatePlaylist(
+
+    try {
+      const response: GeneratePlaylistResponse = await generatePlaylist(
         accessToken,
         userData.id,
         selectedArtist.id
       );
-      
+
+      const link = `https://open.spotify.com/playlist/${response.playlistId}`;
+
       // Show success modal
       setModalData({
-        title: 'Success!',
-        content: `Playlist has been successfully generated! Check your Spotify account to enjoy all the tracks from ${selectedArtist.name}! :)`,
-        type: 'success'
+        title: '¡Playlist creada!',
+        content: (
+          <>
+            Playlist has been successfully generated! Enjoy all the tracks from {selectedArtist.name}! :)
+            <br />
+          </>
+        ),
+        type: 'success',
+        secondaryButtonText: 'Ver en Spotify',
+        onSecondaryAction: () => window.open(link, '_blank')
       });
       setShowModal(true);
-      
-      // Clear selected artist after successful generation
+
       handleClearArtist();
-    } catch (error) {
+    } catch {
       setModalData({
         title: 'Error',
         content: 'Failed to generate playlist. Please try again.',
@@ -133,10 +148,27 @@ const GeneratorPage = () => {
           </div>
         )}
         <div className="generator-page__artist-image-large">
-          <img
-            src={selectedArtist ? selectedArtist.images[0]?.url : blank}
-            alt={selectedArtist ? selectedArtist.name : "No artist selected"}
-          />
+          {selectedArtist ? (
+            <a
+              href={selectedArtist.external_urls.spotify}
+              target="_blank"
+              rel="noreferrer"
+              className="generator-page__artist-image-link"
+            >
+              <img
+                src={selectedArtist.images[0]?.url}
+                alt={selectedArtist.name}
+              />
+              <span className="generator-page__artist-spotify-badge">
+                <img src={spotifyLogo} alt="Spotify" />
+              </span>
+            </a>
+          ) : (
+            <img
+              src={blank}
+              alt="No artist selected"
+            />
+          )}
         </div>
 
         <div className="generator-page__artist-info">
@@ -186,6 +218,8 @@ const GeneratorPage = () => {
         content={modalData.content}
         type={modalData.type}
         primaryButtonText="OK"
+        secondaryButtonText={modalData.secondaryButtonText}
+        onSecondaryAction={modalData.onSecondaryAction}
       />
     </>
   );

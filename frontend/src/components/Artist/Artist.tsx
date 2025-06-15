@@ -48,7 +48,9 @@ const Artist = ({ data, isFollowed, onFollow, onUnfollow }: ArtistProps) => {
           />
         </a>
         <div className="artist__info">
-          <h3 className="artist__name">{data.name}</h3>
+          <a href={data.external_urls.spotify} target="_blank" rel="noreferrer">
+            <h3 className="artist__name">{data.name}</h3>
+          </a>
           <div className="artist__tags">
             {data.genres.slice(0, 3).map((genre, index) => (
               <Tag key={index} text={genre} />
