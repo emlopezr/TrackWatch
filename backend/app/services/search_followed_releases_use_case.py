@@ -15,7 +15,6 @@ def update_new_releases_for_all_users(days_limit: int = System.FILTER_DAYS_LIMIT
 
   print(f"Running new releases update for {total_users} users")
   for user in users:
-    # Skip users that have disabled automatic updates
     if hasattr(user, "updates_enabled") and not user.updates_enabled:
       continue
 
@@ -29,7 +28,8 @@ def update_new_releases_for_all_users(days_limit: int = System.FILTER_DAYS_LIMIT
   users_with_errors = len(errors)
   print(f"New releases update finished - {users_with_errors}/{total_users} users with errors")
 
-  if errors: send_admin_notification_email(total_users, errors)
+  # if errors: send_admin_notification_email(total_users, errors)
+  send_admin_notification_email(total_users, errors)
 
 def update_user_new_releases(user, days_limit: int = System.FILTER_DAYS_LIMIT):
   active_user = get_user_with_valid_token(user)
