@@ -26,9 +26,24 @@ def update_new_releases_for_all_users(days_limit: int = System.FILTER_DAYS_LIMIT
       errors[user.id] = error_msg
 
   users_with_errors = len(errors)
+  ok_users = total_users - users_with_errors
   print(f"New releases update finished - {users_with_errors}/{total_users} users with errors")
 
-  if errors: send_admin_notification_email(total_users, errors)
+  if users_with_errors == 0:
+    status = "ok"
+  elif users_with_errors == total_users:
+    status = "error"
+  else:
+    status = "partial_error"
+
+  result = {
+    "status": status,
+    "message": "New releases update completed successfully" if users_with_errors == 0 else f"Completed with {users_with_errors} errors",
+    "ok_users_count": ok_users,
+    "error_users_count": users_with_errors,
+    "errors": list(errors.values()) if users_with_errors > 0 else []
+  }
+  return result
 
 def update_user_new_releases(user, days_limit: int = System.FILTER_DAYS_LIMIT):
   active_user = get_user_with_valid_token(user)

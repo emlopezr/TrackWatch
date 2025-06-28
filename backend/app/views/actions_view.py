@@ -29,5 +29,5 @@ def update_new_releases(request):
   if admin_key != config("SECRET_KEY"):
     raise ForbiddenException(ErrorCode.INVALID_ADMIN_CREDENTIALS)
 
-  update_new_releases_for_all_users(days_limit)
-  return JsonResponse({"message": "New releases updated for all users"})
+  result = update_new_releases_for_all_users(days_limit)
+  return JsonResponse(result)
