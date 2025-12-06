@@ -27,6 +27,18 @@
     "globals": "^15.12.0",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.15.0",
+<<<<<<< HEAD
     "vite": "^6.4.1"
+=======
+    "vite": "^6.2.7"
+  },
+  "pnpm": {
+    "overrides": {
+      "js-yaml": ">=4.1.1",
+      "on-headers": ">=1.1.0",
+      "@eslint/plugin-kit": ">=0.3.4",
+      "brace-expansion": ">=2.0.2"
+    }
+>>>>>>> d6ec0f2 (Update dependencies)
   }
 }
