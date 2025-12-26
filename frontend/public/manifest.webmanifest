@@ -1,0 +1,27 @@
+{
+  "name": "TrackWatch - Spotify Release Tracker",
+  "short_name": "TrackWatch",
+  "description": "Track new music releases from your favorite Spotify artists",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#242424",
+  "background_color": "#242424",
+  "categories": ["music", "entertainment", "utilities"],
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
+

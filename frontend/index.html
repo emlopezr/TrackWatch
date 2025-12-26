@@ -3,8 +3,9 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/icon.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Viewport: user-scalable=no evita zooms accidentales en inputs móviles -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
   <!-- Primary Meta Tags -->
   <title>TrackWatch - Track New Music Releases from Your Favorite Artists</title>
@@ -29,10 +30,27 @@
     content="Automatically track new releases from your favorite artists on Spotify. Get notifications and auto-updated playlists with TrackWatch." />
   <meta property="twitter:image" content="https://trackwatch.emlopezr.com/preview.jpg" />
 
-  <!-- App-specific metadata -->
+  <!-- PWA: Theme & App Identity -->
+  <meta name="theme-color" content="#242424" />
   <meta name="application-name" content="TrackWatch" />
+
+  <!-- PWA: iOS/Safari Support -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="TrackWatch" />
-  <meta name="theme-color" content="#333333" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <!-- PWA: Android/Chrome Support -->
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <!-- PWA: Manifest & Icons -->
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+  <link rel="icon" type="image/png" sizes="512x512" href="/icon.png" />
+
+  <!-- PWA: Microsoft/Edge Support -->
+  <meta name="msapplication-TileColor" content="#242424" />
+  <meta name="msapplication-TileImage" content="/icon.png" />
 </head>
 
 <body>
