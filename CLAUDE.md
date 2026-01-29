@@ -69,3 +69,10 @@ python manage.py makemigrations  # Create new migrations
 ## Environment Variables
 
 Frontend uses `VITE_*` prefixed variables. Backend requires Spotify API credentials, PostgreSQL connection, and Resend API key for email notifications.
+
+## Active Technologies
+- Python 3.10+ (Backend), TypeScript 5.6 (Frontend) + Django 5.2, Django REST Framework, React 18.3, Vite 6.4 (001-spotify-artists-sync)
+- PostgreSQL (removing `UserFollowedArtist` table) (001-spotify-artists-sync)
+
+## Recent Changes
+- 001-spotify-artists-sync: Added Python 3.10+ (Backend), TypeScript 5.6 (Frontend) + Django 5.2, Django REST Framework, React 18.3, Vite 6.4
