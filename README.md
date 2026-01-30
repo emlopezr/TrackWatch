@@ -35,6 +35,17 @@ Stay updated on the latest music releases from your favorite artists. TrackWatch
 - Python 3.10+
 - Node.js 18+
 - PostgreSQL
+- Spotify Developer Account
+
+### Spotify App Configuration
+
+1. Create a Spotify app at [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
+2. In your Spotify app settings, add the following **Redirect URI**:
+   ```
+   http://127.0.0.1:5173/callback
+   ```
+   **Important:** Spotify no longer allows `http://localhost` as a redirect URI. You must use `127.0.0.1`.
+3. Note your **Client ID** and **Client Secret** for the environment configuration
 
 ### Backend Setup
 ```bash
@@ -51,8 +62,18 @@ python manage.py runserver
 ```bash
 cd frontend
 npm install
+# Copy .env.example to .env and configure with your Spotify credentials
+cp .env.example .env
 npm run dev
 ```
+
+**Environment Variables** (frontend/.env):
+- `VITE_SPOTIFY_CLIENT_ID`: Your Spotify app Client ID
+- `VITE_SPOTIFY_CLIENT_SECRET`: Your Spotify app Client Secret
+- `VITE_SPOTIFY_REDIRECT_URI`: Must match the redirect URI in your Spotify app (default: `http://127.0.0.1:5173/callback`)
+- `VITE_TRACKWATCH_API_BASE_URL`: Backend API URL (default: `http://127.0.0.1:8000`)
+
+**Important:** Access the frontend at `http://127.0.0.1:5173` (not `localhost`) to match the Spotify redirect URI configuration.
 
 ## 📝 Usage
 1. Register and log in with your Spotify account.
