@@ -5,8 +5,8 @@ from .playlist_service import *
 from .email_service import *
 import datetime
 import traceback
-from app.classes.artist import Artist
 from app.models.user_recently_added_track import UserRecentlyAddedTrack
+from app.clients.spotify import get_followed_artists
 
 def update_new_releases_for_all_users(days_limit: int = System.FILTER_DAYS_LIMIT):
   users = get_all_users()
@@ -64,8 +64,9 @@ def get_user_with_valid_token(user):
 def find_new_releases_for_user(user, access_token, days_limit: int):
   new_releases = []
 
-  for followed_artist in user.followed_artists.all():
-    artist = Artist(followed_artist.artist_id, followed_artist.artist_name)
+  # Get followed artists from Spotify API instead of local database
+  followed_artists = get_followed_artists(access_token)
+  for artist in followed_artists:
     collect_artist_tracks(user, artist, access_token, new_releases, days_limit)
 
   return list(sort_tracks(new_releases))

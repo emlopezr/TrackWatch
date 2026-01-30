@@ -1,30 +1,16 @@
 import TrackWatchArtist from "../../types/trackwatch/TrackWatchArtist";
-import { TRACKWATCH_API_BASE_URL } from "../../common/constants";
 import TrackWatchUser from "../../types/trackwatch/TrackWatchUser";
+import { followArtistOnSpotify, unfollowArtistOnSpotify } from "../spotify/spotifyFollowing";
 
 export const followArtist = async (
     userData: TrackWatchUser,
     setUserData: (value: TrackWatchUser) => void,
     artist: TrackWatchArtist
 ) => {
-    try {
-        const response = await fetch(
-            `${TRACKWATCH_API_BASE_URL}/artists/follow?userId=${userData.id}`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-Spotify-Access-Token":
-                        localStorage.getItem("spotify_access_token") || "",
-                },
-                body: JSON.stringify({
-                    id: artist.id,
-                    name: artist.name,
-                }),
-            }
-        );
+    const accessToken = localStorage.getItem("spotify_access_token") || "";
 
-        if (!response.ok) throw new Error("Error following artist");
+    try {
+        await followArtistOnSpotify(accessToken, artist.id);
 
         setUserData({
             ...userData,
@@ -32,7 +18,8 @@ export const followArtist = async (
         });
 
         return true;
-    } catch {
+    } catch (error) {
+        console.error("Error following artist:", error);
         return false;
     }
 };
@@ -42,20 +29,10 @@ export const unfollowArtist = async (
     userData: TrackWatchUser,
     setUserData: (value: TrackWatchUser) => void
 ) => {
-    try {
-        const response = await fetch(
-            `${TRACKWATCH_API_BASE_URL}/artists/unfollow?userId=${userData.id}&artistId=${artistId}`,
-            {
-                method: "POST",
-                headers: {
-                    "X-Spotify-Access-Token":
-                        localStorage.getItem("spotify_access_token") || "",
-                },
-            }
-        );
+    const accessToken = localStorage.getItem("spotify_access_token") || "";
 
-        if (!response.ok)
-            throw new Error("Error unfollowing artist");
+    try {
+        await unfollowArtistOnSpotify(accessToken, artistId);
 
         setUserData({
             ...userData,
@@ -65,7 +42,8 @@ export const unfollowArtist = async (
         });
 
         return true;
-    } catch {
+    } catch (error) {
+        console.error("Error unfollowing artist:", error);
         return false;
     }
 };

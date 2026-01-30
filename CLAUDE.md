@@ -51,8 +51,12 @@ python manage.py makemigrations  # Create new migrations
 
 ### Database Models
 - `User` - Extended AbstractBaseUser with Spotify credentials and settings
-- `UserFollowedArtist` - Tracks artist follows per user
 - `UserRecentlyAddedTrack` - Prevents duplicate track additions to playlists
+
+### Artist Following
+- Followed artists are managed via Spotify API (source of truth)
+- Uses `user-follow-read` and `user-follow-modify` OAuth scopes
+- Client functions in `app/clients/spotify/spotify_follow_api_client.py`
 
 ## Key Endpoints
 
@@ -69,3 +73,10 @@ python manage.py makemigrations  # Create new migrations
 ## Environment Variables
 
 Frontend uses `VITE_*` prefixed variables. Backend requires Spotify API credentials, PostgreSQL connection, and Resend API key for email notifications.
+
+## Active Technologies
+- Python 3.10+ (Backend), TypeScript 5.6 (Frontend) + Django 5.2, Django REST Framework, React 18.3, Vite 6.4
+- PostgreSQL
+
+## Recent Changes
+- 001-spotify-artists-sync: Migrated followed artists from local database to Spotify API as source of truth. Removed `UserFollowedArtist` model. Added Spotify follow/unfollow API integration.

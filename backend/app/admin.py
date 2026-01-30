@@ -1,17 +1,11 @@
 from django.contrib import admin
-from .models import User, UserFollowedArtist, UserRecentlyAddedTrack
+from .models import User, UserRecentlyAddedTrack
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
   list_display = ['id', 'name', 'email', 'playlist_id']
   search_fields = ['name', 'email', 'id']
   readonly_fields = ['id']
-
-@admin.register(UserFollowedArtist)
-class UserFollowedArtistAdmin(admin.ModelAdmin):
-  list_display = ['user', 'artist_name', 'artist_id']
-  list_filter = ['user']
-  search_fields = ['artist_name', 'artist_id']
 
 @admin.register(UserRecentlyAddedTrack)
 class UserRecentlyAddedTrackAdmin(admin.ModelAdmin):

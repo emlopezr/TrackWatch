@@ -1,6 +1,15 @@
-from app.exceptions import BadRequestException, NotFoundException, ErrorCode
+from app.exceptions import NotFoundException, ErrorCode
 from .user_service import find_user_by_id
-from app.models import UserFollowedArtist
+from app.clients.spotify import get_followed_artists, follow_artist as spotify_follow_artist, unfollow_artist as spotify_unfollow_artist
+
+
+def get_user_followed_artists(access_token: str):
+  """
+  Get all artists the user follows on Spotify.
+  Returns a list of Artist objects.
+  """
+  return get_followed_artists(access_token)
+
 
 def follow_artist(user_id: str, artist, access_token: str):
   user = find_user_by_id(user_id)
@@ -9,15 +18,12 @@ def follow_artist(user_id: str, artist, access_token: str):
 
   user.validate_token(access_token)
 
-  if user.followed_artists.filter(artist_id=artist.id).exists():
-    raise BadRequestException(ErrorCode.USER_ALREADY_FOLLOWS_THIS_ARTIST)
+  # Follow artist on Spotify
+  spotify_follow_artist(access_token, artist.id)
 
-  UserFollowedArtist.objects.create(
-    user=user,
-    artist_id=artist.id,
-    artist_name=artist.name
-  )
-  return user.followed_artists.all()
+  # Return updated list from Spotify
+  return get_followed_artists(access_token)
+
 
 def unfollow_artist(user_id: str, artist_id: str, access_token: str):
   user = find_user_by_id(user_id)
@@ -26,9 +32,8 @@ def unfollow_artist(user_id: str, artist_id: str, access_token: str):
 
   user.validate_token(access_token)
 
-  artist_obj = user.followed_artists.filter(artist_id=artist_id).first()
-  if artist_obj is None:
-    raise BadRequestException(ErrorCode.USER_DOES_NOT_FOLLOW_THIS_ARTIST)
+  # Unfollow artist on Spotify
+  spotify_unfollow_artist(access_token, artist_id)
 
-  artist_obj.delete()
-  return user.followed_artists.all()
+  # Return updated list from Spotify
+  return get_followed_artists(access_token)
