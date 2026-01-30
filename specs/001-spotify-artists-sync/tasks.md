@@ -23,8 +23,8 @@
 
 **Purpose**: OAuth scope configuration and TypeScript types
 
-- [ ] T001 Update OAuth scopes to include `user-follow-read` and `user-follow-modify` in frontend/src/services/spotify/spotifyAuth.ts
-- [ ] T002 [P] Create SpotifyFollowedArtistsResponse type in frontend/src/types/spotify/SpotifyFollowedArtistsResponse.ts
+- [x] T001 Update OAuth scopes to include `user-follow-read` and `user-follow-modify` in frontend/src/common/constants.ts
+- [x] T002 [P] Create SpotifyFollowedArtistsResponse type in frontend/src/types/spotify/SpotifyFollowedArtistsResponse.ts
 
 ---
 
@@ -34,10 +34,10 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T003 Create get_followed_artists function with pagination in backend/app/clients/spotify/spotify_follow_api_client.py
-- [ ] T004 [P] Create follow_artist function in backend/app/clients/spotify/spotify_follow_api_client.py
-- [ ] T005 [P] Create unfollow_artist function in backend/app/clients/spotify/spotify_follow_api_client.py
-- [ ] T006 Export new client functions in backend/app/clients/spotify/__init__.py
+- [x] T003 Create get_followed_artists function with pagination in backend/app/clients/spotify/spotify_follow_api_client.py
+- [x] T004 [P] Create follow_artist function in backend/app/clients/spotify/spotify_follow_api_client.py
+- [x] T005 [P] Create unfollow_artist function in backend/app/clients/spotify/spotify_follow_api_client.py
+- [x] T006 Export new client functions in backend/app/clients/spotify/__init__.py
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 
@@ -51,11 +51,11 @@
 
 ### Implementation for User Story 1
 
-- [ ] T007 [P] [US1] Create getFollowedArtists service with pagination in frontend/src/services/spotify/spotifyFollowing.ts
-- [ ] T008 [P] [US1] Create get_user_followed_artists function using Spotify client in backend/app/services/artist_service.py
-- [ ] T009 [US1] Update search_followed_releases_use_case.py to use Spotify API instead of user.followed_artists.all() in backend/app/services/search_followed_releases_use_case.py
-- [ ] T010 [US1] Update frontend to call getFollowedArtists from Spotify service in frontend/src/services/trackwatch/trackwatchArtists.ts or relevant component
-- [ ] T011 [US1] Add error handling for empty artist list and network failures in frontend components
+- [x] T007 [P] [US1] Create getFollowedArtists service with pagination in frontend/src/services/spotify/spotifyFollowing.ts
+- [x] T008 [P] [US1] Create get_user_followed_artists function using Spotify client in backend/app/services/artist_service.py
+- [x] T009 [US1] Update search_followed_releases_use_case.py to use Spotify API instead of user.followed_artists.all() in backend/app/services/search_followed_releases_use_case.py
+- [x] T010 [US1] Update frontend to call getFollowedArtists from Spotify service in frontend/src/services/trackwatch/trackwatchArtists.ts or relevant component
+- [x] T011 [US1] Add error handling for empty artist list and network failures in frontend components
 
 **Checkpoint**: User Story 1 complete - users can view their Spotify followed artists
 
@@ -69,10 +69,10 @@
 
 ### Implementation for User Story 2
 
-- [ ] T012 [P] [US2] Create followArtistOnSpotify service function in frontend/src/services/spotify/spotifyFollowing.ts
-- [ ] T013 [US2] Update followArtist function to call Spotify API instead of backend in frontend/src/services/trackwatch/trackwatchArtists.ts
-- [ ] T014 [US2] Update backend follow_artist in backend/app/services/artist_service.py to call Spotify API (for consistency)
-- [ ] T015 [US2] Add success/error feedback for follow action in frontend UI components
+- [x] T012 [P] [US2] Create followArtistOnSpotify service function in frontend/src/services/spotify/spotifyFollowing.ts
+- [x] T013 [US2] Update followArtist function to call Spotify API instead of backend in frontend/src/services/trackwatch/trackwatchArtists.ts
+- [x] T014 [US2] Update backend follow_artist in backend/app/services/artist_service.py to call Spotify API (for consistency)
+- [x] T015 [US2] Add success/error feedback for follow action in frontend UI components
 
 **Checkpoint**: User Stories 1 AND 2 complete - users can view and follow artists
 
@@ -86,10 +86,10 @@
 
 ### Implementation for User Story 3
 
-- [ ] T016 [P] [US3] Create unfollowArtistOnSpotify service function in frontend/src/services/spotify/spotifyFollowing.ts
-- [ ] T017 [US3] Update unfollowArtist function to call Spotify API instead of backend in frontend/src/services/trackwatch/trackwatchArtists.ts
-- [ ] T018 [US3] Update backend unfollow_artist in backend/app/services/artist_service.py to call Spotify API (for consistency)
-- [ ] T019 [US3] Add success/error feedback for unfollow action in frontend UI components
+- [x] T016 [P] [US3] Create unfollowArtistOnSpotify service function in frontend/src/services/spotify/spotifyFollowing.ts
+- [x] T017 [US3] Update unfollowArtist function to call Spotify API instead of backend in frontend/src/services/trackwatch/trackwatchArtists.ts
+- [x] T018 [US3] Update backend unfollow_artist in backend/app/services/artist_service.py to call Spotify API (for consistency)
+- [x] T019 [US3] Add success/error feedback for unfollow action in frontend UI components
 
 **Checkpoint**: All user stories complete - full Spotify artist sync functionality
 
@@ -99,11 +99,11 @@
 
 **Purpose**: Remove deprecated local database table and model
 
-- [ ] T020 Remove UserFollowedArtist import from backend/app/models/__init__.py
-- [ ] T021 Delete UserFollowedArtist model file backend/app/models/user_followed_artist.py
-- [ ] T022 Run `python manage.py makemigrations` to generate migration for table removal
+- [x] T020 Remove UserFollowedArtist import from backend/app/models/__init__.py
+- [x] T021 Delete UserFollowedArtist model file backend/app/models/user_followed_artist.py
+- [x] T022 Run `python manage.py makemigrations` to generate migration for table removal
 - [ ] T023 Run `python manage.py migrate` to apply migration and drop table
-- [ ] T024 Remove any remaining references to UserFollowedArtist in backend codebase
+- [x] T024 Remove any remaining references to UserFollowedArtist in backend codebase
 
 ---
 
@@ -113,7 +113,7 @@
 
 - [ ] T025 Run quickstart.md validation steps (view artists, follow, unfollow)
 - [ ] T026 Verify background job works correctly with Spotify API (trigger manually)
-- [ ] T027 Update CLAUDE.md to remove UserFollowedArtist from Database Models section
+- [x] T027 Update CLAUDE.md to remove UserFollowedArtist from Database Models section
 
 ---
 

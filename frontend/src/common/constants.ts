@@ -17,4 +17,6 @@ export const SPOTIFY_SCOPES = [
     "user-read-email",
     "user-library-read",
     "ugc-image-upload",
+    "user-follow-read",
+    "user-follow-modify",
 ];

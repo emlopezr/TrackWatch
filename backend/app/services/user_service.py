@@ -2,6 +2,7 @@ from app.models import User
 from app.exceptions import BadRequestException, NotFoundException, ErrorCode
 from app.clients.spotify.spotify_user_api_client import get_spotify_user
 from app.clients.spotify.spotify_auth_api_client import refresh_access_token_with_retries
+from app.clients.spotify import get_followed_artists
 from .playlist_service import create_playlist_for_user, update_playlist_cover
 from .email_service import send_welcome_email
 from app.constants import Assets
@@ -35,7 +36,7 @@ def register_user(access_token: str, refresh_token: str):
   user.save()
 
   send_welcome_email(user)
-  return user_response_dict(user)
+  return user_response_dict(user, access_token)
 
 def get_current_user(access_token: str, refresh_token: str):
   spotify_user = get_spotify_user(access_token)
@@ -46,7 +47,7 @@ def get_current_user(access_token: str, refresh_token: str):
     raise NotFoundException(ErrorCode.USER_NOT_FOUND)
 
   user.update_tokens(access_token, refresh_token)
-  return user_response_dict(user)
+  return user_response_dict(user, access_token)
 
 def get_valid_access_token(user: User):
   refresh_token = user.current_refresh_token
@@ -70,7 +71,17 @@ def artist_to_dict(artist):
     "name": artist.artist_name if hasattr(artist, 'artist_name') else artist.name
   }
 
-def user_response_dict(user):
+def user_response_dict(user, access_token: str = None):
+  # Get followed artists from Spotify API if access token provided
+  followed_artists = []
+  if access_token:
+    try:
+      artists = get_followed_artists(access_token)
+      followed_artists = [artist_to_dict(a) for a in artists]
+    except Exception as e:
+      print(f"Error fetching followed artists from Spotify: {e}")
+      followed_artists = []
+
   return {
     "id": user.id,
     "playlist_id": user.playlist_id,
@@ -78,5 +89,5 @@ def user_response_dict(user):
     "name": user.name,
     "image_url": user.image_url,
     "settings": user_settings_to_dict(user),
-    "followed_artists": [artist_to_dict(a) for a in user.followed_artists.all()] or []
+    "followed_artists": followed_artists
   }

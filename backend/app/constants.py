@@ -29,7 +29,6 @@ class Domains:
 
 class Database:
   USER_TABLE = "users"
-  USER_FOLLOWED_ARTIST_TABLE = "users_followed_artists"
   USER_RECENTLY_ADDED_TRACKS_TABLE = "users_recently_added_tracks"
 
 class System:

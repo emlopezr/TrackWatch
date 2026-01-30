@@ -31,6 +31,8 @@ def spotify_api_request(method, endpoint, token=None, params=None, data=None, js
   )
 
   response.raise_for_status()
+  if response.status_code == 204:
+    return None
   return response.json()
 
 def spotify_auth_request(method, endpoint, params=None, data=None, auth=None):
