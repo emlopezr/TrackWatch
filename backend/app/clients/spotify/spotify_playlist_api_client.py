@@ -142,3 +142,76 @@ def map_response_to_track_uris(response):
     if track and track.get("uri"):
       uris.append(track["uri"])
   return uris
+
+
+def get_user_playlists(token):
+  playlists = []
+  offset = 0
+  limit = 50
+
+  try:
+    while True:
+      response = spotify_api_request(
+        method="GET",
+        endpoint="/me/playlists",
+        token=token,
+        params={"limit": limit, "offset": offset}
+      )
+      items = response.get("items", [])
+      for playlist in items:
+        if isinstance(playlist, dict):
+          playlists.append({
+            "id": playlist.get("id"),
+            "name": playlist.get("name"),
+            "images": playlist.get("images", []),
+            "tracks": playlist.get("tracks", {}),
+            "owner": playlist.get("owner", {})
+          })
+      offset += limit
+      total = response.get("total", 0)
+      if offset >= total:
+        break
+    return playlists
+  except Exception as e:
+    raise InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, str(e))
+
+
+def get_playlist_tracks_with_market(token, playlist_id, market):
+  tracks = []
+  offset = 0
+  limit = 50
+
+  try:
+    while True:
+      response = spotify_api_request(
+        method="GET",
+        endpoint=f"/playlists/{playlist_id}/tracks",
+        token=token,
+        params={"limit": limit, "offset": offset, "market": market}
+      )
+      items = response.get("items", [])
+      tracks.extend(items)
+      offset += limit
+      total = response.get("total", 0)
+      if offset >= total:
+        break
+    return tracks
+  except Exception as e:
+    raise InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, str(e))
+
+
+def remove_tracks_from_playlist(token, playlist_id, track_uris):
+  body = {
+    "tracks": [{"uri": uri} for uri in track_uris]
+  }
+
+  try:
+    response = spotify_api_request(
+      method="DELETE",
+      endpoint=f"/playlists/{playlist_id}/tracks",
+      token=token,
+      json_data=body
+    )
+    return response
+  except Exception as e:
+    raise InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, str(e))

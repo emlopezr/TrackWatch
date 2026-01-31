@@ -7,11 +7,12 @@ import LandingPage from '../../pages/LandingPage/LandingPage';
 import Spinner from '../../components/Spinner/Spinner';
 import HomePage from '../../pages/HomePage/HomePage';
 import GeneratorPage from '../../pages/GeneratorPage/GeneratorPage';
+import GhostTracksPage from '../../pages/GhostTracksPage/GhostTracksPage';
 import Sidebar from '../../layout/Sidebar/Sidebar';
 import Header from '../../layout/Header/Header';
 import './MainRoute.css';
 
-type PageType = 'home' | 'generator';
+type PageType = 'home' | 'generator' | 'ghost-tracks';
 
 const MainRoute = () => {
   const { userData, setUserData } = useUser();
@@ -86,6 +87,8 @@ const MainRoute = () => {
         />;
       case 'generator':
         return <GeneratorPage />;
+      case 'ghost-tracks':
+        return <GhostTracksPage />;
       default:
         return null;
     }

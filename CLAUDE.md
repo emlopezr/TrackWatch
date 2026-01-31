@@ -77,6 +77,8 @@ Frontend uses `VITE_*` prefixed variables. Backend requires Spotify API credenti
 ## Active Technologies
 - Python 3.10+ (Backend), TypeScript 5.6 (Frontend) + Django 5.2, Django REST Framework, React 18.3, Vite 6.4
 - PostgreSQL
+- Python 3.10+ (Backend), TypeScript 5.6 (Frontend) + Django 5.2, Django REST Framework, React 18.3, Vite 6.4, react-router-dom 7.5 (002-ghost-tracks)
+- PostgreSQL (existing) (002-ghost-tracks)
 
 ## Recent Changes
 - 001-spotify-artists-sync: Migrated followed artists from local database to Spotify API as source of truth. Removed `UserFollowedArtist` model. Added Spotify follow/unfollow API integration.

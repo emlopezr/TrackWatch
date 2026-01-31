@@ -1,12 +1,15 @@
 import requests
+import time
 
 SPOTIFY_API_BASE_URL = "https://api.spotify.com/v1"
 SPOTIFY_AUTH_BASE_URL = "https://accounts.spotify.com/api"
 
+MAX_RETRIES = 3
+BASE_BACKOFF_SECONDS = 1
+
 def get_spotify_api_session():
   session = requests.Session()
   session.headers.update({"Content-Type": "application/json"})
-  # Aquí podrías configurar tamaño de respuesta máxima si fuera necesario, requests lo maneja internamente bien
   return session
 
 def get_spotify_auth_session():
@@ -20,20 +23,32 @@ def spotify_api_request(method, endpoint, token=None, params=None, data=None, js
 
   if token: request_headers["Authorization"] = f"Bearer {token}"
 
-  response = requests.request(
-    method,
-    url,
-    params=params,
-    data=data,
-    json=json_data,
-    headers=request_headers,
-    timeout=(10, 60)
-  )
+  for attempt in range(MAX_RETRIES + 1):
+    response = requests.request(
+      method,
+      url,
+      params=params,
+      data=data,
+      json=json_data,
+      headers=request_headers,
+      timeout=(10, 60)
+    )
 
-  response.raise_for_status()
-  if response.status_code == 204:
-    return None
-  return response.json()
+    if response.status_code == 429:
+      if attempt < MAX_RETRIES:
+        retry_after = int(response.headers.get('Retry-After', BASE_BACKOFF_SECONDS))
+        wait_time = retry_after * (2 ** attempt)
+        time.sleep(wait_time)
+        continue
+      else:
+        response.raise_for_status()
+
+    response.raise_for_status()
+    if response.status_code == 204:
+      return None
+    return response.json()
+
+  return None
 
 def spotify_auth_request(method, endpoint, params=None, data=None, auth=None):
   url = f"{SPOTIFY_AUTH_BASE_URL}{endpoint}"

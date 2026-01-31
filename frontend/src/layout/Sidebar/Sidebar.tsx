@@ -2,11 +2,12 @@ import menuIcon from '../../assets/svg/menu.svg';
 import homeFilled from '../../assets/svg/home-filled.svg';
 import homeOutline from '../../assets/svg/home-outline.svg';
 import playlistIcon from '../../assets/svg/playlist.svg';
+import ghostIcon from '../../assets/png/ghost.png';
 import coffeeIcon from '../../assets/svg/coffee.svg';
 import closeIcon from '../../assets/svg/delete.svg';
 import './Sidebar.css';
 
-type PageType = 'home' | 'generator';
+type PageType = 'home' | 'generator' | 'ghost-tracks';
 
 interface SidebarProps {
   activePage: PageType;
@@ -69,6 +70,23 @@ const Sidebar = ({ activePage, sidebarOpen, isMobile, toggleSidebar, handlePageC
               className="sidebar__link-icon icon-white"
             />
             Generator
+          </a>
+
+          {/* Ghost Tracks Cleaner Link */}
+          <a
+            href="#ghost-tracks"
+            className={`sidebar__link ${activePage === 'ghost-tracks' ? 'active' : ''}`}
+            onClick={(e) => {
+              e.preventDefault();
+              handlePageChange('ghost-tracks');
+            }}
+          >
+            <img
+              src={ghostIcon}
+              alt="Ghost Tracks Cleaner"
+              className="sidebar__link-icon"
+            />
+            Ghost Tracks Cleaner
           </a>
 
           {/* Ko-fi Link */}
