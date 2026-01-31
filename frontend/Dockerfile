@@ -1,9 +1,4 @@
-# Frontend Dockerfile for TrackWatch
-# Multi-stage build: Node for building, Nginx for serving
-
-# ============================================
-# Stage 1: Build the React application
-# ============================================
+# Build the React application
 FROM node:20-alpine AS builder
 
 WORKDIR /app
@@ -33,9 +28,7 @@ ENV VITE_TRACKWATCH_API_BASE_URL=$VITE_TRACKWATCH_API_BASE_URL
 # Build the application
 RUN pnpm run build || npm run build
 
-# ============================================
-# Stage 2: Serve with Nginx
-# ============================================
+# Serve with Nginx
 FROM nginx:alpine
 
 # Remove default nginx config

@@ -1,6 +1,4 @@
-# Backend Dockerfile for TrackWatch
 # Uses Python 3.11 slim image for minimal footprint
-
 FROM python:3.11-slim
 
 # Set environment variables
