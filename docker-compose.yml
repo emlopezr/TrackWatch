@@ -1,0 +1,128 @@
+# TrackWatch Docker Compose Configuration
+# Self-hosted music release tracker with Spotify integration
+#
+# Usage:
+#   1. Copy .env.docker.example to .env and configure
+#   2. Run: docker-compose up -d
+#   3. Access at http://localhost
+
+services:
+  # ===========================================
+  # PostgreSQL Database
+  # ===========================================
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME:-trackwatch}
+      POSTGRES_USER: ${DATABASE_USER:-trackwatch}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:?Database password required}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER:-trackwatch} -d ${DATABASE_NAME:-trackwatch}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - trackwatch-network
+
+  # ===========================================
+  # Django Backend API
+  # ===========================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment: &backend-env
+      # Django settings
+      SECRET_KEY: ${SECRET_KEY:?Django secret key required}
+      DEBUG: ${DEBUG:-False}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-*}
+      
+      # Database connection (uses Docker service name)
+      DATABASE_NAME: ${DATABASE_NAME:-trackwatch}
+      DATABASE_USER: ${DATABASE_USER:-trackwatch}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:?Database password required}
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      
+      # Spotify API credentials
+      SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID:?Spotify Client ID required}
+      SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET:?Spotify Client Secret required}
+      
+      # Email service (optional)
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      
+      # Gunicorn configuration
+      GUNICORN_WORKERS: ${GUNICORN_WORKERS:-2}
+      GUNICORN_THREADS: ${GUNICORN_THREADS:-4}
+      GUNICORN_TIMEOUT: ${GUNICORN_TIMEOUT:-120}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - trackwatch-network
+
+  # ===========================================
+  # Background Task Scheduler (APScheduler)
+  # Runs release update checks on schedule
+  # ===========================================
+  scheduler:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    # Override entrypoint to run scheduler directly
+    entrypoint: []
+    command: ["python", "manage.py", "run_scheduler"]
+    environment:
+      <<: *backend-env
+      # Scheduler-specific configuration
+      SCHEDULER_HOURS: ${SCHEDULER_HOURS:-7,14,21}
+      SCHEDULER_MINUTE: ${SCHEDULER_MINUTE:-0}
+    depends_on:
+      db:
+        condition: service_healthy
+      backend:
+        condition: service_started
+    networks:
+      - trackwatch-network
+
+  # ===========================================
+  # React Frontend + Nginx Reverse Proxy
+  # ===========================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        # Build-time variables for Vite
+        VITE_SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID:?Spotify Client ID required}
+        VITE_SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET:?Spotify Client Secret required}
+        VITE_SPOTIFY_REDIRECT_URI: ${VITE_SPOTIFY_REDIRECT_URI:-http://127.0.0.1/callback}
+        VITE_TRACKWATCH_API_BASE_URL: ${VITE_TRACKWATCH_API_BASE_URL:-/api}
+    restart: unless-stopped
+    ports:
+      - "${PORT:-80}:80"
+    depends_on:
+      - backend
+    networks:
+      - trackwatch-network
+
+# ===========================================
+# Volumes
+# ===========================================
+volumes:
+  postgres_data:
+    name: trackwatch_postgres_data
+
+# ===========================================
+# Networks
+# ===========================================
+networks:
+  trackwatch-network:
+    name: trackwatch-network
+    driver: bridge

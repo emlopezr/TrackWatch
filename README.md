@@ -1,81 +1,215 @@
-# 🎶 TrackWatch
+# TrackWatch
 
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![Spotify](https://img.shields.io/badge/Spotify-1ED760?style=for-the-badge&logo=spotify&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)
-![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=green)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=000000)
-![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 
-Stay updated on the latest music releases from your favorite artists. TrackWatch connects with your Spotify account to automatically track your favorite artists, notify you of new releases and add their new releases to a playlist in your Spotify account.
+**Self-hosted music release tracker for Spotify users.** Never miss a new release from your favorite artists again.
 
-![image](https://github.com/user-attachments/assets/92061a4d-8d46-4487-9bba-ae62dfdb59de)
+![TrackWatch Preview](https://github.com/user-attachments/assets/92061a4d-8d46-4487-9bba-ae62dfdb59de)
 
----
+## Why TrackWatch?
 
-## 🚀 Features
-- **Spotify Integration:** Connect your Spotify account and track your favorite artists automatically.
-- **Automatic Notifications:** Receive alerts when your followed artists release new music.
-- **Playlist Automation:** New releases are added directly to a playlist in your Spotify account.
-- **Modern Web UI:** Built with React and TypeScript for a fast, responsive experience.
-- **Backend API:** Robust REST API built with Django and Django REST Framework.
-- **Task Scheduling:** Automated background jobs for periodic checks and notifications.
-- **Image Optimization:** Automated image compression for faster load times.
-- **Dependency Management:** Automated updates with Dependabot.
+- **Your data stays yours** - Self-hosted means no third-party tracking your listening habits
+- **Automatic playlist updates** - New releases are automatically added to your TrackWatch playlist
+- **Never miss a release** - Checks for new music multiple times daily
+- **Simple deployment** - Up and running in minutes with Docker
 
-## 🛠️ Tech Stack
-- **Frontend:** React, TypeScript, Vite, ESLint
-- **Backend:** Django, Django REST Framework, APScheduler, Gunicorn, WhiteNoise
-- **Database:** PostgreSQL
-
-## 📦 Getting Started
+## Quick Start (Docker)
 
 ### Prerequisites
-- Python 3.10+
-- Node.js 18+
-- PostgreSQL
-- Spotify Developer Account
 
-### Spotify App Configuration
+- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
+- A [Spotify Developer](https://developer.spotify.com/dashboard) account
 
-1. Create a Spotify app at [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
-2. In your Spotify app settings, add the following **Redirect URI**:
-   ```
-   http://127.0.0.1:5173/callback
-   ```
-   **Important:** Spotify no longer allows `http://localhost` as a redirect URI. You must use `127.0.0.1`.
-3. Note your **Client ID** and **Client Secret** for the environment configuration
+### 1. Clone the Repository
 
-### Backend Setup
 ```bash
-cd backend
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-# Set up your .env file with Spotify, DB and Resend credentials
-python manage.py migrate
-python manage.py runserver
+git clone https://github.com/emlopezr/trackwatch.git
+cd trackwatch
 ```
 
-### Frontend Setup
+### 2. Configure Environment
+
 ```bash
-cd frontend
-npm install
-# Copy .env.example to .env and configure with your Spotify credentials
-cp .env.example .env
-npm run dev
+cp .env.docker.example .env
 ```
 
-**Environment Variables** (frontend/.env):
-- `VITE_SPOTIFY_CLIENT_ID`: Your Spotify app Client ID
-- `VITE_SPOTIFY_CLIENT_SECRET`: Your Spotify app Client Secret
-- `VITE_SPOTIFY_REDIRECT_URI`: Must match the redirect URI in your Spotify app (default: `http://127.0.0.1:5173/callback`)
-- `VITE_TRACKWATCH_API_BASE_URL`: Backend API URL (default: `http://127.0.0.1:8000`)
+Edit `.env` with your configuration:
 
-**Important:** Access the frontend at `http://127.0.0.1:5173` (not `localhost`) to match the Spotify redirect URI configuration.
+```env
+# Required: Generate a secure secret key
+SECRET_KEY=your-random-secret-key
 
-## 📝 Usage
-1. Register and log in with your Spotify account.
-2. Select the artists you want to follow.
-3. TrackWatch will notify you and update your playlist automatically with new releases.
+# Required: Database credentials
+DATABASE_PASSWORD=your-secure-password
+
+# Required: Spotify API credentials (see Configuration section)
+SPOTIFY_CLIENT_ID=your-client-id
+SPOTIFY_CLIENT_SECRET=your-client-secret
+```
+
+### 3. Start TrackWatch
+
+```bash
+docker-compose up -d
+```
+
+That's it! Access TrackWatch at **http://127.0.0.1**
+
+### 4. Stop TrackWatch
+
+```bash
+docker-compose down
+```
+
+To also remove the database volume:
+```bash
+docker-compose down -v
+```
+
+## Configuration
+
+### Spotify Developer Setup
+
+1. Go to [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
+2. Click **Create App**
+3. Fill in the app details:
+   - **App name:** TrackWatch (or any name)
+   - **App description:** Your description
+   - **Redirect URI:** `http://127.0.0.1/callback`
+   - **Which API/SDKs are you planning to use?** Web API
+4. Click **Settings** and note your **Client ID** and **Client Secret**
+5. Add these to your `.env` file
+
+> **Important:** Spotify does not allow `localhost` as a redirect URI. You must use `127.0.0.1` for local development, or `https://` for custom domains.
+
+### Custom Domain
+
+If deploying to a custom domain:
+
+1. Update the redirect URI in your Spotify app settings to match your domain:
+   ```
+   https://your-domain.com/callback
+   ```
+
+2. Update your `.env`:
+   ```env
+   VITE_SPOTIFY_REDIRECT_URI=https://your-domain.com/callback
+   ```
+
+3. Rebuild the frontend:
+   ```bash
+   docker-compose up -d --build frontend
+   ```
+
+### Environment Variables Reference
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `SECRET_KEY` | Yes | - | Django secret key for security |
+| `DATABASE_PASSWORD` | Yes | - | PostgreSQL password |
+| `SPOTIFY_CLIENT_ID` | Yes | - | From Spotify Developer Dashboard |
+| `SPOTIFY_CLIENT_SECRET` | Yes | - | From Spotify Developer Dashboard |
+| `VITE_SPOTIFY_REDIRECT_URI` | No | `http://127.0.0.1/callback` | OAuth callback URL |
+| `PORT` | No | `80` | Frontend port |
+| `DEBUG` | No | `False` | Django debug mode |
+| `SCHEDULER_HOURS` | No | `7,14,21` | Hours to check for releases (24h) |
+| `SCHEDULER_MINUTE` | No | `0` | Minute of the hour to run |
+| `RESEND_API_KEY` | No | - | For email notifications |
+
+## Features
+
+- **Spotify Integration** - Connect your Spotify account securely via OAuth
+- **Artist Tracking** - Follow artists and track their releases automatically
+- **Automatic Playlist** - New releases are added to a dedicated TrackWatch playlist
+- **Ghost Track Detection** - Find and remove unavailable tracks from your playlists
+- **Scheduled Checks** - Automatically checks for new releases 3x daily (7am, 2pm, 9pm)
+
+## Architecture
+
+```
+┌──────────────────────────────────────────────────────────────────────────┐
+│                              Docker                                      │
+├─────────────┬─────────────────────┬─────────────────┬────────────────────┤
+│   Frontend  │      Backend        │    Scheduler    │     Database       │
+│   (Nginx)   │     (Gunicorn)      │   (APScheduler) │    (PostgreSQL)    │
+│             │                     │                 │                    │
+│  React SPA  │     REST API        │   Background    │   User data +      │
+│  + Reverse  │  + Spotify Auth     │   task runner   │   Track history    │
+│    Proxy    │                     │                 │                    │
+└─────────────┴─────────────────────┴─────────────────┴────────────────────┘
+```
+
+### Background Tasks
+
+The `scheduler` service runs independently from the web server, checking for new releases at configured times (default: 7am, 2pm, 9pm).
+
+**Alternative: External Triggers**
+
+If you prefer external scheduling (e.g., n8n, system cron), you can:
+1. Stop the scheduler service: `docker-compose stop scheduler`
+2. Trigger updates via webhook:
+   ```bash
+   curl -X POST http://localhost/api/actions/releases \
+     -H "X-Admin-Key: YOUR_SECRET_KEY"
+   ```
+
+## Development
+
+For local development without Docker, see [docs/MANUAL_SETUP.md](docs/MANUAL_SETUP.md).
+
+### Tech Stack
+
+- **Frontend:** React 18, TypeScript, Vite, React Router 7
+- **Backend:** Django 5, Django REST Framework, APScheduler, Gunicorn
+- **Database:** PostgreSQL 15
+- **Deployment:** Docker, Nginx
+
+## Troubleshooting
+
+### "Invalid redirect URI" error
+
+Ensure the redirect URI in your Spotify app settings matches exactly:
+- For local Docker: `http://127.0.0.1/callback`
+- For custom domain: `https://your-domain.com/callback`
+
+> **Note:** Spotify does not allow `localhost` - use `127.0.0.1` instead. Custom domains require HTTPS.
+
+### Container won't start
+
+Check logs:
+```bash
+docker-compose logs backend
+docker-compose logs frontend
+docker-compose logs scheduler
+```
+
+### Database connection issues
+
+Ensure the database is healthy:
+```bash
+docker-compose ps
+```
+
+If `db` shows unhealthy, check PostgreSQL logs:
+```bash
+docker-compose logs db
+```
+
+### Reset everything
+
+```bash
+docker-compose down -v
+docker-compose up -d --build
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is provided as-is for personal use. See [EULA](legal/eula.md) and [Privacy Policy](legal/privacy.md).

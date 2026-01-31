@@ -592,3 +592,21 @@ fabric.properties
 .idea
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij
+
+# ===========================================
+# Docker
+# ===========================================
+# Docker environment files (may contain secrets)
+.env
+.env.local
+.env.*.local
+!.env.example
+!.env.docker.example
+
+# Docker build artifacts
+docker-compose.override.yml
+docker-compose.*.yml
+!docker-compose.yml
+
+# Docker volumes (if stored locally)
+.docker/
