@@ -40,10 +40,6 @@
   cursor: pointer;
   transition: all 0.2s ease;
   border: none;
-  -webkit-border-radius:;
-  -moz-border-radius:;
-  -ms-border-radius:;
-  -o-border-radius:;
 }
 
 .ghost-tracks-page__btn--primary {
