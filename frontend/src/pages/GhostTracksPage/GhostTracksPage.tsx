@@ -27,7 +27,7 @@ const GhostTracksPage = () => {
   // Playlist selection state
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
   const [selectedPlaylistIds, setSelectedPlaylistIds] = useState<Set<string>>(new Set());
-  const [isLoadingPlaylists, setIsLoadingPlaylists] = useState(false);
+  const [isLoadingPlaylists, setIsLoadingPlaylists] = useState(true);
 
   // Scanning state
   const [isScanning, setIsScanning] = useState(false);
@@ -252,6 +252,10 @@ const GhostTracksPage = () => {
 
       {phase === 'select' && (
         <div className="ghost-tracks-page__select-phase">
+          <p className="ghost-tracks-page__description">
+            Find and remove unplayable tracks from your playlists. Select the playlists you want to scan for ghost tracks.
+          </p>
+
           {isLoadingPlaylists ? (
             <div className="ghost-tracks-page__loading">
               <Spinner />
@@ -259,10 +263,6 @@ const GhostTracksPage = () => {
             </div>
           ) : (
             <>
-              <p className="ghost-tracks-page__description">
-                Find and remove unplayable tracks from your playlists. Select the playlists you want to scan for ghost tracks.
-              </p>
-
               <PlaylistSelector
                 playlists={playlists}
                 selectedIds={selectedPlaylistIds}
