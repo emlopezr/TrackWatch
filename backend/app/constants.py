@@ -17,6 +17,10 @@ class Endpoints:
   PRIVACY = "privacy"
   TOGGLE_PLAYLIST_UPDATES = "users/<id>/playlist-updates"
 
+  GHOST_TRACKS_PLAYLISTS = "ghost-tracks/playlists"
+  GHOST_TRACKS_SCAN = "ghost-tracks/scan"
+  GHOST_TRACKS_REMOVE = "ghost-tracks/remove"
+
 class AppInfo:
   APP_NAME = "TrackWatch"
   DOMAIN = "emlopezr.com"

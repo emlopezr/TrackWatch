@@ -32,11 +32,19 @@ legal_urlpatterns = [
   path(Endpoints.PRIVACY, views.get_privacy_policy, name='privacy'),
 ]
 
+# Ghost Tracks endpoints
+ghost_tracks_urlpatterns = [
+  path(Endpoints.GHOST_TRACKS_PLAYLISTS, views.get_playlists, name='ghost_tracks_playlists'),
+  path(Endpoints.GHOST_TRACKS_SCAN, views.scan_ghost_tracks, name='ghost_tracks_scan'),
+  path(Endpoints.GHOST_TRACKS_REMOVE, views.remove_ghost_tracks, name='ghost_tracks_remove'),
+]
+
 # Combine all URL patterns
 urlpatterns = (
   health_urlpatterns +
   action_urlpatterns +
   artist_urlpatterns +
   user_urlpatterns +
-   legal_urlpatterns
+  legal_urlpatterns +
+  ghost_tracks_urlpatterns
 )

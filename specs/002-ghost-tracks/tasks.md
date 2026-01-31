@@ -24,9 +24,9 @@
 
 **Purpose**: TypeScript types and frontend service foundation
 
-- [ ] T001 [P] Create TypeScript interfaces for Playlist, GhostTrack, ScanResult, RemovalResult in `frontend/src/types/trackwatch/GhostTrack.ts`
-- [ ] T002 [P] Create ghost tracks API service file with base structure in `frontend/src/services/trackwatch/ghostTracks.ts`
-- [ ] T003 [P] Add Ghost Tracks route to React Router in `frontend/src/App.tsx`
+- [x] T001 [P] Create TypeScript interfaces for Playlist, GhostTrack, ScanResult, RemovalResult in `frontend/src/types/trackwatch/GhostTrack.ts`
+- [x] T002 [P] Create ghost tracks API service file with base structure in `frontend/src/services/trackwatch/ghostTracks.ts`
+- [x] T003 [P] Add Ghost Tracks route to React Router in `frontend/src/routes/MainRoute/MainRoute.tsx`
 
 ---
 
@@ -36,12 +36,12 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Add `get_user_playlists` function with pagination to `backend/app/clients/spotify/spotify_playlist_api_client.py`
-- [ ] T005 Add `get_playlist_tracks_with_market` function (returns is_playable field) to `backend/app/clients/spotify/spotify_playlist_api_client.py`
-- [ ] T006 Add `remove_tracks_from_playlist` function to `backend/app/clients/spotify/spotify_playlist_api_client.py`
-- [ ] T007 Implement retry logic with exponential backoff for 429 responses in `backend/app/clients/spotify/spotify_api_client.py`
-- [ ] T008 Create ghost tracks service file with helper functions in `backend/app/services/ghost_tracks_service.py`
-- [ ] T009 Create ghost tracks view file and register URL routes in `backend/app/views/ghost_tracks_view.py` and `backend/app/urls.py`
+- [x] T004 Add `get_user_playlists` function with pagination to `backend/app/clients/spotify/spotify_playlist_api_client.py`
+- [x] T005 Add `get_playlist_tracks_with_market` function (returns is_playable field) to `backend/app/clients/spotify/spotify_playlist_api_client.py`
+- [x] T006 Add `remove_tracks_from_playlist` function to `backend/app/clients/spotify/spotify_playlist_api_client.py`
+- [x] T007 Implement retry logic with exponential backoff for 429 responses in `backend/app/clients/spotify/spotify_api_client.py`
+- [x] T008 Create ghost tracks service file with helper functions in `backend/app/services/ghost_tracks_service.py`
+- [x] T009 Create ghost tracks view file and register URL routes in `backend/app/views/ghost_tracks_view.py` and `backend/app/urls.py`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 
@@ -55,24 +55,24 @@
 
 ### Backend Implementation for User Story 1
 
-- [ ] T010 [US1] Implement `get_owned_playlists` function that filters by owner.id in `backend/app/services/ghost_tracks_service.py`
-- [ ] T011 [US1] Implement `scan_playlist_for_ghost_tracks` function that detects is_playable=false tracks in `backend/app/services/ghost_tracks_service.py`
-- [ ] T012 [US1] Implement `scan_playlists_parallel` function using ThreadPoolExecutor (max 3 workers) in `backend/app/services/ghost_tracks_service.py`
-- [ ] T013 [US1] Implement GET `/ghost-tracks/playlists` endpoint in `backend/app/views/ghost_tracks_view.py`
-- [ ] T014 [US1] Implement POST `/ghost-tracks/scan` endpoint in `backend/app/views/ghost_tracks_view.py`
+- [x] T010 [US1] Implement `get_owned_playlists` function that filters by owner.id in `backend/app/services/ghost_tracks_service.py`
+- [x] T011 [US1] Implement `scan_playlist_for_ghost_tracks` function that detects is_playable=false tracks in `backend/app/services/ghost_tracks_service.py`
+- [x] T012 [US1] Implement `scan_playlists_parallel` function using ThreadPoolExecutor (max 3 workers) in `backend/app/services/ghost_tracks_service.py`
+- [x] T013 [US1] Implement GET `/ghost-tracks/playlists` endpoint in `backend/app/views/ghost_tracks_view.py`
+- [x] T014 [US1] Implement POST `/ghost-tracks/scan` endpoint in `backend/app/views/ghost_tracks_view.py`
 
 ### Frontend Implementation for User Story 1
 
-- [ ] T015 [P] [US1] Implement `getOwnedPlaylists` API call in `frontend/src/services/trackwatch/ghostTracks.ts`
-- [ ] T016 [P] [US1] Implement `scanGhostTracks` API call in `frontend/src/services/trackwatch/ghostTracks.ts`
-- [ ] T017 [P] [US1] Create PlaylistSelector component directory and files in `frontend/src/components/PlaylistSelector/PlaylistSelector.tsx` and `PlaylistSelector.css`
-- [ ] T018 [US1] Implement PlaylistSelector with multi-select checkboxes and playlist images in `frontend/src/components/PlaylistSelector/PlaylistSelector.tsx`
-- [ ] T019 [P] [US1] Create GhostTrackList component directory and files in `frontend/src/components/GhostTrackList/GhostTrackList.tsx` and `GhostTrackList.css`
-- [ ] T020 [US1] Implement GhostTrackList displaying tracks grouped by playlist (read-only view) in `frontend/src/components/GhostTrackList/GhostTrackList.tsx`
-- [ ] T021 [P] [US1] Create GhostTracksPage directory and files in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx` and `GhostTracksPage.css`
-- [ ] T022 [US1] Implement GhostTracksPage with playlist loading, selection, scan button, and results display in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
-- [ ] T023 [US1] Add loading spinner and progress indication during scan in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
-- [ ] T024 [US1] Add "No ghost tracks found" success message when scan returns empty results in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
+- [x] T015 [P] [US1] Implement `getOwnedPlaylists` API call in `frontend/src/services/trackwatch/ghostTracks.ts`
+- [x] T016 [P] [US1] Implement `scanGhostTracks` API call in `frontend/src/services/trackwatch/ghostTracks.ts`
+- [x] T017 [P] [US1] Create PlaylistSelector component directory and files in `frontend/src/components/PlaylistSelector/PlaylistSelector.tsx` and `PlaylistSelector.css`
+- [x] T018 [US1] Implement PlaylistSelector with multi-select checkboxes and playlist images in `frontend/src/components/PlaylistSelector/PlaylistSelector.tsx`
+- [x] T019 [P] [US1] Create GhostTrackList component directory and files in `frontend/src/components/GhostTrackList/GhostTrackList.tsx` and `GhostTrackList.css`
+- [x] T020 [US1] Implement GhostTrackList displaying tracks grouped by playlist (read-only view) in `frontend/src/components/GhostTrackList/GhostTrackList.tsx`
+- [x] T021 [P] [US1] Create GhostTracksPage directory and files in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx` and `GhostTracksPage.css`
+- [x] T022 [US1] Implement GhostTracksPage with playlist loading, selection, scan button, and results display in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
+- [x] T023 [US1] Add loading spinner and progress indication during scan in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
+- [x] T024 [US1] Add "No ghost tracks found" success message when scan returns empty results in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
 
 **Checkpoint**: User Story 1 complete - users can scan playlists and see ghost tracks
 
@@ -86,12 +86,12 @@
 
 ### Frontend Implementation for User Story 2
 
-- [ ] T025 [US2] Add selection state management (selectedTrackKeys Set) to GhostTracksPage in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
-- [ ] T026 [US2] Add checkbox and onClick selection toggle to GhostTrackList items in `frontend/src/components/GhostTrackList/GhostTrackList.tsx`
-- [ ] T027 [US2] Add Select All / Deselect All buttons per playlist in `frontend/src/components/GhostTrackList/GhostTrackList.tsx`
-- [ ] T028 [US2] Add global Select All / Deselect All buttons in GhostTracksPage in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
-- [ ] T029 [US2] Style selected tracks with visual highlight in `frontend/src/components/GhostTrackList/GhostTrackList.css`
-- [ ] T030 [US2] Add selection count display showing "X of Y selected" in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
+- [x] T025 [US2] Add selection state management (selectedTrackKeys Set) to GhostTracksPage in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
+- [x] T026 [US2] Add checkbox and onClick selection toggle to GhostTrackList items in `frontend/src/components/GhostTrackList/GhostTrackList.tsx`
+- [x] T027 [US2] Add Select All / Deselect All buttons per playlist in `frontend/src/components/GhostTrackList/GhostTrackList.tsx`
+- [x] T028 [US2] Add global Select All / Deselect All buttons in GhostTracksPage in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
+- [x] T029 [US2] Style selected tracks with visual highlight in `frontend/src/components/GhostTrackList/GhostTrackList.css`
+- [x] T030 [US2] Add selection count display showing "X of Y selected" in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
 
 **Checkpoint**: User Story 2 complete - users can select tracks for removal
 
@@ -105,17 +105,17 @@
 
 ### Backend Implementation for User Story 3
 
-- [ ] T031 [US3] Implement `remove_tracks_from_playlists` function handling batches of 100 tracks in `backend/app/services/ghost_tracks_service.py`
-- [ ] T032 [US3] Implement POST `/ghost-tracks/remove` endpoint in `backend/app/views/ghost_tracks_view.py`
+- [x] T031 [US3] Implement `remove_tracks_from_playlists` function handling batches of 100 tracks in `backend/app/services/ghost_tracks_service.py`
+- [x] T032 [US3] Implement POST `/ghost-tracks/remove` endpoint in `backend/app/views/ghost_tracks_view.py`
 
 ### Frontend Implementation for User Story 3
 
-- [ ] T033 [P] [US3] Implement `removeGhostTracks` API call in `frontend/src/services/trackwatch/ghostTracks.ts`
-- [ ] T034 [US3] Add "Remove Selected" button (disabled when no selection) to GhostTracksPage in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
-- [ ] T035 [US3] Add loading state and progress indication during removal in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
-- [ ] T036 [US3] Implement summary modal showing removed/failed counts per playlist in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
-- [ ] T037 [US3] Implement return to playlist selection on modal dismiss in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
-- [ ] T038 [US3] Handle partial failure - display which tracks succeeded and which failed in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
+- [x] T033 [P] [US3] Implement `removeGhostTracks` API call in `frontend/src/services/trackwatch/ghostTracks.ts`
+- [x] T034 [US3] Add "Remove Selected" button (disabled when no selection) to GhostTracksPage in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
+- [x] T035 [US3] Add loading state and progress indication during removal in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
+- [x] T036 [US3] Implement summary modal showing removed/failed counts per playlist in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
+- [x] T037 [US3] Implement return to playlist selection on modal dismiss in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
+- [x] T038 [US3] Handle partial failure - display which tracks succeeded and which failed in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
 
 **Checkpoint**: User Story 3 complete - full feature is functional
 
@@ -125,10 +125,10 @@
 
 **Purpose**: Edge cases, error handling, and UX improvements
 
-- [ ] T039 [P] Add error handling for Spotify token expiration with refresh attempt in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
-- [ ] T040 [P] Add warning when all tracks in a playlist are selected for removal in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
-- [ ] T041 [P] Add navigation link to Ghost Tracks tab in main navigation in `frontend/src/layout/` (appropriate nav component)
-- [ ] T042 Validate country code parameter (ISO 3166-1 alpha-2 format) in backend scan endpoint in `backend/app/views/ghost_tracks_view.py`
+- [x] T039 [P] Add error handling for Spotify token expiration with refresh attempt in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
+- [x] T040 [P] Add warning when all tracks in a playlist are selected for removal in `frontend/src/pages/GhostTracksPage/GhostTracksPage.tsx`
+- [x] T041 [P] Add navigation link to Ghost Tracks tab in main navigation in `frontend/src/layout/Sidebar/Sidebar.tsx`
+- [x] T042 Validate country code parameter (ISO 3166-1 alpha-2 format) in backend scan endpoint in `backend/app/views/ghost_tracks_view.py`
 - [ ] T043 Run manual testing per quickstart.md checklist
 
 ---

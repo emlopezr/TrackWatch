@@ -1,0 +1,223 @@
+.ghost-tracks-page__title {
+  margin-bottom: 1rem;
+}
+
+.ghost-tracks-page__description {
+  color: color-mix(in srgb, var(--white) 70%, transparent);
+  margin-bottom: 1.5rem;
+  margin-top: 0rem;
+  line-height: 1.5;
+}
+
+.ghost-tracks-page__select-phase {
+  position: relative;
+}
+
+.ghost-tracks-page__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  gap: 1rem;
+}
+
+.ghost-tracks-page__loading p {
+  color: color-mix(in srgb, var(--white) 70%, transparent);
+}
+
+.ghost-tracks-page__actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.ghost-tracks-page__btn {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  -webkit-border-radius:;
+  -moz-border-radius:;
+  -ms-border-radius:;
+  -o-border-radius:;
+}
+
+.ghost-tracks-page__btn--primary {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+.ghost-tracks-page__btn--primary:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--primary) 80%, black);
+}
+
+.ghost-tracks-page__btn--secondary {
+  background-color: var(--card);
+  color: var(--white);
+  border: 1px solid color-mix(in srgb, var(--white) 20%, transparent);
+}
+
+.ghost-tracks-page__btn--secondary:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--card) 70%, white);
+}
+
+.ghost-tracks-page__btn--danger {
+  background-color: var(--red);
+  color: var(--white);
+}
+
+.ghost-tracks-page__btn--danger:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--red) 80%, black);
+}
+
+.ghost-tracks-page__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* T023, T035: Loading overlay */
+.ghost-tracks-page__loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--overlay);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  gap: 1rem;
+  backdrop-filter: blur(5px);
+}
+
+.ghost-tracks-page__loading-message {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.ghost-tracks-page__loading-submessage {
+  font-size: 0.9rem;
+  color: color-mix(in srgb, var(--white) 70%, transparent);
+}
+
+/* Results phase */
+.ghost-tracks-page__results-phase {
+  position: relative;
+}
+
+.ghost-tracks-page__results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.ghost-tracks-page__results-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.ghost-tracks-page__results-count {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.ghost-tracks-page__scan-time {
+  font-size: 0.85rem;
+  color: color-mix(in srgb, var(--white) 60%, transparent);
+}
+
+/* T028, T030: Selection controls */
+.ghost-tracks-page__selection-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--card);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.ghost-tracks-page__selection-info {
+  font-weight: 500;
+  color: var(--white);
+}
+
+.ghost-tracks-page__selection-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* T036: Removal summary modal */
+.ghost-tracks-page__removal-summary {
+  text-align: left;
+}
+
+.ghost-tracks-page__removal-summary p {
+  margin: 0.5rem 0;
+}
+
+.ghost-tracks-page__removal-failed {
+  color: var(--red);
+}
+
+.ghost-tracks-page__removal-details {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--white) 20%, transparent);
+}
+
+.ghost-tracks-page__removal-playlist {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--white) 10%, transparent);
+}
+
+.ghost-tracks-page__removal-playlist:last-child {
+  border-bottom: none;
+}
+
+.ghost-tracks-page__removal-playlist-name {
+  font-weight: 500;
+}
+
+.ghost-tracks-page__removal-playlist-count {
+  color: color-mix(in srgb, var(--white) 70%, transparent);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .ghost-tracks-page__results-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ghost-tracks-page__results-summary {
+    align-items: flex-start;
+  }
+
+  .ghost-tracks-page__selection-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ghost-tracks-page__selection-actions {
+    justify-content: center;
+  }
+}
