@@ -2,6 +2,13 @@
   margin-bottom: 1rem;
 }
 
+.generator-page__description {
+  color: color-mix(in srgb, var(--white) 70%, transparent);
+  margin-bottom: 1.5rem;
+  margin-top: 0rem;
+  line-height: 1.5;
+}
+
 .generator-page__search-container {
   position: relative;
   width: 100%;

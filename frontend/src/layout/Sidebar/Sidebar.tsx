@@ -66,10 +66,10 @@ const Sidebar = ({ activePage, sidebarOpen, isMobile, toggleSidebar, handlePageC
           >
             <img
               src={playlistIcon}
-              alt="Generator"
+              alt="Playlist Generator"
               className="sidebar__link-icon icon-white"
             />
-            Generator
+            Playlist Generator
           </a>
 
           {/* Ghost Tracks Cleaner Link */}

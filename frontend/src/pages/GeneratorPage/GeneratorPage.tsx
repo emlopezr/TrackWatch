@@ -100,6 +100,10 @@ const GeneratorPage = () => {
     <>
       <h1 className="generator-page__title">Playlist Generator</h1>
 
+      <p className="generator-page__description">
+        Generate a complete playlist with every track from your favorite artist. Search for an artist and create your personalized collection.
+      </p>
+
       <div className="generator-page__search-container">
         <SearchBar
           ref={searchBarRef}

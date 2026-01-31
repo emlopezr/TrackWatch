@@ -270,15 +270,17 @@ const GhostTracksPage = () => {
                 disabled={isScanning}
               />
 
-              <div className="ghost-tracks-page__actions">
-                <button
-                  className="ghost-tracks-page__btn ghost-tracks-page__btn--primary"
-                  onClick={handleScan}
-                  disabled={selectedPlaylistIds.size === 0 || isScanning}
-                >
-                  {isScanning ? 'Scanning...' : 'Scan for Ghost Tracks'}
-                </button>
-              </div>
+              {selectedPlaylistIds.size > 0 && (
+                <div className="ghost-tracks-page__actions">
+                  <button
+                    className="ghost-tracks-page__btn ghost-tracks-page__btn--primary"
+                    onClick={handleScan}
+                    disabled={selectedPlaylistIds.size === 0 || isScanning}
+                  >
+                    {isScanning ? 'Scanning...' : 'Scan for Ghost Tracks'}
+                  </button>
+                </div>
+              )}
             </>
           )}
 
