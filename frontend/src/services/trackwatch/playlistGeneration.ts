@@ -3,15 +3,9 @@ import { TRACKWATCH_API_BASE_URL } from "../../common/constants";
 export interface GeneratePlaylistResponse {
   message: string;
   playlistId: string;
+  artistImageUrl: string;
 }
 
-/**
- * Generates a playlist based on the selected artist
- * @param accessToken Spotify access token
- * @param userId User ID from TrackWatch
- * @param artistId Artist ID from Spotify
- * @returns Promise with the API response
- */
 export const generatePlaylist = async (
   accessToken: string,
   userId: string,

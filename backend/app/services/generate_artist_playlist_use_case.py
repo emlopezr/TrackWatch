@@ -16,7 +16,11 @@ def generate_artist_playlist(user_id, artist_id, playlist_id, access_token):
   update_playlist_content(user, final_playlist_id, filtered_tracks, artist.image_url)
 
   print(f"Playlist generated for artist: {artist.name}")
-  return final_playlist_id
+
+  return {
+    "playlist_id": final_playlist_id,
+    "artist_image_url": artist.image_url
+  }
 
 def retrieve_and_validate_user(user_id, access_token):
   user = find_user_by_id(user_id)
@@ -87,10 +91,10 @@ def update_playlist_content(user, playlist_id, tracks, cover_image_url):
     tracks,
     filter_uris_by_saved_by_user=False
   )
-  # try:
-  #   update_playlist_cover(user, playlist_id, cover_image_url)
-  # except Exception:
-  #   print(f"Failed to upload playlist cover for playlist: {playlist_id}")
+  try:
+    update_playlist_cover(user, playlist_id, cover_image_url)
+  except Exception:
+    print(f"Failed to upload playlist cover for playlist: {playlist_id}")
 
 def filter_tracks(artist, tracks):
   return [track for track in tracks if is_correct_artist(track, artist)]

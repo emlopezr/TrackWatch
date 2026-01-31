@@ -44,7 +44,7 @@ def spotify_api_request(method, endpoint, token=None, params=None, data=None, js
         response.raise_for_status()
 
     response.raise_for_status()
-    if response.status_code == 204:
+    if response.status_code in (202, 204):
       return None
     return response.json()
 

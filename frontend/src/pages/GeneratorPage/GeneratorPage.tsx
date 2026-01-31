@@ -71,10 +71,24 @@ const GeneratorPage = () => {
       setModalData({
         title: 'Playlist created!',
         content: (
-          <>
-            Playlist has been successfully generated! Enjoy all the tracks from {selectedArtist.name}! :)
-            <br />
-          </>
+          <div className="generator-page__modal-content">
+            <a
+              href={link}
+              target="_blank"
+              rel="noreferrer"
+              className="generator-page__modal-image-link"
+            >
+              <img
+                src={response.artistImageUrl}
+                alt={selectedArtist.name}
+                className="generator-page__modal-image"
+              />
+              <span className="generator-page__modal-spotify-badge">
+                <img src={spotifyLogo} alt="Spotify" />
+              </span>
+            </a>
+            <p>Playlist has been successfully generated! Enjoy all the tracks from {selectedArtist.name}! :)</p>
+          </div>
         ),
         type: 'success',
         secondaryButtonText: 'View on Spotify',
@@ -141,18 +155,20 @@ const GeneratorPage = () => {
         )}
       </div>
 
-      <div className="generator-page__selected-artist">
-        {isGenerating && (
-          <div className="generator-page__loading-overlay">
-            <div className="generator-page__loading-message">
-              Generating playlist...
-            </div>
-            <div className="generator-page__loading-submessage">
-              This may take a while as we process all the artist's tracks...
-            </div>
-            <Spinner />
+      {/* Loading overlay during playlist generation */}
+      {isGenerating && (
+        <div className="generator-page__loading-overlay">
+          <div className="generator-page__loading-message">
+            Generating playlist...
           </div>
-        )}
+          <div className="generator-page__loading-submessage">
+            This may take a while as we process all the artist's tracks...
+          </div>
+          <Spinner />
+        </div>
+      )}
+
+      <div className="generator-page__selected-artist">
         <div className="generator-page__artist-image-large">
           {selectedArtist ? (
             <a

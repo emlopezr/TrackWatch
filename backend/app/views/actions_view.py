@@ -14,8 +14,13 @@ def generate_artist_playlist(request):
   playlist_id = request.GET.get('playlistId')
   access_token = request.headers.get(Headers.SPOTIFY_ACCESS_TOKEN)
 
-  playlist_id = generate_artist_playlist_use_case(user_id, artist_id, playlist_id, access_token)
-  return JsonResponse({"message": "Playlist generated", "playlistId": playlist_id})
+  result = generate_artist_playlist_use_case(user_id, artist_id, playlist_id, access_token)
+
+  return JsonResponse({
+    "message": "Playlist generated",
+    "playlistId": result["playlist_id"],
+    "artistImageUrl": result["artist_image_url"]
+  })
 
 
 @require_POST

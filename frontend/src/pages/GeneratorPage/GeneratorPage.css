@@ -208,42 +208,32 @@
   background-color: color-mix(in srgb, var(--primary) 70%, black);
 }
 
-/* Loading overlay */
-.generator-page__selected-artist {
-  position: relative; /* Needed for absolute positioning of overlay */
-}
-
+/* Loading overlay - covers entire screen like GhostTracksPage */
 .generator-page__loading-overlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  bottom: 0;
   background-color: var(--overlay);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   z-index: 100;
-  border-radius: 0.5rem;
+  gap: 1rem;
   backdrop-filter: blur(5px);
-  pointer-events: none;
 }
 
 .generator-page__loading-message {
-  color: white;
-  font-size: 1.2rem;
-  margin-top: 1.5rem;
-  text-align: center;
-  max-width: 80%;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--white);
 }
 
 .generator-page__loading-submessage {
-  color: rgba(255, 255, 255, 0.8);
   font-size: 0.9rem;
-  margin-top: 0.5rem;
-  text-align: center;
-  max-width: 80%;
+  color: color-mix(in srgb, var(--white) 70%, transparent);
 }
 
 .generator-page__search-spotify-link {
@@ -263,4 +253,55 @@
 .generator-page__search-spotify-link img {
   width: 12px;
   height: 12px;
+}
+
+/* Modal content styles */
+.generator-page__modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.generator-page__modal-content p {
+  margin: 0;
+}
+
+.generator-page__modal-image-link {
+  display: block;
+  position: relative;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.generator-page__modal-image-link:hover {
+  transform: scale(1.02);
+}
+
+.generator-page__modal-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.generator-page__modal-spotify-badge {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  width: 28px;
+  height: 28px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.generator-page__modal-spotify-badge img {
+  width: 16px;
+  height: 16px;
 }
