@@ -354,6 +354,7 @@ const GhostTracksPage = () => {
 
               <GhostTrackList
                 scanResults={scanResult.playlists}
+                playlists={playlists}
                 selectedTrackKeys={selectedTrackKeys}
                 onSelectionChange={setSelectedTrackKeys}
                 selectionEnabled={true}

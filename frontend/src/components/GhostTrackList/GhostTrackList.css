@@ -23,8 +23,21 @@
 
 .ghost-track-list__playlist-info {
   display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ghost-track-list__playlist-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.ghost-track-list__playlist-details {
+  display: flex;
   flex-direction: column;
-  gap: 0.25rem;
 }
 
 .ghost-track-list__playlist-name {
@@ -45,7 +58,7 @@
 .ghost-track-list__selected-badge {
   background-color: var(--primary);
   color: var(--white);
-  padding: 0.15rem 0.5rem;
+  padding: 0.1rem 0.5rem;
   border-radius: 12px;
   font-size: 0.75rem;
 }

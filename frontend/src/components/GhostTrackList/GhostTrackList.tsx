@@ -1,9 +1,10 @@
-import type { PlaylistScanResult, GhostTrack } from '../../types/trackwatch/GhostTrack';
+import type { PlaylistScanResult, GhostTrack, Playlist } from '../../types/trackwatch/GhostTrack';
 import blank from '../../assets/png/blank.png';
 import './GhostTrackList.css';
 
 interface GhostTrackListProps {
   scanResults: PlaylistScanResult[];
+  playlists: Playlist[];
   selectedTrackKeys: Set<string>;
   onSelectionChange: (keys: Set<string>) => void;
   selectionEnabled?: boolean;
@@ -11,10 +12,16 @@ interface GhostTrackListProps {
 
 const GhostTrackList = ({
   scanResults,
+  playlists,
   selectedTrackKeys,
   onSelectionChange,
   selectionEnabled = false
 }: GhostTrackListProps) => {
+
+  const getPlaylistImage = (playlistId: string) => {
+    const playlist = playlists.find(p => p.id === playlistId);
+    return playlist?.imageUrl || blank;
+  };
 
   const getTrackKey = (track: GhostTrack) => `${track.playlistId}:${track.trackUri}`;
 
@@ -71,15 +78,22 @@ const GhostTrackList = ({
           <div key={result.playlistId} className="ghost-track-list__playlist">
             <div className="ghost-track-list__playlist-header">
               <div className="ghost-track-list__playlist-info">
-                <h4 className="ghost-track-list__playlist-name">{result.playlistName}</h4>
-                <span className="ghost-track-list__playlist-count">
-                  {result.ghostTracks.length} ghost track{result.ghostTracks.length !== 1 ? 's' : ''} found
-                  {selectionEnabled && selectedCount > 0 && (
-                    <span className="ghost-track-list__selected-badge">
-                      {selectedCount} selected
-                    </span>
-                  )}
-                </span>
+                <img
+                  src={getPlaylistImage(result.playlistId)}
+                  alt={result.playlistName}
+                  className="ghost-track-list__playlist-image"
+                />
+                <div className="ghost-track-list__playlist-details">
+                  <h4 className="ghost-track-list__playlist-name">{result.playlistName}</h4>
+                    <span className="ghost-track-list__playlist-count">
+                    {result.ghostTracks.length} ghost track{result.ghostTracks.length !== 1 ? 's' : ''} found
+                    {selectionEnabled && selectedCount > 0 && (
+                      <span className="ghost-track-list__selected-badge">
+                        {selectedCount} selected
+                      </span>
+                    )}
+                  </span>
+                </div>
               </div>
               {selectionEnabled && (
                 <div className="ghost-track-list__playlist-actions">
