@@ -1,0 +1,317 @@
+openapi: 3.0.3
+info:
+  title: Ghost Tracks API
+  description: API endpoints for detecting and removing unplayable tracks from Spotify playlists
+  version: 1.0.0
+
+servers:
+  - url: /api
+    description: TrackWatch Backend API
+
+paths:
+  /ghost-tracks/playlists:
+    get:
+      summary: Get user's owned playlists
+      description: Returns all Spotify playlists owned by the authenticated user (excludes followed playlists)
+      operationId: getOwnedPlaylists
+      parameters:
+        - name: X-Spotify-Access-Token
+          in: header
+          required: true
+          schema:
+            type: string
+          description: Spotify access token
+      responses:
+        '200':
+          description: List of owned playlists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaylistListResponse'
+        '401':
+          description: Invalid or expired Spotify token
+        '500':
+          description: Internal server error
+
+  /ghost-tracks/scan:
+    post:
+      summary: Scan playlists for ghost tracks
+      description: Analyzes selected playlists and returns tracks that are not playable in the specified market
+      operationId: scanGhostTracks
+      parameters:
+        - name: X-Spotify-Access-Token
+          in: header
+          required: true
+          schema:
+            type: string
+          description: Spotify access token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScanRequest'
+      responses:
+        '200':
+          description: Scan results with ghost tracks grouped by playlist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanResponse'
+        '400':
+          description: Invalid request (empty playlist list, invalid country code)
+        '401':
+          description: Invalid or expired Spotify token
+        '500':
+          description: Internal server error
+
+  /ghost-tracks/remove:
+    post:
+      summary: Remove ghost tracks from playlists
+      description: Removes selected tracks from their respective playlists
+      operationId: removeGhostTracks
+      parameters:
+        - name: X-Spotify-Access-Token
+          in: header
+          required: true
+          schema:
+            type: string
+          description: Spotify access token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoveRequest'
+      responses:
+        '200':
+          description: Removal results per playlist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoveResponse'
+        '400':
+          description: Invalid request (empty tracks list)
+        '401':
+          description: Invalid or expired Spotify token
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    Playlist:
+      type: object
+      required:
+        - id
+        - name
+        - trackCount
+      properties:
+        id:
+          type: string
+          description: Spotify playlist ID
+          example: "37i9dQZF1DXcBWIGoYBM5M"
+        name:
+          type: string
+          description: Playlist name
+          example: "Today's Top Hits"
+        imageUrl:
+          type: string
+          nullable: true
+          description: Playlist cover image URL
+          example: "https://i.scdn.co/image/ab67706f..."
+        trackCount:
+          type: integer
+          description: Total number of tracks in playlist
+          example: 50
+
+    PlaylistListResponse:
+      type: object
+      required:
+        - playlists
+      properties:
+        playlists:
+          type: array
+          items:
+            $ref: '#/components/schemas/Playlist'
+
+    ScanRequest:
+      type: object
+      required:
+        - playlistIds
+      properties:
+        playlistIds:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          maxItems: 20
+          description: List of playlist IDs to scan
+          example: ["37i9dQZF1DXcBWIGoYBM5M", "37i9dQZF1DX0XUsuxWHRQd"]
+        countryCode:
+          type: string
+          pattern: "^[A-Z]{2}$"
+          default: "CO"
+          description: ISO 3166-1 alpha-2 country code
+          example: "CO"
+
+    GhostTrack:
+      type: object
+      required:
+        - trackId
+        - trackUri
+        - trackName
+        - artistNames
+        - albumName
+        - playlistId
+        - playlistName
+        - reason
+      properties:
+        trackId:
+          type: string
+          description: Spotify track ID
+          example: "4iV5W9uYEdYUVa79Axb7Rh"
+        trackUri:
+          type: string
+          description: Spotify track URI
+          example: "spotify:track:4iV5W9uYEdYUVa79Axb7Rh"
+        trackName:
+          type: string
+          description: Track name
+          example: "Hotline Bling"
+        artistNames:
+          type: array
+          items:
+            type: string
+          description: List of artist names
+          example: ["Drake"]
+        albumName:
+          type: string
+          description: Album name
+          example: "Views"
+        albumImageUrl:
+          type: string
+          nullable: true
+          description: Album cover thumbnail URL
+          example: "https://i.scdn.co/image/ab67616d..."
+        playlistId:
+          type: string
+          description: Source playlist ID
+        playlistName:
+          type: string
+          description: Source playlist name
+        reason:
+          type: string
+          enum: [market, not_playable]
+          description: Reason track is not playable
+
+    PlaylistScanResult:
+      type: object
+      required:
+        - playlistId
+        - playlistName
+        - ghostTracks
+        - totalTracks
+        - scannedTracks
+      properties:
+        playlistId:
+          type: string
+        playlistName:
+          type: string
+        ghostTracks:
+          type: array
+          items:
+            $ref: '#/components/schemas/GhostTrack'
+        totalTracks:
+          type: integer
+        scannedTracks:
+          type: integer
+        error:
+          type: string
+          nullable: true
+          description: Error message if scan failed for this playlist
+
+    ScanResponse:
+      type: object
+      required:
+        - playlists
+        - totalGhostTracks
+        - scanDurationMs
+      properties:
+        playlists:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaylistScanResult'
+        totalGhostTracks:
+          type: integer
+          description: Total ghost tracks found across all playlists
+        scanDurationMs:
+          type: integer
+          description: Total scan duration in milliseconds
+
+    RemoveRequest:
+      type: object
+      required:
+        - removals
+      properties:
+        removals:
+          type: array
+          items:
+            type: object
+            required:
+              - playlistId
+              - trackUris
+            properties:
+              playlistId:
+                type: string
+                description: Playlist ID to remove tracks from
+              trackUris:
+                type: array
+                items:
+                  type: string
+                minItems: 1
+                maxItems: 100
+                description: Track URIs to remove
+          minItems: 1
+          description: List of removal operations grouped by playlist
+
+    RemovalResult:
+      type: object
+      required:
+        - playlistId
+        - playlistName
+        - removedCount
+        - failedCount
+      properties:
+        playlistId:
+          type: string
+        playlistName:
+          type: string
+        removedCount:
+          type: integer
+          description: Number of tracks successfully removed
+        failedCount:
+          type: integer
+          description: Number of tracks that failed to remove
+        failedTracks:
+          type: array
+          items:
+            type: string
+          description: URIs of tracks that failed to remove
+
+    RemoveResponse:
+      type: object
+      required:
+        - results
+        - totalRemoved
+        - totalFailed
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RemovalResult'
+        totalRemoved:
+          type: integer
+          description: Total tracks removed across all playlists
+        totalFailed:
+          type: integer
+          description: Total tracks that failed to remove
