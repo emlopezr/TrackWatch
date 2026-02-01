@@ -1,67 +1,82 @@
-# TrackWatch Privacy Policy
+# TrackWatch Data Handling Statement
 
-**Last updated: June 20, 2025**
+**Last updated: January 2026**
 
-Please read and review this privacy policy ("Privacy Policy") carefully to understand how TrackWatch collects, uses, and maintains your personal information. By using TrackWatch services, you agree to the terms set forth in this Privacy Policy.
+## Self-Hosted Software Notice
 
-## Data Collection
+TrackWatch is **self-hosted software**. This means:
 
-TrackWatch gathers your Spotify data through the official Spotify API when you sign up for TrackWatch. This information is essential for the main functionality of TrackWatch, which provides tracking of your favorite artists and their new releases.
+- **You deploy and control your own instance** of TrackWatch
+- **All data stays on your server** in your own PostgreSQL database
+- **The developer [(@emlopezr](https://github.com/emlopezr)) has no access** to your data, tokens, or any information processed by your instance
 
-We collect:
-• **Spotify Account Information**: User ID, display name, profile image, email address
-• **OAuth Tokens**: Access and refresh tokens needed to communicate with Spotify
-• **Usage Data**: Artists you follow (inside our app), playlists generated, and followed artists added tracks.
+This document describes how the TrackWatch application handles data locally on your self-hosted instance.
 
-We do **not** collect payment information.
+## Data Processed by Your Instance
 
-## How We Use Your Data
+When you connect your Spotify account to your TrackWatch instance, the application processes the following data locally:
 
-We use your information to:
-• Authenticate you with Spotify
-• Display your followed artists and generate playlists
-• Track new releases from your favorite artists
-• Improve the service and fix bugs
+### Spotify Account Information
+- **User ID**: Used as the primary identifier in your local database
+- **Display Name & Profile Image**: Displayed in the application interface
+- **Email Address**: Used for optional email notifications (if configured)
 
-We never sell your personal data.
+### OAuth Tokens
+- **Access Token & Refresh Token**: Stored in your local database to authenticate with Spotify's API
+- These tokens are used exclusively by your instance to communicate with Spotify on your behalf
 
-## Data Storage and Security
+### Usage Data
+- **Followed Artists**: Retrieved from your Spotify account via the API
+- **Generated Playlists**: Created and managed in your Spotify account
+- **Track History**: Records of which tracks have been added to prevent duplicates
 
-TrackWatch securely stores your data in a database that is only accessible to TrackWatch. We implement security measures including encrypted connections and access controls.
+## How Your Instance Uses This Data
 
-## Data Sharing
+Your TrackWatch instance uses this data to:
+- Authenticate with Spotify's API on your behalf
+- Display your followed artists in the application
+- Check for new releases from artists you follow
+- Automatically add new tracks to your TrackWatch playlist on Spotify
+- Send email notifications about new releases (if configured)
 
-We do not share your personal data with third parties, except as necessary to provide the service (such as communicating with Spotify's API).
+## Data Storage
 
-We may share fully anonymized aggregate data (such as "top 10 most followed artists across all users") but this cannot be traced back to individual users.
+All data is stored in the PostgreSQL database that you configure and control:
+- **Location**: Your server, your infrastructure
+- **Access**: Only you (and anyone you grant access to your server)
+- **Encryption**: Dependent on your server configuration
+- **Backups**: Your responsibility to configure
 
-## Data Retention
+## Third-Party Communication
 
-We keep your data only as long as necessary:
-• OAuth tokens: until revoked or after extended periods of inactivity
-• Usage data: until you delete your TrackWatch account
-• Technical logs: for a limited time for debugging purposes
+Your TrackWatch instance communicates directly with:
 
-## Your Rights
+1. **Spotify API** (`api.spotify.com`)
+   - To fetch your profile, followed artists, and manage playlists
+   - Subject to [Spotify's Privacy Policy](https://www.spotify.com/legal/privacy-policy/)
 
-You have the right to:
-• Access the personal data we hold about you
-• Request correction or deletion of your data
-• Stop using the service at any time
+2. **Resend API** (optional, if configured)
+   - To send email notifications
+   - Subject to [Resend's Privacy Policy](https://resend.com/legal/privacy-policy)
 
-To exercise any of these rights, please contact us at contact@emlopezr.com.
+The developer does **not** operate any servers that receive data from your instance.
+
+## Your Control
+
+As the operator of your own instance, you have full control:
+- **Access**: View all data in your database directly
+- **Modification**: Change or correct any stored data
+- **Deletion**: Remove data or delete the entire database
+- **Revocation**: Disconnect Spotify access at any time via [Spotify Account Settings](https://www.spotify.com/account/apps/)
 
 ## Children's Privacy
 
-TrackWatch is not intended for users under 13 years of age. We do not knowingly collect data from children under 13.
+TrackWatch is not intended for users under 13 years of age, in compliance with Spotify's terms of service.
 
-## Changes to This Policy
+## Questions
 
-We may update this Privacy Policy from time to time. If we make material changes, we will notify you through the service or by email. Your continued use of TrackWatch after changes are posted means you accept the updated policy.
-
-## Contact Us
-
-If you have any questions or concerns about this Privacy Policy, please contact us at contact@emlopezr.com.
+For questions about how TrackWatch handles data, please open an issue on the [GitHub repository](https://github.com/emlopezr/trackwatch).
 
 ---
-© 2025 TrackWatch. All rights reserved.
+
+*This is a data handling statement for self-hosted software, not a privacy policy for a hosted service. You are responsible for your own data.*

@@ -59,6 +59,8 @@ docker-compose up -d
 
 That's it! Access TrackWatch at **http://127.0.0.1**
 
+*Tip: If port 80 is already in use on your machine, change PORT=8080 in your .env file and access the app at http://127.0.0.1:8080*
+
 ### 4. Stop TrackWatch
 
 ```bash
@@ -114,7 +116,7 @@ If deploying to a custom domain:
 | `SPOTIFY_CLIENT_ID` | Yes | - | From Spotify Developer Dashboard |
 | `SPOTIFY_CLIENT_SECRET` | Yes | - | From Spotify Developer Dashboard |
 | `VITE_SPOTIFY_REDIRECT_URI` | No | `http://127.0.0.1/callback` | OAuth callback URL |
-| `PORT` | No | `80` | Frontend port |
+| `PORT` | No | `8080` | Frontend port |
 | `DEBUG` | No | `False` | Django debug mode |
 | `SCHEDULER_HOURS` | No | `7,14,21` | Hours to check for releases (24h) |
 | `SCHEDULER_MINUTE` | No | `0` | Minute of the hour to run |
@@ -212,4 +214,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is provided as-is for personal use. See [EULA](legal/eula.md) and [Privacy Policy](legal/privacy.md).
+This project is licensed under the [MIT License](LICENSE). See also the [Data Handling Statement](legal/privacy.md) for information about how the application processes data.
