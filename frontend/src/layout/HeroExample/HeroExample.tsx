@@ -7,15 +7,15 @@ const HeroExample = () => {
   const followedArtists = [
     { id: 1, name: "Bad Bunny", img: "/webp/artist-01.webp" },
     { id: 2, name: "Kendrick Lamar", img: "/webp/artist-02.webp" },
-    { id: 3, name: "Duki", img: "/webp/artist-03.webp" },
-    { id: 4, name: "Milo j", img: "/webp/artist-04.webp" }
+    { id: 3, name: "Tame Impala", img: "/webp/artist-03.webp" },
+    { id: 4, name: "Fred again..", img: "/webp/artist-04.webp" }
   ];
 
   const newSongs = [
     { id: 1, title: "DtMF", artist: "Bad Bunny", img: "/webp/song-01.webp" },
-    { id: 2, title: "Not Like Us", artist: "Kendrick Lamar", img: "/webp/song-02.webp" },
-    { id: 3, title: "Nueva Era", artist: "Duki, Myke Towers", img: "/webp/song-03.webp" },
-    { id: 4, title: "OJALA", artist: "Milo j, Bhavi", img: "/webp/song-04.webp" }
+    { id: 2, title: "HUMBLE.", artist: "Kendrick Lamar", img: "/webp/song-02.webp" },
+    { id: 3, title: "Let It Happen", artist: "Tame Impala", img: "/webp/song-03.webp" },
+    { id: 4, title: "Victory Lap", artist: "Fred again..", img: "/webp/song-04.webp" }
   ];
 
   return (
