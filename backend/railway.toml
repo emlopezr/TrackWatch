@@ -1,9 +1,6 @@
-# Use Nixpacks instead of Dockerfile for Railway deployment
-# The Dockerfile is designed for Docker Compose (local/self-hosted)
-[build]
-builder = "nixpacks"
-
+# Railway deployment configuration
+# Dockerfile.compose is for Docker Compose (self-hosted), Railway uses Nixpacks
 [deploy]
-startCommand = "python manage.py migrate && gunicorn --timeout 3600 trackwatch.wsgi:application"
+startCommand = "python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn trackwatch.wsgi:application --bind 0.0.0.0:$PORT"
 healthcheckPath = "/ping"
 healthcheckTimeout = 300

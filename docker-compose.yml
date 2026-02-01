@@ -23,7 +23,7 @@ services:
     backend:
         build:
             context: ./backend
-            dockerfile: Dockerfile
+            dockerfile: Dockerfile.compose
         restart: unless-stopped
         environment: &backend-env
             # Django settings
@@ -65,7 +65,7 @@ services:
     scheduler:
         build:
             context: ./backend
-            dockerfile: Dockerfile
+            dockerfile: Dockerfile.compose
         restart: unless-stopped
         entrypoint: []
         command: ["python", "manage.py", "run_scheduler"]
@@ -82,7 +82,7 @@ services:
     frontend:
         build:
             context: ./frontend
-            dockerfile: Dockerfile
+            dockerfile: Dockerfile.compose
             args:
                 VITE_SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID:?Spotify Client ID required}
                 VITE_SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET:?Spotify Client Secret required}
