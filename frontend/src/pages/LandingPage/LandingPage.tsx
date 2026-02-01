@@ -1,11 +1,15 @@
+import { Link } from 'react-router-dom';
 import { getSpotifyAuthUrl } from '../../services/spotify/spotifyAuth';
 import FeatureCard from '../../layout/FeatureCard/FeatureCard';
 import HeroExample from '../../layout/HeroExample/HeroExample';
 import trackWatchlogo from '../../assets/svg/logo.svg';
 import spotifyLogo from '../../assets/svg/spotify.svg';
+import shieldIcon from '../../assets/svg/shield.svg';
 import musicIcon from '../../assets/svg/music.svg';
 import notificationIcon from '../../assets/svg/notification.svg';
 import playlistIcon from '../../assets/svg/playlist.svg';
+import ghostIcon from '../../assets/svg/ghost.svg';
+import downloadIcon from '../../assets/svg/download.svg';
 import './LandingPage.css';
 
 const LandingPage = () => {
@@ -31,15 +35,21 @@ const LandingPage = () => {
         <section className="hero">
           <div className="hero__content">
             <h1 className="hero__title">
-              Never miss a <span className="hero__title--highlight">new release</span> again
+              Your Personal <span className="hero__title--highlight">Spotify Release</span> Tracker
             </h1>
             <p className="hero__description">
-              Stay updated on the latest music releases from your favorite artists. TrackWatch connects with your Spotify account to automatically track your favorite artists, notify you of new releases and add their new releases to a playlist in your Spotify account.
+              Open source, self-hosted, and private. Automatically track your favorite artists and sync new releases to your playlist, completely under your control.
             </p>
-            <a href={getSpotifyAuthUrl()} className="login-button">
-              <img src={spotifyLogo} alt="Spotify Logo" className="login-button__logo" />
-              Sign In with Spotify
-            </a>
+            <div className="hero__buttons">
+              <a href={getSpotifyAuthUrl()} className="login-button">
+                <img src={spotifyLogo} alt="Spotify Logo" className="login-button__logo" />
+                Login with Spotify
+              </a>
+              <Link to="/install" className="install-button">
+                <img src={downloadIcon} alt="Download Icon" className="install-button__icon icon-white" />
+                How to Install
+              </Link>
+            </div>
           </div>
           <div className="hero__image-container">
             <HeroExample />
@@ -49,20 +59,29 @@ const LandingPage = () => {
         <section className="features">
           <div className="features__grid">
             <FeatureCard
+              icon={shieldIcon}
+              title="Your Data, Your Server"
+              description="No third-party tracking. Your Spotify tokens and listening history never leave your own infrastructure. Runs entirely in your Docker container."
+            />
+            <FeatureCard
               icon={musicIcon}
-              title="Track Your Artists"
-              description="Add the artists you want to follow, and as soon as they make a new release, we'll add it to a playlist in your Spotify account."
+              title="Automated Tracking"
+              description="Add the artists you want to follow, and as soon as they make a new release, your instance automatically adds it to your playlist."
             />
             <FeatureCard
               icon={notificationIcon}
               title="Release Notifications"
-              description="Receive notifications when your favorite artists release new songs, albums, EPs, or be featured in songs by other artists."
+              description="Receive notifications when your favorite artists release new songs, albums, or EPs."
             />
             <FeatureCard
               icon={playlistIcon}
-              title="Playlist Generator"
-              description="Generate playlists with all the songs of any artist you want. Perfect for discovering the complete discography of your favorite artists."
-              tag="New"
+              title="Discography Generator"
+              description="Generate a complete playlist with every track from your favorite artist. Search for an artist and create your personalized collection instantly."
+            />
+            <FeatureCard
+              icon={ghostIcon}
+              title="Ghost Tracks Cleaner"
+              description="Find and remove unplayable (greyed out) tracks from your playlists to keep your library clean."
             />
           </div>
         </section>
@@ -74,8 +93,11 @@ const LandingPage = () => {
         </p>
         <div className="landing-footer__legals_container">
           <p className="landing-footer__links">
-            <a className="landing-footer__link" href="/eula" target="_blank" rel="noopener noreferrer">Terms of Use (EULA)</a> · {" "}
-            <a className="landing-footer__link" href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+            <a className="landing-footer__link" href="/eula" target="_blank" rel="noopener noreferrer">Terms of Use</a> · {" "}
+            <a className="landing-footer__link" href="/privacy" target="_blank" rel="noopener noreferrer">Data Handling</a> · {" "}
+            <a className="landing-footer__link" href="https://github.com/emlopezr/trackwatch" target="_blank" rel="noopener noreferrer">
+              GitHub
+            </a>
           </p>
           <p className="landing-footer__disclaimer">
             <span className="landing-footer__disclaimer-text">TrackWatch is not affiliated with Spotify</span>
@@ -86,4 +108,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage; 
+export default LandingPage;

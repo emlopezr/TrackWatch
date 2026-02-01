@@ -8,6 +8,14 @@ TrackWatch is a full-stack application that integrates with Spotify to track fav
 
 ## Commands
 
+### Docker (Recommended for deployment)
+```bash
+docker-compose up -d          # Start all services
+docker-compose down           # Stop all services
+docker-compose logs -f        # View logs
+docker-compose up -d --build  # Rebuild and start
+```
+
 ### Frontend (in `/frontend`)
 ```bash
 npm run dev      # Start dev server on :5173
@@ -18,9 +26,11 @@ npm run preview  # Preview production build
 
 ### Backend (in `/backend`)
 ```bash
-python manage.py runserver    # Start dev server on :8000
-python manage.py migrate      # Run database migrations
+python manage.py runserver       # Start dev server on :8000
+python manage.py migrate         # Run database migrations
 python manage.py makemigrations  # Create new migrations
+python manage.py run_scheduler   # Run background scheduler (blocking)
+python manage.py run_scheduler --run-now  # Run scheduler + immediate task
 ```
 
 ## Architecture
@@ -80,5 +90,34 @@ Frontend uses `VITE_*` prefixed variables. Backend requires Spotify API credenti
 - Python 3.10+ (Backend), TypeScript 5.6 (Frontend) + Django 5.2, Django REST Framework, React 18.3, Vite 6.4, react-router-dom 7.5 (002-ghost-tracks)
 - PostgreSQL (existing) (002-ghost-tracks)
 
+## Docker Configuration
+
+The application is designed for Docker-first deployment:
+
+- `docker-compose.yml` - Orchestrates all services (db, backend, scheduler, frontend)
+- `backend/Dockerfile` - Python/Django with Gunicorn
+- `backend/entrypoint.sh` - Handles migrations and starts Gunicorn
+- `frontend/Dockerfile` - Multi-stage build (Node build + Nginx serve)
+- `frontend/nginx.conf` - SPA routing + reverse proxy to `/api/*` endpoints
+- `.env.docker.example` - Environment configuration template
+
+### Docker Services
+
+| Service | Description |
+|---------|-------------|
+| `db` | PostgreSQL database with persistent volume |
+| `backend` | Django REST API served by Gunicorn |
+| `scheduler` | APScheduler running `run_scheduler` command |
+| `frontend` | Nginx serving React SPA + reverse proxy |
+
+### Docker Networking
+
+In Docker mode, the frontend Nginx proxies `/api/*` requests to the backend at `http://backend:8000`, stripping the `/api` prefix. The `VITE_TRACKWATCH_API_BASE_URL` should be set to `/api` for Docker builds.
+
+### Background Tasks
+
+The scheduler runs as a separate service using `python manage.py run_scheduler`. For external triggers (n8n, cron), use `POST /actions/releases` with `X-Admin-Key` header.
+
 ## Recent Changes
+- Docker-first deployment: Added complete Docker setup with Gunicorn, Nginx reverse proxy, and PostgreSQL.
 - 001-spotify-artists-sync: Migrated followed artists from local database to Spotify API as source of truth. Removed `UserFollowedArtist` model. Added Spotify follow/unfollow API integration.

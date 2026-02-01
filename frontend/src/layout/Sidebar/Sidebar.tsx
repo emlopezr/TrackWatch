@@ -2,7 +2,7 @@ import menuIcon from '../../assets/svg/menu.svg';
 import homeFilled from '../../assets/svg/home-filled.svg';
 import homeOutline from '../../assets/svg/home-outline.svg';
 import playlistIcon from '../../assets/svg/playlist.svg';
-import ghostIcon from '../../assets/png/ghost.png';
+import ghostIcon from '../../assets/svg/ghost.svg';
 import coffeeIcon from '../../assets/svg/coffee.svg';
 import closeIcon from '../../assets/svg/delete.svg';
 import './Sidebar.css';
@@ -84,7 +84,7 @@ const Sidebar = ({ activePage, sidebarOpen, isMobile, toggleSidebar, handlePageC
             <img
               src={ghostIcon}
               alt="Ghost Tracks Cleaner"
-              className="sidebar__link-icon"
+              className="sidebar__link-icon icon-white"
             />
             Ghost Tracks Cleaner
           </a>

@@ -1,0 +1,106 @@
+services:
+    db:
+        image: postgres:15-alpine
+        restart: unless-stopped
+        environment:
+            POSTGRES_DB: ${DATABASE_NAME:-trackwatch}
+            POSTGRES_USER: ${DATABASE_USER:-trackwatch}
+            POSTGRES_PASSWORD: ${DATABASE_PASSWORD:?Database password required}
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        healthcheck:
+            test:
+                [
+                    "CMD-SHELL",
+                    "pg_isready -U ${DATABASE_USER:-trackwatch} -d ${DATABASE_NAME:-trackwatch}",
+                ]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        networks:
+            - trackwatch-network
+
+    backend:
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        environment: &backend-env
+            # Django settings
+            SECRET_KEY: ${SECRET_KEY:?Django secret key required}
+            DEBUG: ${DEBUG:-False}
+            ALLOWED_HOSTS: ${ALLOWED_HOSTS:-*}
+
+            # Database
+            DATABASE_NAME: ${DATABASE_NAME:-trackwatch}
+            DATABASE_USER: ${DATABASE_USER:-trackwatch}
+            DATABASE_PASSWORD: ${DATABASE_PASSWORD:?Database password required}
+            DATABASE_HOST: db
+            DATABASE_PORT: 5432
+
+            # Spotify
+            SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID:?Spotify Client ID required}
+            SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET:?Spotify Client Secret required}
+
+            # Optional: Email service
+            RESEND_API_KEY: ${RESEND_API_KEY:-}
+            ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+
+            # Gunicorn configuration
+            GUNICORN_WORKERS: ${GUNICORN_WORKERS:-2}
+            GUNICORN_THREADS: ${GUNICORN_THREADS:-4}
+            GUNICORN_TIMEOUT: ${GUNICORN_TIMEOUT:-120}
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:8000/ping"]
+            interval: 10s
+            timeout: 5s
+            retries: 10
+            start_period: 30s
+        depends_on:
+            db:
+                condition: service_healthy
+        networks:
+            - trackwatch-network
+
+    scheduler:
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        entrypoint: []
+        command: ["python", "manage.py", "run_scheduler"]
+        environment:
+            <<: *backend-env
+            SCHEDULER_HOURS: ${SCHEDULER_HOURS:-7,14,21}
+            SCHEDULER_MINUTE: ${SCHEDULER_MINUTE:-0}
+        depends_on:
+            backend:
+                condition: service_healthy
+        networks:
+            - trackwatch-network
+
+    frontend:
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+            args:
+                VITE_SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID:?Spotify Client ID required}
+                VITE_SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET:?Spotify Client Secret required}
+                VITE_SPOTIFY_REDIRECT_URI: ${VITE_SPOTIFY_REDIRECT_URI:-http://127.0.0.1/callback}
+                VITE_TRACKWATCH_API_BASE_URL: ${VITE_TRACKWATCH_API_BASE_URL:-/api}
+        restart: unless-stopped
+        ports:
+            - "${PORT:-80}:80"
+        depends_on:
+            - backend
+        networks:
+            - trackwatch-network
+
+volumes:
+    postgres_data:
+        name: trackwatch_postgres_data
+
+networks:
+    trackwatch-network:
+        name: trackwatch-network
+        driver: bridge

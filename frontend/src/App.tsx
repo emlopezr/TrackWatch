@@ -4,6 +4,7 @@ import MainRoute from './routes/MainRoute/MainRoute';
 import CallbackRoute from './routes/CallbackRoute/CallbackRoute';
 import EulaPage from './pages/EulaPage/EulaPage';
 import PrivacyPage from './pages/PrivacyPage/PrivacyPage';
+import InstallPage from './pages/InstallPage/InstallPage';
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
           <Route path="/callback" element={<CallbackRoute />} />
           <Route path="/eula" element={<EulaPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/install" element={<InstallPage />} />
         </Routes>
       </Router>
     </UserProvider>

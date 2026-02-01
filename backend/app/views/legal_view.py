@@ -59,10 +59,10 @@ def get_eula(request):
 
 @require_GET
 def get_privacy_policy(request):
-  """Return the Privacy Policy markdown file as JSON."""
+  """Return the Data Handling markdown file as JSON."""
   content = get_legal_content(LOCAL_PRIVACY_FILE, GITHUB_PRIVACY_URL)
   if content is None:
-    return JsonResponse({"error": "Privacy Policy not found"}, status=404)
+    return JsonResponse({"error": "Data Handling not found"}, status=404)
 
   return JsonResponse({
     "version": DEFAULT_VERSION,

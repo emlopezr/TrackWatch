@@ -128,6 +128,12 @@ body {
   margin-bottom: 0.5rem;
 }
 
+.hero__buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
 .login-button {
   display: flex;
   align-items: center;
@@ -157,6 +163,35 @@ body {
   height: 1.5rem;
 }
 
+.install-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background-color: transparent;
+  color: white;
+  border: 2px solid var(--card);
+  border-radius: 3rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  width: fit-content;
+  transition: all 0.2s ease;
+}
+
+.install-button:hover {
+  transform: scale(1.025);
+  background-color: var(--card);
+  border-color: var(--card);
+}
+
+.install-button__icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
 .hero__image-container {
   display: flex;
   justify-content: right;
@@ -173,10 +208,59 @@ body {
 
 .features__grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   width: 100%;
   justify-content: center;
+}
+
+/* First row: 3 cards, Second row: 2 cards centered */
+.features__grid > :nth-child(4),
+.features__grid > :nth-child(5) {
+  grid-column: span 1;
+}
+
+/* Center the last two cards */
+@supports (grid-template-columns: subgrid) {
+  .features__grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+  }
+  
+  .features__grid > :nth-child(1),
+  .features__grid > :nth-child(2),
+  .features__grid > :nth-child(3) {
+    grid-column: span 2;
+  }
+  
+  .features__grid > :nth-child(4) {
+    grid-column: 2 / span 2;
+  }
+  
+  .features__grid > :nth-child(5) {
+    grid-column: 4 / span 2;
+  }
+}
+
+/* Fallback for browsers without subgrid support */
+@supports not (grid-template-columns: subgrid) {
+  .features__grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  
+  .features__grid > * {
+    flex: 0 0 calc(33.333% - 1rem);
+    max-width: calc(33.333% - 1rem);
+  }
+  
+  .features__grid > :nth-child(4),
+  .features__grid > :nth-child(5) {
+    flex: 0 0 calc(33.333% - 1rem);
+    max-width: calc(33.333% - 1rem);
+  }
 }
 
 .landing-footer {
@@ -206,6 +290,7 @@ body {
 .landing-footer__links {
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.25rem;
 }
@@ -214,6 +299,18 @@ body {
   color: var(--primary);
   text-decoration: none;
   font-weight: bold;
+}
+
+.landing-footer__link--github {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.landing-footer__github-icon {
+  width: 1rem;
+  height: 1rem;
+  vertical-align: middle;
 }
 
 .landing-footer__disclaimer {
@@ -239,6 +336,10 @@ body {
     gap: 1.5rem;
   }
 
+  .hero__buttons {
+    justify-content: center;
+  }
+
   .hero__image-container {
     justify-content: center;
     align-items: center;
@@ -248,9 +349,24 @@ body {
     font-size: 3rem;
   }
 
+  .features__grid,
   .features__grid {
-    grid-template-columns: 1fr 1fr;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
     gap: 1.5rem;
+  }
+  
+  .features__grid > * {
+    flex: unset !important;
+    max-width: unset !important;
+    grid-column: span 1 !important;
+  }
+  
+  /* Center the 5th card on tablet */
+  .features__grid > :nth-child(5) {
+    grid-column: 1 / -1 !important;
+    max-width: 50%;
+    margin: 0 auto;
   }
 }
 
@@ -264,9 +380,26 @@ body {
     padding: 1rem;
   }
 
+  .features__grid,
   .features__grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
     gap: 1.5rem;
+  }
+  
+  .features__grid > :nth-child(5) {
+    max-width: 100%;
+  }
+
+  .hero__buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .login-button,
+  .install-button {
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
   }
 }
 
@@ -300,6 +433,11 @@ body {
 
   .hero__description {
     padding: 0.5rem 2rem;
+  }
+
+  .landing-footer__links {
+    flex-wrap: wrap;
+    justify-content: center;
   }
 }
 

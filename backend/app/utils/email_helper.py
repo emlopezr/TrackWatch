@@ -1,6 +1,9 @@
 from app.constants import AppInfo, Colors, Assets, System
 import datetime
 import locale
+import logging
+
+logger = logging.getLogger(__name__)
 
 def generate_welcome_email_subject():
   return f"🎶 ¡Bienvenido a {AppInfo.APP_NAME}! ❤️"
@@ -130,7 +133,7 @@ def generate_today_date():
       return f"{day_of_week} {day_of_month} de {month} de {year}"
 
     except locale.Error:
-      print(f"Error setting locale to {locale_name}")
+      logger.debug(f"Locale {locale_name} not available, trying next...")
       continue
 
   now = datetime.datetime.now(datetime.timezone.utc)
