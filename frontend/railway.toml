@@ -1,0 +1,4 @@
+# Use Nixpacks instead of Dockerfile for Railway deployment
+# The Dockerfile is designed for Docker Compose (local/self-hosted)
+[build]
+builder = "nixpacks"
