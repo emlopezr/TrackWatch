@@ -8,7 +8,8 @@
 
 **Self-hosted music release tracker for Spotify users.** Never miss a new release from your favorite artists again.
 
-![TrackWatch Preview](https://github.com/user-attachments/assets/92061a4d-8d46-4487-9bba-ae62dfdb59de)
+![TrackWatch Preview](docs/assets/01.png)
+![TrackWatch Followed artists](docs/assets/02.png)
 
 ## Why TrackWatch?
 
@@ -116,7 +117,7 @@ If deploying to a custom domain:
 | `SPOTIFY_CLIENT_ID` | Yes | - | From Spotify Developer Dashboard |
 | `SPOTIFY_CLIENT_SECRET` | Yes | - | From Spotify Developer Dashboard |
 | `VITE_SPOTIFY_REDIRECT_URI` | No | `http://127.0.0.1/callback` | OAuth callback URL |
-| `PORT` | No | `8080` | Frontend port |
+| `PORT` | No | `80` | Frontend port |
 | `DEBUG` | No | `False` | Django debug mode |
 | `SCHEDULER_HOURS` | No | `7,14,21` | Hours to check for releases (24h) |
 | `SCHEDULER_MINUTE` | No | `0` | Minute of the hour to run |

@@ -40,7 +40,7 @@ EOF
         echo "Database unavailable - retrying in 2 seconds... (attempt $RETRY_COUNT/$MAX_RETRIES)"
         sleep 2
     done
-    echo "Database check complete!"
+    echo "Database check complete!"gca
 fi
 
 # Run migrations
