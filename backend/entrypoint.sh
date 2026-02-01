@@ -3,9 +3,16 @@ set -e
 
 echo "=== TrackWatch Backend Starting ==="
 
-# Wait for database to be ready
-echo "Waiting for database..."
-until python << 'EOF'
+# Skip database wait if SKIP_DB_WAIT is set (useful for Railway/managed databases)
+if [ "${SKIP_DB_WAIT:-false}" = "true" ]; then
+    echo "Skipping database wait (SKIP_DB_WAIT=true)"
+else
+    # Wait for database to be ready with timeout
+    echo "Waiting for database..."
+    MAX_RETRIES=${DB_WAIT_MAX_RETRIES:-30}
+    RETRY_COUNT=0
+    
+    until python << 'EOF'
 import sys
 import psycopg2
 from decouple import config
@@ -24,11 +31,17 @@ except Exception as e:
     print(f"Database connection failed: {e}")
     sys.exit(1)
 EOF
-do
-    echo "Database unavailable - retrying in 2 seconds..."
-    sleep 2
-done
-echo "Database is ready!"
+    do
+        RETRY_COUNT=$((RETRY_COUNT + 1))
+        if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
+            echo "Max retries ($MAX_RETRIES) reached. Proceeding anyway..."
+            break
+        fi
+        echo "Database unavailable - retrying in 2 seconds... (attempt $RETRY_COUNT/$MAX_RETRIES)"
+        sleep 2
+    done
+    echo "Database check complete!"
+fi
 
 # Run migrations
 echo "Running database migrations..."
