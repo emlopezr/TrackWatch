@@ -51,7 +51,7 @@ const UserMenu = ({ showUserMenu, setShowUserMenu, handleLogout }: UserMenuProps
         <div className="profile__menu">
           <div className="profile__menu-links">
             <a className="profile__menu-link" href="/eula" target="_blank" rel="noopener noreferrer">Terms of Use</a>
-            <a className="profile__menu-link" href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+            <a className="profile__menu-link" href="/privacy" target="_blank" rel="noopener noreferrer">Data Handling</a>
           </div>
           <div className="profile__menu-buttons">
             <button className="profile__menu-button profile__menu-settings" onClick={() => { setShowUserMenu(false); setShowSettingsModal(true); }}>

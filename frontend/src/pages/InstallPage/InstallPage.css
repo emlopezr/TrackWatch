@@ -1,0 +1,401 @@
+.install-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background);
+  color: var(--white);
+}
+
+.install-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.install-logo__link {
+  text-decoration: none;
+  color: var(--white);
+}
+
+.install-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.install-logo__image {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.install-logo__title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.install-logo__title--white {
+  color: var(--white);
+}
+
+.install-logo__title--green {
+  color: var(--primary);
+}
+
+.install-main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 0 2rem 3rem;
+}
+
+.install-content {
+  max-width: 800px;
+  width: 100%;
+}
+
+.install-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 0 0 0.5rem 0;
+  text-align: center;
+  color: var(--primary);
+}
+
+.install-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  text-align: center;
+  margin: 0 0 3rem 0;
+}
+
+.install-section {
+  margin-bottom: 2.5rem;
+}
+
+.install-section--centered {
+  text-align: center;
+}
+
+.install-section__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.install-step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--primary);
+  color: white;
+  border-radius: 50%;
+  font-size: 1rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.install-section__description {
+  color: var(--text-secondary);
+  margin: 1rem 0;
+  line-height: 1.6;
+}
+
+.install-section__description code {
+  background-color: var(--card);
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.25rem;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 0.9em;
+}
+
+.install-prerequisites {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.install-prerequisites li {
+  padding: 0.75rem 1rem;
+  background-color: var(--card);
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.install-prerequisites a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.install-prerequisites a:hover {
+  text-decoration: underline;
+}
+
+.install-numbered-list {
+  padding-left: 1.5rem;
+  margin: 0;
+}
+
+.install-numbered-list li {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.install-numbered-list a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.install-numbered-list a:hover {
+  text-decoration: underline;
+}
+
+.install-nested-list {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.install-nested-list li {
+  margin-bottom: 0.25rem;
+}
+
+.install-nested-list code {
+  background-color: var(--card);
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.25rem;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 0.9em;
+}
+
+/* Code Block Styles */
+.code-block {
+  background-color: #1a1a1a;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  margin: 1rem 0;
+  border: 1px solid var(--card);
+}
+
+.code-block__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: var(--card);
+  border-bottom: 1px solid #444;
+}
+
+.code-block__language {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.code-block__copy {
+  background-color: transparent;
+  border: 1px solid var(--text-secondary);
+  color: var(--text-secondary);
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.code-block__copy:hover {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.code-block__copy--copied {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.code-block__content {
+  margin: 0;
+  padding: 1rem;
+  overflow-x: auto;
+  font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #e0e0e0;
+}
+
+.code-block__content code {
+  font-family: inherit;
+}
+
+/* Callout Styles */
+.install-callout {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background-color: color-mix(in srgb, var(--primary) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--primary) 40%, transparent);
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+
+.install-callout--warning {
+  background-color: color-mix(in srgb, #f59e0b 15%, transparent);
+  border-color: color-mix(in srgb, #f59e0b 40%, transparent);
+}
+
+.install-callout__icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.install-callout__content {
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.install-callout__content code {
+  background-color: var(--card);
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 0.85em;
+}
+
+/* GitHub Button */
+.install-github-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
+  background-color: var(--card);
+  color: white;
+  border-radius: 3rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin-top: 1rem;
+}
+
+.install-github-button:hover {
+  transform: scale(1.025);
+  background-color: color-mix(in srgb, var(--card) 80%, white);
+}
+
+/* Footer */
+.install-footer {
+  position: relative;
+  width: 100%;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--card);
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.install-footer__text {
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.install-footer__legals_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0rem;
+}
+
+.install-footer__links {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.install-footer__link {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.install-footer__link--github {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.install-footer__github-icon {
+  width: 1rem;
+  height: 1rem;
+  vertical-align: middle;
+}
+
+.install-footer__disclaimer {
+  color: color-mix(in srgb, var(--white) 50%, transparent);
+  font-style: italic;
+  font-size: 0.9rem;
+  margin: 0 0 0.5rem 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .install-header {
+    padding: 1rem;
+  }
+
+  .install-main {
+    padding: 0 1rem 2rem;
+  }
+
+  .install-title {
+    font-size: 2rem;
+  }
+
+  .install-subtitle {
+    font-size: 1rem;
+  }
+
+  .install-section__title {
+    font-size: 1.25rem;
+  }
+
+  .code-block__content {
+    font-size: 0.8rem;
+    padding: 0.75rem;
+  }
+
+  .install-callout {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .install-logo__title {
+    font-size: 1.5rem;
+  }
+
+  .install-logo__image {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .install-title {
+    font-size: 1.75rem;
+  }
+}
