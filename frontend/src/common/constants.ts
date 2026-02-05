@@ -4,6 +4,8 @@ export const SPOTIFY_REDIRECT_URI =
     import.meta.env.VITE_SPOTIFY_REDIRECT_URI ||
     `${window.location.origin}/callback`;
 
+export const HIDE_PUBLIC_LOGIN = import.meta.env.VITE_HIDE_PUBLIC_LOGIN === 'true';
+
 export const TRACKWATCH_API_BASE_URL = (() => {
     const url = import.meta.env.VITE_TRACKWATCH_API_BASE_URL;
     if (!url) return "";

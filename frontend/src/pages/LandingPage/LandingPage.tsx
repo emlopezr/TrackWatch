@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { getSpotifyAuthUrl } from '../../services/spotify/spotifyAuth';
+import { HIDE_PUBLIC_LOGIN } from '../../common/constants';
 import FeatureCard from '../../layout/FeatureCard/FeatureCard';
 import HeroExample from '../../layout/HeroExample/HeroExample';
 import trackWatchlogo from '../../assets/svg/logo.svg';
@@ -25,10 +26,12 @@ const LandingPage = () => {
             </h1>
           </div>
         </a>
-        <a href={getSpotifyAuthUrl()} className="login-button-small">
-          <img src={spotifyLogo} alt="Spotify Logo" className="login-button-small__logo" />
-          Sign In
-        </a>
+        {!HIDE_PUBLIC_LOGIN && (
+          <a href={getSpotifyAuthUrl()} className="login-button-small">
+            <img src={spotifyLogo} alt="Spotify Logo" className="login-button-small__logo" />
+            Sign In
+          </a>
+        )}
       </header>
 
       <main className="landing-main">
@@ -41,11 +44,13 @@ const LandingPage = () => {
               Open source, self-hosted, and private. Automatically track your favorite artists and sync new releases to your playlist, completely under your control.
             </p>
             <div className="hero__buttons">
-              <a href={getSpotifyAuthUrl()} className="login-button">
-                <img src={spotifyLogo} alt="Spotify Logo" className="login-button__logo" />
-                Login with Spotify
-              </a>
-              <Link to="/install" className="install-button">
+              {!HIDE_PUBLIC_LOGIN && (
+                <a href={getSpotifyAuthUrl()} className="login-button">
+                  <img src={spotifyLogo} alt="Spotify Logo" className="login-button__logo" />
+                  Login with Spotify
+                </a>
+              )}
+              <Link to="/install" className={HIDE_PUBLIC_LOGIN ? "install-button install-button--primary" : "install-button"}>
                 <img src={downloadIcon} alt="Download Icon" className="install-button__icon icon-white" />
                 How to Install
               </Link>

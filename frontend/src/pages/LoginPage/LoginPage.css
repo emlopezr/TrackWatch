@@ -1,0 +1,75 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--background);
+  padding: 2rem;
+}
+
+.login-page__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.login-page__logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.login-page__logo-image {
+  width: 4rem;
+  height: 4rem;
+}
+
+.login-page__title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.login-page__title--white {
+  color: var(--text);
+}
+
+.login-page__title--green {
+  color: var(--primary);
+}
+
+.login-page__description {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.login-page__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 3rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.login-page__button:hover {
+  transform: scale(1.025);
+  box-shadow: 0 10px 20px var(--box-shadow);
+  background-color: color-mix(in srgb, var(--primary) 75%, black);
+}
+
+.login-page__button-logo {
+  width: 1.5rem;
+  height: 1.5rem;
+}
