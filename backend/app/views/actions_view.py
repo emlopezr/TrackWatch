@@ -5,6 +5,7 @@ from app.constants import Headers, System
 from app.services import generate_artist_playlist as generate_artist_playlist_use_case, update_new_releases_for_all_users
 from decouple import config
 from app.exceptions import ForbiddenException, ErrorCode
+import threading
 
 @require_POST
 @csrf_exempt
@@ -34,5 +35,15 @@ def update_new_releases(request):
   if admin_key != config("SECRET_KEY"):
     raise ForbiddenException(ErrorCode.INVALID_ADMIN_CREDENTIALS)
 
-  result = update_new_releases_for_all_users(days_limit)
-  return JsonResponse(result)
+  # Run in background thread to avoid Gunicorn worker timeout
+  thread = threading.Thread(
+    target=update_new_releases_for_all_users,
+    args=(days_limit,),
+    daemon=True
+  )
+  thread.start()
+
+  return JsonResponse({
+    "status": "started",
+    "message": "New releases update started in background"
+  })
