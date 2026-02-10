@@ -9,15 +9,15 @@
 
 ### User Story 1 - Deploy TrackWatch with a single container (Priority: P1)
 
-As a self-hosted user, I want to deploy TrackWatch using a single Docker container (plus a database) so that I can get the application running with minimal configuration and without managing multiple containers.
+As a self-hosted user, I want to deploy TrackWatch using a single Docker container so that I can get the application running with minimal configuration and without managing multiple containers.
 
-**Why this priority**: This is the core value proposition of the feature. Self-hosted users on platforms like CasaOS, Unraid, or Portainer expect single-image deployments. Reducing the number of containers from 4 to 2 (app + database) significantly lowers the barrier to adoption.
+**Why this priority**: This is the core value proposition of the feature. Self-hosted users on platforms like CasaOS, Unraid, or Portainer expect single-image deployments. Reducing the number of containers from 4 to 1 (everything included: PostgreSQL, Nginx, Gunicorn, APScheduler) significantly lowers the barrier to adoption.
 
-**Independent Test**: Can be fully tested by running `docker-compose -f docker-compose.aio.yml up -d`, providing the required environment variables, and verifying that the application is accessible and fully functional (frontend loads, API responds, scheduler runs).
+**Independent Test**: Can be fully tested by running `docker run` with the required environment variables, or `docker-compose -f docker-compose.aio.yml up -d`, and verifying that the application is accessible and fully functional (frontend loads, API responds, scheduler runs).
 
 **Acceptance Scenarios**:
 
-1. **Given** a machine with Docker installed and a valid `.env` file, **When** the user runs `docker-compose -f docker-compose.aio.yml up -d`, **Then** the application starts with two containers (database + trackwatch) and the frontend is accessible on the configured port.
+1. **Given** a machine with Docker installed, **When** the user runs `docker run` with required env vars (`SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET`, `SECRET_KEY`), **Then** the application starts as a single container with embedded PostgreSQL and the frontend is accessible on the configured port.
 2. **Given** the AiO container is running, **When** the user navigates to the application URL, **Then** the React SPA loads, API requests to `/api/*` are proxied to the backend, and the user can log in with Spotify.
 3. **Given** the AiO container is running, **When** the scheduler's configured time arrives, **Then** new releases are checked and playlists are updated automatically, just like the multi-container setup.
 
@@ -33,7 +33,7 @@ As an existing user or developer, I want the current `docker-compose.yml` multi-
 
 **Acceptance Scenarios**:
 
-1. **Given** the existing `docker-compose.yml`, `backend/Dockerfile.compose`, `frontend/Dockerfile.compose`, `backend/entrypoint.sh`, and `frontend/nginx.conf`, **When** the AiO feature is added, **Then** none of these files are modified.
+1. **Given** the existing `docker-compose.yml`, `backend/Dockerfile.compose`, `frontend/Dockerfile.compose`, `backend/entrypoint.sh`, and `frontend/nginx.conf`, **When** the AiO feature is added, **Then** none of these core Docker files are modified. Minimal changes to shared application files (`frontend/index.html`, `frontend/src/common/constants.ts`, `backend/app/constants.py`) are backward-compatible.
 2. **Given** a user running the existing multi-container setup, **When** they pull the latest code with AiO changes, **Then** their deployment continues to work without any reconfiguration.
 
 ---
@@ -79,24 +79,27 @@ As a self-hosted user, I want to configure the AiO deployment using the same `.e
 
 ### Functional Requirements
 
-- **FR-001**: The system MUST provide an All-in-One Dockerfile that builds a single image containing the frontend (Nginx + React SPA), backend (Gunicorn + Django), and scheduler (APScheduler) processes.
-- **FR-002**: The system MUST provide a separate `docker-compose.aio.yml` file that orchestrates the AiO container alongside a PostgreSQL database container.
-- **FR-003**: The AiO container MUST use a process supervisor to manage and automatically restart the three internal processes (Nginx, Gunicorn, APScheduler scheduler).
+- **FR-001**: The system MUST provide an All-in-One Dockerfile that builds a single image containing PostgreSQL, the frontend (Nginx + React SPA), backend (Gunicorn + Django), and scheduler (APScheduler) processes.
+- **FR-002**: The system MUST provide a separate `docker-compose.aio.yml` file as an alternative way to run the AiO container (single service with a persistent volume).
+- **FR-003**: The AiO container MUST use a process supervisor to manage and automatically restart the four internal processes (PostgreSQL, Nginx, Gunicorn, APScheduler scheduler).
 - **FR-004**: The AiO container MUST run database migrations on startup before starting the application processes.
 - **FR-005**: The AiO container MUST serve the React SPA and proxy `/api/*` requests to the backend, identical to the current Nginx behavior.
 - **FR-006**: The AiO container MUST expose a single port (default 80) for all user-facing traffic.
 - **FR-007**: The AiO container MUST provide a health check endpoint that reflects the status of the backend process.
-- **FR-008**: The existing `docker-compose.yml` and all current Docker-related files (Dockerfiles, entrypoint, nginx.conf) MUST NOT be modified.
-- **FR-009**: The AiO setup MUST use the same `.env` file format and variable names as the existing multi-container setup.
+- **FR-008**: The existing `docker-compose.yml` and all current Docker-related files (Dockerfiles, entrypoint, nginx.conf) MUST NOT be modified. Minimal backward-compatible changes to shared application files are acceptable.
+- **FR-009**: The AiO setup MUST use the same environment variable names as the existing multi-container setup.
 - **FR-010**: The Nginx configuration for the AiO image MUST proxy to `localhost` instead of the Docker service hostname `backend`, since all processes run in the same container.
+- **FR-011**: The AiO container MUST support runtime environment variable injection for frontend configuration, allowing pre-built images to be configured at startup via `window.__ENV__` without rebuilding.
+- **FR-012**: The AiO container MUST initialize PostgreSQL on first run (initdb, create user/database) and persist data via a Docker volume.
+- **FR-013**: The `EMAIL_DOMAIN` MUST be configurable via environment variable so self-hosters can use their own Resend-verified domain.
 
 ### Key Entities
 
-- **AiO Dockerfile**: Multi-stage build file that compiles the frontend and packages it with the backend runtime, Nginx, and process supervisor into a single image.
-- **AiO Nginx Configuration**: A variant of the existing `nginx.conf` that proxies to `localhost:8000` instead of `backend:8000`.
-- **AiO Entrypoint Script**: Startup script that handles database readiness check, migrations, static file collection, and launches the process supervisor.
-- **Process Supervisor Configuration**: Configuration file defining the three managed processes and their restart policies.
-- **AiO Docker Compose File**: Simplified compose file with only two services (database + trackwatch).
+- **AiO Dockerfile**: Multi-stage build file that compiles the frontend and packages it with the backend runtime, Nginx, PostgreSQL, and process supervisor into a single image.
+- **AiO Nginx Configuration**: A variant of the existing `nginx.conf` that proxies to `127.0.0.1:8000` instead of `backend:8000`.
+- **AiO Entrypoint Script**: Startup script that handles PostgreSQL initialization (first run), database migrations, static file collection, runtime env.js generation, and launches the process supervisor.
+- **Process Supervisor Configuration**: Configuration file defining the four managed processes (PostgreSQL, Nginx, Gunicorn, APScheduler) and their restart policies.
+- **AiO Docker Compose File**: Simplified compose file with a single service (trackwatch) and a persistent volume for PostgreSQL data.
 
 ## Success Criteria *(mandatory)*
 
@@ -105,16 +108,16 @@ As a self-hosted user, I want to configure the AiO deployment using the same `.e
 - **SC-001**: A user can go from cloning the repository to a fully running TrackWatch instance (AiO mode) in under 5 minutes, excluding Spotify Developer App creation.
 - **SC-002**: The AiO container starts and passes its health check within 60 seconds on a standard machine (2 CPU cores, 4GB RAM).
 - **SC-003**: All existing application features (Spotify login, artist following, playlist generation, release notifications, scheduled checks) work identically in AiO mode compared to multi-container mode.
-- **SC-004**: Zero existing files are modified — the feature is purely additive (only new files created).
+- **SC-004**: Core Docker files are untouched. Minimal backward-compatible changes to shared application files (`frontend/index.html`, `frontend/src/common/constants.ts`, `backend/app/constants.py`, `docker-compose.yml`) support runtime env injection and configurable email domain.
 - **SC-005**: If any internal process crashes, the process supervisor restarts it within 10 seconds, and the application recovers without manual container restart.
 - **SC-006**: The AiO image size remains under 700MB to be practical for self-hosted environments with limited storage.
 
 ## Assumptions
 
-- Users deploying the AiO image will build it locally using `docker-compose -f docker-compose.aio.yml up -d --build`. Publishing a pre-built image to a container registry (which requires runtime environment variable injection for frontend configuration) is out of scope for this feature and will be addressed in a future phase.
-- The process supervisor used will be `supervisord`, which is the most widely adopted solution for multi-process Docker containers in the self-hosted community.
-- The AiO container will use the same base Python image as the current backend Dockerfile, with Nginx and Node.js added during the build stages.
-- Self-hosted users are comfortable editing a `.env` file and running basic Docker commands.
+- Users can deploy the AiO image either by pulling from GHCR/Docker Hub or building locally from source.
+- The process supervisor used is `supervisord`, which is the most widely adopted solution for multi-process Docker containers in the self-hosted community.
+- The AiO container uses `python:3.11-slim` as the runtime base image, with Nginx, PostgreSQL, and Node.js (build stage only) added during the build.
+- Self-hosted users are comfortable running basic Docker commands. Only 3 environment variables are required (`SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET`, `SECRET_KEY`).
 
 ## Scope Boundaries
 
@@ -126,9 +129,13 @@ As a self-hosted user, I want to configure the AiO deployment using the same `.e
 - New `entrypoint-aio.sh` at repository root (or appropriate location)
 - Documentation updates to reference the AiO deployment option
 
+### Also Implemented (beyond original scope)
+- Runtime environment variable injection for frontend (`window.__ENV__` pattern via `env.js`)
+- Pre-built image publishing to GHCR and Docker Hub via GitHub Actions (semver tags)
+- Embedded PostgreSQL inside the container (true all-in-one, no sidecar database)
+- Configurable `EMAIL_DOMAIN` for self-hosters using their own Resend account
+- Updated Install page in frontend with AiO tab
+
 ### Out of Scope
-- Publishing pre-built images to Docker Hub or GHCR (future phase)
-- Runtime environment variable injection for frontend (future phase, needed for pre-built images)
 - Multi-architecture builds (linux/arm64 for Raspberry Pi, etc.)
 - Integration with self-hosted platforms (CasaOS app store, Unraid templates, etc.)
-- Modifications to application source code (frontend or backend)

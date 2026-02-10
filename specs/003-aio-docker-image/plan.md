@@ -5,19 +5,19 @@
 
 ## Summary
 
-Provide an All-in-One Docker deployment option that consolidates the frontend (Nginx + React SPA), backend (Gunicorn + Django), and scheduler (APScheduler) into a single container managed by supervisord. This runs alongside a PostgreSQL database container via a dedicated `docker-compose.aio.yml`. Zero existing files are modified — the feature is purely additive (5 new files).
+Provide a true All-in-One Docker deployment option that consolidates PostgreSQL, the frontend (Nginx + React SPA), backend (Gunicorn + Django), and scheduler (APScheduler) into a single container managed by supervisord. The container is fully self-contained — no sidecar database needed. Runtime environment variable injection allows pre-built images (GHCR/Docker Hub) to be configured at startup without rebuilding.
 
 ## Technical Context
 
 **Language/Version**: Python 3.11 (backend), TypeScript 5.6 (frontend build only), Node.js 20 (build stage only)
 **Primary Dependencies**: supervisord (pip), nginx (apt), gunicorn, Django 5.2, React 18.3, Vite 6.4
-**Storage**: PostgreSQL 15 (external container, unchanged)
+**Storage**: PostgreSQL 17 (embedded inside container, data persisted via Docker volume)
 **Testing**: Manual integration testing (Docker build + compose up + functional verification)
 **Target Platform**: Linux (Docker, amd64)
 **Project Type**: Web application (existing backend + frontend)
 **Performance Goals**: Container health check passes within 60 seconds, all features functional
-**Constraints**: Image size < 700MB, zero modifications to existing files, same `.env` format
-**Scale/Scope**: 5 new files, 0 modified files
+**Constraints**: Image size < 700MB, same env var names, backward-compatible changes only
+**Scale/Scope**: 8 new files, 4 modified files
 
 ## Constitution Check
 
@@ -54,27 +54,31 @@ specs/003-aio-docker-image/
 ### Source Code (repository root)
 
 ```text
-# New files (AiO feature) — all at repository root
-Dockerfile.aio           # Multi-stage build: Node build → Python/Nginx/supervisord runtime
-docker-compose.aio.yml   # 2 services: db + trackwatch
-supervisord.conf         # Process manager config for Nginx + Gunicorn + Scheduler
-nginx-aio.conf           # Nginx config with proxy_pass to 127.0.0.1:8000
-entrypoint-aio.sh        # DB wait → migrations → collectstatic → exec supervisord
+# New files (AiO feature)
+Dockerfile.aio                          # Multi-stage build: Node build → Python/Nginx/PostgreSQL/supervisord
+docker-compose.aio.yml                  # 1 service: trackwatch (fully self-contained)
+supervisord.conf                        # Process manager: PostgreSQL + Nginx + Gunicorn + Scheduler
+nginx-aio.conf                          # Nginx config with proxy_pass to 127.0.0.1:8000
+entrypoint-aio.sh                       # PG init → supervisord → migrations → env.js generation
+.dockerignore                           # Build context optimization
+frontend/public/env.js                  # Empty placeholder for local dev (prevents 404)
+docs/DOCKER_AIO_SETUP.md               # Full setup documentation
+.github/workflows/docker-publish.yml    # CI/CD: build and publish to GHCR + Docker Hub
 
-# Existing files (NOT modified)
-docker-compose.yml       # Unchanged — 4-service setup
-backend/
-├── Dockerfile.compose   # Unchanged
-├── entrypoint.sh        # Unchanged
-└── ...
-frontend/
-├── Dockerfile.compose   # Unchanged
-├── nginx.conf           # Unchanged
-└── ...
-.env.docker.example      # Unchanged — same vars work for both modes
+# Modified files (backward-compatible changes)
+frontend/index.html                     # Added <script src="/env.js"> for runtime config
+frontend/src/common/constants.ts        # env() helper reads window.__ENV__ first, falls back to import.meta.env
+backend/app/constants.py                # EMAIL_DOMAIN configurable via env var (default: emlopezr.com)
+docker-compose.yml                      # Added EMAIL_DOMAIN env var to backend service
+
+# Existing Docker files (NOT modified)
+backend/Dockerfile.compose              # Unchanged
+backend/entrypoint.sh                   # Unchanged
+frontend/Dockerfile.compose             # Unchanged
+frontend/nginx.conf                     # Unchanged
 ```
 
-**Structure Decision**: All 5 new files placed at repository root. The `Dockerfile.aio` needs access to both `backend/` and `frontend/` as build context. The compose and config files follow the convention of the existing `docker-compose.yml` at root level.
+**Structure Decision**: All AiO infrastructure files placed at repository root. The `Dockerfile.aio` needs access to both `backend/` and `frontend/` as build context.
 
 ## Complexity Tracking
 
@@ -94,8 +98,9 @@ No violations to justify. All constitution gates pass.
 - Output: `/app/dist/` with built React SPA
 
 **Stage 2 — Runtime** (python:3.11-slim):
-- Install system dependencies: `libpq-dev`, `gcc`, `curl`, `nginx`
+- Install system dependencies: `libpq-dev`, `gcc`, `curl`, `nginx`, `postgresql`, `postgresql-client`
 - Install Python dependencies from `backend/requirements.txt` + `supervisor`
+- Prepare PostgreSQL data directory (`/var/lib/postgresql/data`), declare VOLUME
 - Copy backend application code from `backend/`
 - Copy frontend build from Stage 1 to `/usr/share/nginx/html`
 - Copy `nginx-aio.conf` to `/etc/nginx/conf.d/default.conf`
@@ -109,36 +114,41 @@ No violations to justify. All constitution gates pass.
 
 ### File 2: `docker-compose.aio.yml`
 
-**Purpose**: Simplified compose file with 2 services only.
-
-**Service: db**
-- Same as existing `docker-compose.yml` db service (postgres:15-alpine, health check, persistent volume)
+**Purpose**: Simplified compose file with a single service (true all-in-one).
 
 **Service: trackwatch**
 - Build context: `.` (repository root) with `Dockerfile.aio`
-- Build args: VITE_* variables for frontend
-- Environment: All backend env vars (Django, DB, Spotify, Resend, Gunicorn, Scheduler)
-- `DATABASE_HOST: db` (overrides any .env value to use the compose network)
+- Build args: VITE_* variables for frontend build
+- Environment: All backend env vars (Django, DB, Spotify, Resend, Gunicorn, Scheduler) + VITE_* runtime vars for env.js generation
+- Database credentials default to `trackwatch`/`trackwatch`/`trackwatch` (internal PostgreSQL)
 - Port: `${PORT:-80}:80`
-- Depends on: db (healthy)
 - Restart: unless-stopped
 - `stop_grace_period: 150s` (exceeds max supervisord stopwaitsecs)
 
-**Network**: `trackwatch-aio-network` (separate from multi-container network to avoid conflicts)
-**Volume**: `trackwatch_aio_postgres_data` (separate volume name to avoid conflicts)
+**Volume**: `trackwatch_aio_postgres_data` (separate volume name to avoid conflicts with multi-container setup)
 
 ### File 3: `supervisord.conf`
 
-**Purpose**: Manage 3 processes with auto-restart and Docker-compatible logging.
+**Purpose**: Manage 4 processes with auto-restart and Docker-compatible logging.
 
 **[supervisord] section**:
 - `nodaemon=true` (run in foreground for Docker)
 - `logfile=/dev/null` (no supervisor log file)
 - `user=root`
 
+**[unix_http_server]** + **[supervisorctl]** + **[rpcinterface:supervisor]**:
+- Unix socket at `/var/run/supervisor.sock` for `supervisorctl` access
+
+**[program:postgresql]**:
+- Command: `/usr/lib/postgresql/17/bin/postgres -D /var/lib/postgresql/data -c listen_addresses=127.0.0.1 -c port=5432`
+- User: postgres
+- Priority: 1 (starts first)
+- `autorestart=true`, `startsecs=5`, `startretries=3`
+- `stopwaitsecs=30`
+
 **[program:nginx]**:
 - Command: `nginx -g "daemon off;"`
-- Priority: 10 (starts first)
+- Priority: 10
 - `autorestart=true`, `startsecs=5`, `startretries=3`
 - `stopwaitsecs=30`
 - stdout/stderr → `/dev/fd/1` and `/dev/fd/2`
@@ -171,16 +181,22 @@ Everything else is identical: gzip, security headers, SPA fallback, static asset
 
 ### File 5: `entrypoint-aio.sh`
 
-**Purpose**: Sequential startup: DB wait → migrations → collectstatic → supervisord.
+**Purpose**: PostgreSQL initialization, startup, migrations, and runtime config generation.
 
 **Flow**:
 1. `set -e` (exit on error)
-2. Database readiness check (same logic as existing `entrypoint.sh`):
-   - Skip if `SKIP_DB_WAIT=true`
-   - Python psycopg2 connection test with retries (max `DB_WAIT_MAX_RETRIES`, default 30)
-3. Run `python manage.py migrate --noinput`
-4. Run `python manage.py collectstatic --noinput`
-5. `exec supervisord -c /etc/supervisord.conf` (replaces shell, becomes PID 1)
+2. PostgreSQL initialization (first run only — checks for `PG_VERSION` file):
+   - `chown` data directory, run `initdb` as postgres user
+   - Start PostgreSQL temporarily, create user/database with configured credentials
+   - Stop PostgreSQL (supervisord will manage it going forward)
+3. Ensure correct ownership of data directory and run directory
+4. Export `DATABASE_HOST=127.0.0.1`, `DATABASE_PORT=5432` and other DB vars
+5. Start supervisord in background (launches PostgreSQL, Nginx, Gunicorn, Scheduler)
+6. Wait for PostgreSQL to be ready (`pg_isready` with retries)
+7. Run `python manage.py migrate --noinput`
+8. Run `python manage.py collectstatic --noinput`
+9. Generate `/usr/share/nginx/html/env.js` with runtime `window.__ENV__` from environment variables (SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, VITE_SPOTIFY_REDIRECT_URI, etc.)
+10. `wait $SUPERVISORD_PID` (keep container running)
 
 **Working directory**: `/app` (set by Dockerfile WORKDIR)
 
@@ -188,12 +204,14 @@ Everything else is identical: gzip, security headers, SPA fallback, static asset
 
 | Aspect | Multi-Container (existing) | AiO (new) |
 |--------|---------------------------|-----------|
-| Command | `docker-compose up -d` | `docker-compose -f docker-compose.aio.yml up -d --build` |
-| Containers | 4 (db, backend, scheduler, frontend) | 2 (db, trackwatch) |
+| Command | `docker-compose up -d` | `docker run ...` or `docker-compose -f docker-compose.aio.yml up -d` |
+| Pre-built image | No (must build from source) | Yes (`docker pull` from GHCR or Docker Hub) |
+| Containers | 4 (db, backend, scheduler, frontend) | 1 (everything included) |
+| Database | Separate container (postgres:15-alpine) | Embedded PostgreSQL 17 |
 | Process management | Docker per container | supervisord inside container |
 | Independent restart | Yes (per service) | No (whole container) |
 | Log separation | By container | Mixed (all to stdout) |
-| Network names | `trackwatch-network` | `trackwatch-aio-network` |
 | Volume names | `trackwatch_postgres_data` | `trackwatch_aio_postgres_data` |
-| `.env` file | Same | Same |
+| Env vars | Same | Same names, + VITE_* runtime injection |
 | Port | `${PORT:-80}:80` | `${PORT:-80}:80` |
+| Best for | Development, production scaling | Self-hosting, quick setup |
