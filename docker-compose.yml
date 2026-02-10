@@ -45,6 +45,7 @@ services:
             # Optional: Email service
             RESEND_API_KEY: ${RESEND_API_KEY:-}
             ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+            EMAIL_DOMAIN: ${EMAIL_DOMAIN:-emlopezr.com}
 
             # Gunicorn configuration
             GUNICORN_WORKERS: ${GUNICORN_WORKERS:-2}

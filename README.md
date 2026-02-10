@@ -18,59 +18,68 @@
 - **Never miss a release** - Checks for new music multiple times daily
 - **Simple deployment** - Up and running in minutes with Docker
 
-## Quick Start (Docker)
+## Quick Start
 
 ### Prerequisites
 
-- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
-- A [Spotify Developer](https://developer.spotify.com/dashboard) account
+- [Docker](https://docs.docker.com/get-docker/) installed
+- A [Spotify Developer](https://developer.spotify.com/dashboard) app with Redirect URI: `http://127.0.0.1/callback`
 
-### 1. Clone the Repository
+### Option A: All-in-One Image (Recommended)
+
+One container with everything included — no cloning, no building. Available on [GHCR](https://ghcr.io/emlopezr/trackwatch) and [Docker Hub](https://hub.docker.com/r/emlopezr/trackwatch).
+
+```bash
+docker run -d \
+  --name trackwatch \
+  -e SPOTIFY_CLIENT_ID=your-client-id \
+  -e SPOTIFY_CLIENT_SECRET=your-client-secret \
+  -e SECRET_KEY=your-secret-key \
+  -v trackwatch_data:/var/lib/postgresql/data \
+  -p 80:80 \
+  --restart unless-stopped \
+  ghcr.io/emlopezr/trackwatch:latest
+```
+
+Open **http://127.0.0.1** and you're done.
+
+> *If port 80 is in use, change `-p 80:80` to `-p 8080:80` and access at `http://127.0.0.1:8080`*
+
+For the full AiO guide (optional variables, Docker Compose, email setup, backups), see **[docs/DOCKER_AIO_SETUP.md](docs/DOCKER_AIO_SETUP.md)**.
+
+### Option B: Multi-Container (Docker Compose)
+
+Best for development or if you need independent control over each service.
 
 ```bash
 git clone https://github.com/emlopezr/trackwatch.git
 cd trackwatch
-```
-
-### 2. Configure Environment
-
-```bash
 cp .env.docker.example .env
 ```
 
 Edit `.env` with your configuration:
 
 ```env
-# Required: Generate a secure secret key
 SECRET_KEY=your-random-secret-key
-
-# Required: Database credentials
 DATABASE_PASSWORD=your-secure-password
-
-# Required: Spotify API credentials (see Configuration section)
 SPOTIFY_CLIENT_ID=your-client-id
 SPOTIFY_CLIENT_SECRET=your-client-secret
 ```
-
-### 3. Start TrackWatch
 
 ```bash
 docker-compose up -d
 ```
 
-That's it! Access TrackWatch at **http://127.0.0.1**
+Open **http://127.0.0.1** and you're done.
 
-*Tip: If port 80 is already in use on your machine, change PORT=8080 in your .env file and access the app at http://127.0.0.1:8080*
-
-### 4. Stop TrackWatch
+### Stop TrackWatch
 
 ```bash
+# AiO
+docker stop trackwatch
+
+# Multi-container
 docker-compose down
-```
-
-To also remove the database volume:
-```bash
-docker-compose down -v
 ```
 
 ## Configuration
