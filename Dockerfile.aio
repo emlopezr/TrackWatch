@@ -1,0 +1,98 @@
+# ============================================================
+# Stage 1: Build the React frontend
+# ============================================================
+FROM node:20-alpine AS frontend-builder
+
+WORKDIR /app
+
+# Copy package files first for better caching
+COPY frontend/package.json frontend/pnpm-lock.yaml* frontend/package-lock.json* ./
+
+# Install pnpm and dependencies
+RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN pnpm install --frozen-lockfile || npm ci
+
+# Copy frontend source code
+COPY frontend/ .
+
+# Build arguments for environment variables
+ARG VITE_SPOTIFY_CLIENT_ID
+ARG VITE_SPOTIFY_CLIENT_SECRET
+ARG VITE_SPOTIFY_REDIRECT_URI
+ARG VITE_TRACKWATCH_API_BASE_URL
+
+# Set environment variables for build
+ENV VITE_SPOTIFY_CLIENT_ID=$VITE_SPOTIFY_CLIENT_ID
+ENV VITE_SPOTIFY_CLIENT_SECRET=$VITE_SPOTIFY_CLIENT_SECRET
+ENV VITE_SPOTIFY_REDIRECT_URI=$VITE_SPOTIFY_REDIRECT_URI
+ENV VITE_TRACKWATCH_API_BASE_URL=$VITE_TRACKWATCH_API_BASE_URL
+
+# Build the application
+RUN pnpm run build || npm run build
+
+# ============================================================
+# Stage 2: Production runtime (Python + Nginx + supervisord)
+# ============================================================
+FROM python:3.11-slim
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    GUNICORN_WORKERS=2 \
+    GUNICORN_THREADS=4 \
+    GUNICORN_TIMEOUT=120
+
+# Set work directory
+WORKDIR /app
+
+# Install system dependencies (psycopg2, healthcheck, nginx, postgresql)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq-dev \
+    gcc \
+    curl \
+    nginx \
+    postgresql \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first for better caching
+COPY backend/requirements.txt .
+
+# Install Python dependencies + supervisor
+RUN pip install --no-cache-dir -r requirements.txt supervisor
+
+# Copy backend application code
+COPY backend/ .
+
+# Copy frontend build from stage 1
+COPY --from=frontend-builder /app/dist /usr/share/nginx/html
+
+# Remove default nginx config and copy AiO config
+RUN rm -f /etc/nginx/sites-enabled/default /etc/nginx/conf.d/default.conf
+COPY nginx-aio.conf /etc/nginx/conf.d/default.conf
+
+# Copy supervisord configuration
+COPY supervisord.conf /etc/supervisord.conf
+
+# Copy and set permissions for entrypoint script
+COPY entrypoint-aio.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Prepare PostgreSQL data and run directories
+RUN mkdir -p /var/lib/postgresql/data /run/postgresql \
+    && chown -R postgres:postgres /var/lib/postgresql /run/postgresql
+
+# Expose port 80 (Nginx)
+EXPOSE 80
+
+# Volume for PostgreSQL data persistence
+VOLUME /var/lib/postgresql/data
+
+# Health check: verify both Nginx and Gunicorn are responding
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost/health && curl -f http://localhost:8000/ping || exit 1
+
+# Run entrypoint script
+ENTRYPOINT ["/entrypoint.sh"]

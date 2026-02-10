@@ -1,3 +1,5 @@
+from decouple import config
+
 class Headers:
   AUTHORIZATION = "Authorization"
   CONTENT_TYPE = "Content-Type"
@@ -23,7 +25,7 @@ class Endpoints:
 
 class AppInfo:
   APP_NAME = "TrackWatch"
-  DOMAIN = "emlopezr.com"
+  DOMAIN = config("EMAIL_DOMAIN", default="emlopezr.com")
   DEVELOPER = "emlopezr"
   GITHUB_USER_PROFILE = f"https://github.com/{DEVELOPER}"
 

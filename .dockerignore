@@ -1,0 +1,50 @@
+# Git
+.git/
+.gitignore
+
+# Specs and documentation
+specs/
+.specify/
+*.md
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment files (secrets must not be baked into images)
+.env
+.env.*
+!.env.docker.example
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+.tox/
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Node artifacts
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker (don't include Dockerfiles in the image)
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Other
+*.log
+github-issue-34-response.md

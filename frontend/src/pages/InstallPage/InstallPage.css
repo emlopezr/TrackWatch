@@ -177,6 +177,37 @@
   font-size: 0.9em;
 }
 
+/* Tab Styles */
+.install-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--card);
+}
+
+.install-tab {
+  flex: 1;
+  padding: 0.85rem 1.5rem;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+}
+
+.install-tab:hover {
+  color: var(--white);
+}
+
+.install-tab--active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
 /* Code Block Styles */
 .code-block {
   background-color: #1a1a1a;
