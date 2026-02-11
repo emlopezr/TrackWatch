@@ -498,7 +498,7 @@ Items are **deduplicated** across reviews. When the same issue was found by mult
   **Files:** `app/models/user.py:16-19`
   **Fix:** Consider `django-encrypted-model-fields` or `django-fernet-fields`. At minimum, document the risk.
 
-- [ ] **4.4** Lazy-load `resend.api_key` configuration
+- [x] **4.4** Lazy-load `resend.api_key` configuration
   **Files:** `app/clients/email/resend_client.py:7`
   **Fix:** Move `resend.api_key = config("RESEND_API_KEY")` inside a function to prevent import-time failures.
 

@@ -110,7 +110,7 @@ The `-p` flag maps a port on your machine to port 80 inside the container:
 -p 3000:80    # Access at http://127.0.0.1:3000
 ```
 
-If you change the port, remember to update the **Redirect URI** in your Spotify app accordingly (e.g. `http://127.0.0.1:8080/callback`).
+Remember to update the **Redirect URI** in your Spotify app to match your port (e.g. `http://127.0.0.1:80/callback` or `http://127.0.0.1:8080/callback`). The port is mandatory in Spotify's dashboard.
 
 ### Or use Docker Compose
 
@@ -210,10 +210,10 @@ Open **http://127.0.0.1** in your browser.
 In your [Spotify Developer Dashboard](https://developer.spotify.com/dashboard), add this **Redirect URI** to your app:
 
 ```
-http://127.0.0.1/callback
+http://127.0.0.1:80/callback
 ```
 
-> **Important:** Spotify does NOT allow `localhost`. You must use `127.0.0.1`. For custom domains, HTTPS is required.
+> **Important:** Spotify only allows `http://` for `127.0.0.1`. Any other address (LAN IPs like `192.168.x.x`, custom domains) **requires HTTPS**. `localhost` is not accepted at all.
 
 ## Verifying the Deployment
 
@@ -276,7 +276,7 @@ docker exec -i trackwatch psql -U trackwatch trackwatch < backup.sql
 | `PORT` | `80` | Host port to expose |
 | `DEBUG` | `False` | Django debug mode |
 | `ALLOWED_HOSTS` | `*` | Comma-separated allowed hosts |
-| `VITE_SPOTIFY_REDIRECT_URI` | `http://<host>/callback` | Spotify OAuth redirect URI |
+| `VITE_SPOTIFY_REDIRECT_URI` | `http://<host>:<port>/callback` | Spotify OAuth redirect URI |
 | `VITE_TRACKWATCH_API_BASE_URL` | `/api` | API base URL for frontend |
 | `VITE_HIDE_PUBLIC_LOGIN` | `false` | Hide the public login button |
 | `RESEND_API_KEY` | *(empty)* | [Resend](https://resend.com) API key for email notifications |
@@ -344,7 +344,8 @@ If Spotify login fails with a redirect error:
 
 1. Verify the redirect URI in your Spotify app matches **exactly** (including port and protocol)
 2. Use `127.0.0.1` instead of `localhost` — Spotify does not allow `localhost`
-3. For HTTPS domains, ensure the URI uses `https://`
+3. Spotify only allows `http://` for `127.0.0.1` — LAN IPs (e.g. `192.168.x.x`) and custom domains require HTTPS
+4. For HTTPS, set up a reverse proxy with a valid certificate and use an internal domain
 
 ### Container Starts but App Not Accessible
 

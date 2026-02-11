@@ -96,7 +96,7 @@ const InstallPage = () => {
                 <ul className="install-nested-list">
                   <li><strong>App name:</strong> TrackWatch (or any name)</li>
                   <li><strong>App description:</strong> Your description</li>
-                  <li><strong>Redirect URI:</strong> <code>http://127.0.0.1/callback</code></li>
+                  <li><strong>Redirect URI:</strong> <code>http://127.0.0.1:80/callback</code></li>
                   <li><strong>Which API/SDKs are you planning to use?</strong> Web API</li>
                 </ul>
               </li>
@@ -106,8 +106,8 @@ const InstallPage = () => {
             <div className="install-callout install-callout--warning">
               <div className="install-callout__icon">⚠️</div>
               <div className="install-callout__content">
-                <strong>Important:</strong> Spotify does not allow <code>localhost</code> as a redirect URI.
-                You must use <code>127.0.0.1</code> for local development, or <code>https://</code> for custom domains.
+                <strong>Important:</strong> Spotify only allows <code>http://</code> for <code>127.0.0.1</code>.
+                Any other address (LAN IPs, custom domains) <strong>requires HTTPS</strong>. <code>localhost</code> is not accepted.
               </div>
             </div>
           </section>

@@ -4,9 +4,14 @@ from decouple import config
 from app.exceptions import InternalServerErrorException, ErrorCode
 from app.models.user import User
 
-resend.api_key = config("RESEND_API_KEY")
+def _configure_api_key():
+  api_key = config("RESEND_API_KEY", default="")
+  if not api_key: return False
+  resend.api_key = api_key
+  return True
 
 def send_admin_email(admin_email, email_subject, email_body):
+  if not _configure_api_key(): return
   params = create_email_params(admin_email, email_subject, email_body)
 
   try:
@@ -15,6 +20,7 @@ def send_admin_email(admin_email, email_subject, email_body):
     print(f"Failed to send admin email: {str(e)}")
 
 def send_email(recipient, email_subject, email_body):
+  if not _configure_api_key(): return
   params = create_email_params(recipient, email_subject, email_body)
 
   try:

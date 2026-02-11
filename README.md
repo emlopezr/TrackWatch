@@ -23,7 +23,7 @@
 ### Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) installed
-- A [Spotify Developer](https://developer.spotify.com/dashboard) app with Redirect URI: `http://127.0.0.1/callback`
+- A [Spotify Developer](https://developer.spotify.com/dashboard) app with Redirect URI: `http://127.0.0.1:80/callback`
 
 ### Option A: All-in-One Image (Recommended)
 
@@ -91,12 +91,12 @@ docker-compose down
 3. Fill in the app details:
    - **App name:** TrackWatch (or any name)
    - **App description:** Your description
-   - **Redirect URI:** `http://127.0.0.1/callback`
+   - **Redirect URI:** `http://127.0.0.1:80/callback`
    - **Which API/SDKs are you planning to use?** Web API
 4. Click **Settings** and note your **Client ID** and **Client Secret**
 5. Add these to your `.env` file
 
-> **Important:** Spotify does not allow `localhost` as a redirect URI. You must use `127.0.0.1` for local development, or `https://` for custom domains.
+> **Important:** Spotify only allows `http://` for `127.0.0.1`. Any other address (LAN IPs like `192.168.x.x`, custom domains) **requires HTTPS**. `localhost` is not accepted at all.
 
 ### Custom Domain
 
@@ -125,7 +125,7 @@ If deploying to a custom domain:
 | `DATABASE_PASSWORD` | Yes | - | PostgreSQL password |
 | `SPOTIFY_CLIENT_ID` | Yes | - | From Spotify Developer Dashboard |
 | `SPOTIFY_CLIENT_SECRET` | Yes | - | From Spotify Developer Dashboard |
-| `VITE_SPOTIFY_REDIRECT_URI` | No | `http://127.0.0.1/callback` | OAuth callback URL |
+| `VITE_SPOTIFY_REDIRECT_URI` | No | `http://127.0.0.1:80/callback` | OAuth callback URL |
 | `PORT` | No | `80` | Frontend port |
 | `DEBUG` | No | `False` | Django debug mode |
 | `SCHEDULER_HOURS` | No | `7,14,21` | Hours to check for releases (24h) |
@@ -185,10 +185,10 @@ For local development without Docker, see [docs/MANUAL_SETUP.md](docs/MANUAL_SET
 ### "Invalid redirect URI" error
 
 Ensure the redirect URI in your Spotify app settings matches exactly:
-- For local Docker: `http://127.0.0.1/callback`
+- For local Docker: `http://127.0.0.1:80/callback`
 - For custom domain: `https://your-domain.com/callback`
 
-> **Note:** Spotify does not allow `localhost` - use `127.0.0.1` instead. Custom domains require HTTPS.
+> **Note:** Spotify only allows `http://` for `127.0.0.1`. LAN IPs (e.g. `192.168.x.x`) and custom domains require HTTPS. `localhost` is not accepted.
 
 ### Container won't start
 

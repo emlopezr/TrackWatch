@@ -16,7 +16,7 @@ This guide covers setting up TrackWatch for local development without Docker. Fo
    ```
    http://127.0.0.1:5173/callback
    ```
-   > **Note:** Spotify no longer allows `http://localhost` as a redirect URI. You must use `127.0.0.1`.
+   > **Note:** Spotify only allows `http://` for `127.0.0.1`. LAN IPs and custom domains require HTTPS. `localhost` is not accepted.
 3. Note your **Client ID** and **Client Secret** for the environment configuration
 
 ## Database Setup

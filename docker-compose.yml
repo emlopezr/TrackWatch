@@ -87,7 +87,7 @@ services:
             args:
                 VITE_SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID:?Spotify Client ID required}
                 VITE_SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET:?Spotify Client Secret required}
-                VITE_SPOTIFY_REDIRECT_URI: ${VITE_SPOTIFY_REDIRECT_URI:-http://127.0.0.1/callback}
+                VITE_SPOTIFY_REDIRECT_URI: ${VITE_SPOTIFY_REDIRECT_URI:-http://127.0.0.1:80/callback}
                 VITE_TRACKWATCH_API_BASE_URL: ${VITE_TRACKWATCH_API_BASE_URL:-/api}
         restart: unless-stopped
         ports:
