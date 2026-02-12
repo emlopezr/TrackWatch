@@ -1,4 +1,4 @@
-name: Build and Publish AiO Docker Image
+name: Build and Publish Docker Image + Public Instance Deploy
 
 on:
   push:
@@ -65,3 +65,7 @@ jobs:
             VITE_TRACKWATCH_API_BASE_URL=/api
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Trigger Public Instance Deployment
+        run: |
+          curl -X POST "${{ secrets.DEPLOY_WEBHOOK_URL }}"
