@@ -2,9 +2,7 @@ name: Build and Publish Docker Image + Public Instance Deploy
 
 on:
   push:
-    tags:
-      - "*.*.*"
-  workflow_dispatch:
+    branches: [develop]
 
 env:
   GHCR_IMAGE: ghcr.io/${{ github.repository }}
@@ -46,9 +44,8 @@ jobs:
             ${{ env.GHCR_IMAGE }}
             ${{ env.DOCKERHUB_IMAGE }}
           tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
             type=raw,value=latest
+            type=sha,prefix=
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
@@ -67,5 +64,5 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Trigger Public Instance Deployment
-        run: |
-          curl -X POST "${{ secrets.DEPLOY_WEBHOOK_URL }}"
+        if: success()
+        run: curl -fsSL "${{ secrets.DEPLOY_WEBHOOK_URL }}"
