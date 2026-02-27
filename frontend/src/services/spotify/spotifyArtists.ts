@@ -6,14 +6,6 @@ const MAX_CONCURRENT_REQUESTS = 5;
 
 const artistCache: { [artistId: string]: SpotifyArtistResponse } = {};
 
-const chunkArray = <T>(array: T[], chunkSize: number): T[][] => {
-    const chunks: T[][] = [];
-    for (let i = 0; i < array.length; i += chunkSize) {
-        chunks.push(array.slice(i, i + chunkSize));
-    }
-    return chunks;
-};
-
 const fetchSingleArtist = async (
     accessToken: string,
     artistId: string
