@@ -138,8 +138,8 @@ def build_query_params(artist_name, days_limit, page):
   q = build_query(artist_name, days_limit)
   q_escaped = quote_plus(q)
   type_ = "track"
-  limit = 50
-  offset = page * 50
+  limit = 10
+  offset = page * 10
   return f"q={q_escaped}&type={type_}&limit={limit}&offset={offset}"
 
 def build_query(artist_name, days_limit):

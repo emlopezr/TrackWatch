@@ -25,13 +25,14 @@ def get_spotify_user(access_token: str):
     )
 
 def map_to_spotify_user_dto(response: dict):
-  explicit_content = response.get("explicit_content", {})
   images_json = response.get("images", [])
+  user_id = response.get("id")
+  email = response.get("email") or f"{user_id}@trackwatch.placeholder"
 
   return {
-    "id": response.get("id"),
-    "email": response.get("email"),
+    "id": user_id,
+    "email": email,
     "name": response.get("display_name"),
     "image_url": images_json[0]["url"] if images_json else "",
-    "blocked_explicit_content": explicit_content.get("filter_enabled", False)
+    "blocked_explicit_content": False
   }

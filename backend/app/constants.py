@@ -39,10 +39,10 @@ class Database:
 
 class System:
   SERVER_TIMEZONE = "America/Bogota"
-  PAGES_TO_FETCH = 3
+  PAGES_TO_FETCH = 15  # limit=10 × 15 pages = 150 results (equivalent to previous limit=50 × 3 pages)
   FILTER_DAYS_LIMIT = 2
   CLEANUP_DAYS_LIMIT = 30
-  MAX_LOOP_ITERATION = 19
+  MAX_LOOP_ITERATION = 99  # limit=10 × 100 iterations = 1000 results (equivalent to previous limit=50 × 20)
   DEFAULT_WAIT_TIME_SECONDS = 3
 
 class Playlist:

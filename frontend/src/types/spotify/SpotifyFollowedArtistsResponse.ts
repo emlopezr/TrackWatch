@@ -14,7 +14,6 @@ export interface SpotifyArtist {
     name: string;
     images: SpotifyImage[];
     genres: string[];
-    popularity: number;
     external_urls: {
         spotify: string;
     };

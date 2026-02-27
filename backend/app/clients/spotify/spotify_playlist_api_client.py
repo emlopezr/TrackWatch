@@ -7,7 +7,7 @@ def add_tracks_to_playlist(user, playlist_id, track_uris):
   try:
     response = spotify_api_request(
       method="POST",
-      endpoint=f"/playlists/{playlist_id}/tracks",
+      endpoint=f"/playlists/{playlist_id}/items",
       token=user.current_access_token,
       json_data=body
     )
@@ -23,7 +23,7 @@ def get_playlist_tracks(user, playlist_id):
     while True:
       response = spotify_api_request(
         method="GET",
-        endpoint=f"/playlists/{playlist_id}/tracks",
+        endpoint=f"/playlists/{playlist_id}/items",
         token=user.current_access_token,
         params={"limit": limit, "offset": offset}
       )
@@ -38,26 +38,25 @@ def get_playlist_tracks(user, playlist_id):
     raise InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, str(e))
 
 def filter_saved_tracks(user, uris):
-  ids = [uri.split(":")[-1] for uri in uris]
   filtered_uris = []
   limit = 50
 
   try:
-    for i in range(0, len(ids), limit):
-      chunk = ids[i:i+limit]
-      ids_param = ",".join(chunk)
+    for i in range(0, len(uris), limit):
+      chunk = uris[i:i+limit]
+      uris_param = ",".join(chunk)
 
       response = spotify_api_request(
         method="GET",
-        endpoint="/me/tracks/contains",
+        endpoint="/me/library/contains",
         token=user.current_access_token,
-        params={"ids": ids_param}
+        params={"uris": uris_param}
       )
       saved_statuses = response
 
-      for idx, id_ in enumerate(chunk):
+      for idx, uri in enumerate(chunk):
         if not saved_statuses[idx]:
-          filtered_uris.append(f"spotify:track:{id_}")
+          filtered_uris.append(uri)
 
     return filtered_uris
   except Exception as e:
@@ -164,7 +163,7 @@ def get_user_playlists(token):
             "id": playlist.get("id"),
             "name": playlist.get("name"),
             "images": playlist.get("images", []),
-            "tracks": playlist.get("tracks", {}),
+            "tracks": playlist.get("items", {}),
             "owner": playlist.get("owner", {})
           })
       offset += limit
@@ -185,7 +184,7 @@ def get_playlist_tracks_with_market(token, playlist_id, market):
     while True:
       response = spotify_api_request(
         method="GET",
-        endpoint=f"/playlists/{playlist_id}/tracks",
+        endpoint=f"/playlists/{playlist_id}/items",
         token=token,
         params={"limit": limit, "offset": offset, "market": market}
       )
@@ -208,7 +207,7 @@ def remove_tracks_from_playlist(token, playlist_id, track_uris):
   try:
     response = spotify_api_request(
       method="DELETE",
-      endpoint=f"/playlists/{playlist_id}/tracks",
+      endpoint=f"/playlists/{playlist_id}/items",
       token=token,
       json_data=body
     )
