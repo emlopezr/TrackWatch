@@ -9,7 +9,7 @@ WORKDIR /app
 COPY frontend/package.json frontend/pnpm-lock.yaml* frontend/package-lock.json* ./
 
 # Install pnpm and dependencies
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@10.6.3 --activate
 RUN pnpm install --frozen-lockfile || npm ci
 
 # Copy frontend source code
