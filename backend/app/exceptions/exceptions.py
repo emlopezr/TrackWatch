@@ -1,5 +1,4 @@
 from datetime import datetime
-import traceback
 
 class CustomException(Exception):
   def __init__(self, error_code, message=None, details=""):
@@ -27,14 +26,11 @@ class ErrorCode:
   SPOTIFY_USER_NOT_FOUND = ("SPOTIFY_USER_NOT_FOUND", "Spotify user not found")
   INVALID_ADMIN_CREDENTIALS = ("INVALID_ADMIN_CREDENTIALS", "Invalid admin credentials")
 
-def exception_response_dto(status, code, message, details):
-  print(f"traceback: {traceback.format_exc()}")
-  
+def exception_response_dto(status, code, message, details=""):
   return {
     "status": status,
     "code": code,
     "message": message,
     "details": details,
     "timestamp": datetime.now().isoformat(),
-    "stack_trace": traceback.format_exc()
   }

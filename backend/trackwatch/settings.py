@@ -1,6 +1,7 @@
 import os
 from decouple import config
 from pathlib import Path
+from urllib.parse import unquote, urlparse
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -36,16 +37,38 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "trackwatch.urls"
 
-DATABASES = {
-  "default": {
+def _database_settings():
+  database_url = os.getenv("DATABASE_URL")
+  if database_url:
+    parsed = urlparse(database_url)
+    return {
+      "ENGINE": "django.db.backends.postgresql",
+      "NAME": parsed.path.lstrip("/"),
+      "USER": unquote(parsed.username or ""),
+      "PASSWORD": unquote(parsed.password or ""),
+      "HOST": parsed.hostname or "localhost",
+      "PORT": str(parsed.port or "5432"),
+    }
+
+  default_host = "localhost" if DEBUG else None
+  database_settings = {
     "ENGINE": "django.db.backends.postgresql",
-    "NAME": config("DATABASE_NAME"),
-    "USER": config("DATABASE_USER", default="postgres"),
-    "PASSWORD": config("DATABASE_PASSWORD"),
-    "HOST": config("DATABASE_HOST", default="localhost"),
-    "PORT": config("DATABASE_PORT", default="5432"),
+    "NAME": config("DATABASE_NAME", default=os.getenv("PGDATABASE")),
+    "USER": config("DATABASE_USER", default=os.getenv("PGUSER", "postgres")),
+    "PASSWORD": config("DATABASE_PASSWORD", default=os.getenv("PGPASSWORD", "")),
+    "HOST": config("DATABASE_HOST", default=os.getenv("PGHOST", default_host)),
+    "PORT": config("DATABASE_PORT", default=os.getenv("PGPORT", "5432")),
   }
-}
+
+  if not database_settings["NAME"]:
+    raise ValueError("Database name is not configured. Set DATABASE_URL or DATABASE_NAME/PGDATABASE.")
+
+  if not database_settings["HOST"]:
+    raise ValueError("Database host is not configured. Set DATABASE_URL or DATABASE_HOST/PGHOST.")
+
+  return database_settings
+
+DATABASES = {"default": _database_settings()}
 
 REST_FRAMEWORK = {
   "DEFAULT_AUTHENTICATION_CLASSES": [
