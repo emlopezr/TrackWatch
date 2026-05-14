@@ -2,6 +2,8 @@ from .spotify_api_client import spotify_api_request
 from app.exceptions import InternalServerErrorException, ErrorCode
 import time
 
+LIBRARY_CONTAINS_MAX_URIS = 40
+
 def add_tracks_to_playlist(user, playlist_id, track_uris):
   body = {"uris": track_uris}
   try:
@@ -39,11 +41,10 @@ def get_playlist_tracks(user, playlist_id):
 
 def filter_saved_tracks(user, uris):
   filtered_uris = []
-  limit = 50
 
   try:
-    for i in range(0, len(uris), limit):
-      chunk = uris[i:i+limit]
+    for i in range(0, len(uris), LIBRARY_CONTAINS_MAX_URIS):
+      chunk = uris[i:i+LIBRARY_CONTAINS_MAX_URIS]
       uris_param = ",".join(chunk)
 
       response = spotify_api_request(
