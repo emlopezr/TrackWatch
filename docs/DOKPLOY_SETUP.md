@@ -195,7 +195,25 @@ curl -fsSL https://trackwatch.emlopezr.com/health
 curl -fsSL https://trackwatch.emlopezr.com/api/ping
 ```
 
-## 7. Spotify Redirect URI
+## 7. GitHub Actions Deploy Webhooks
+
+Each Dokploy app has its own deployment webhook. Add these GitHub repository secrets:
+
+| Secret | Dokploy app |
+| --- | --- |
+| `BACKEND_DEPLOY_WEBHOOK_URL` | `trackwatch-backend` |
+| `FRONTEND_DEPLOY_WEBHOOK_URL` | `trackwatch-frontend` |
+| `SCHEDULER_DEPLOY_WEBHOOK_URL` | `trackwatch-scheduler`, only if you deploy it |
+
+The workflow publishes and deploys only the affected component:
+
+- Changes under `backend/**` publish `trackwatch-backend` and `trackwatch-scheduler`, then trigger their webhooks.
+- Changes under `frontend/**` publish `trackwatch-frontend`, then trigger its webhook.
+- Changes to `docker-compose.yml` or `.github/workflows/docker-publish.yml` affect all component images.
+
+If you are using n8n instead of the internal scheduler, do not set `SCHEDULER_DEPLOY_WEBHOOK_URL` and do not create the scheduler app. In that case, backend changes will still publish the scheduler image, but deployment is only needed if the scheduler app exists.
+
+## 8. Spotify Redirect URI
 
 In the Spotify Developer Dashboard, set:
 

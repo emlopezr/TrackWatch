@@ -15,7 +15,6 @@ jobs:
       backend: ${{ steps.filter.outputs.backend }}
       scheduler: ${{ steps.filter.outputs.scheduler }}
       frontend: ${{ steps.filter.outputs.frontend }}
-      deploy: ${{ steps.filter.outputs.deploy }}
 
     steps:
       - name: Checkout repository
@@ -35,11 +34,6 @@ jobs:
               - 'docker-compose.yml'
               - '.github/workflows/docker-publish.yml'
             frontend:
-              - 'frontend/**'
-              - 'docker-compose.yml'
-              - '.github/workflows/docker-publish.yml'
-            deploy:
-              - 'backend/**'
               - 'frontend/**'
               - 'docker-compose.yml'
               - '.github/workflows/docker-publish.yml'
@@ -96,6 +90,12 @@ jobs:
           cache-from: type=gha,scope=backend
           cache-to: type=gha,mode=max,scope=backend
 
+      - name: Trigger backend deployment
+        env:
+          DEPLOY_WEBHOOK_URL: ${{ secrets.BACKEND_DEPLOY_WEBHOOK_URL }}
+        if: success() && env.DEPLOY_WEBHOOK_URL != ''
+        run: curl -fsSL "$DEPLOY_WEBHOOK_URL"
+
   publish-scheduler:
     needs: detect-changes
     if: needs.detect-changes.outputs.scheduler == 'true'
@@ -148,6 +148,12 @@ jobs:
           cache-from: type=gha,scope=scheduler
           cache-to: type=gha,mode=max,scope=scheduler
 
+      - name: Trigger scheduler deployment
+        env:
+          DEPLOY_WEBHOOK_URL: ${{ secrets.SCHEDULER_DEPLOY_WEBHOOK_URL }}
+        if: success() && env.DEPLOY_WEBHOOK_URL != ''
+        run: curl -fsSL "$DEPLOY_WEBHOOK_URL"
+
   publish-frontend:
     needs: detect-changes
     if: needs.detect-changes.outputs.frontend == 'true'
@@ -199,15 +205,8 @@ jobs:
           cache-from: type=gha,scope=frontend
           cache-to: type=gha,mode=max,scope=frontend
 
-  trigger-public-deploy:
-    needs:
-      - detect-changes
-      - publish-backend
-      - publish-scheduler
-      - publish-frontend
-    if: always() && needs.detect-changes.outputs.deploy == 'true' && !contains(join(needs.*.result, ','), 'failure') && !contains(join(needs.*.result, ','), 'cancelled')
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Trigger Public Instance Deployment
-        run: curl -fsSL "${{ secrets.DEPLOY_WEBHOOK_URL }}"
+      - name: Trigger frontend deployment
+        env:
+          DEPLOY_WEBHOOK_URL: ${{ secrets.FRONTEND_DEPLOY_WEBHOOK_URL }}
+        if: success() && env.DEPLOY_WEBHOOK_URL != ''
+        run: curl -fsSL "$DEPLOY_WEBHOOK_URL"
