@@ -40,7 +40,7 @@ const CodeBlock = ({ code, language = 'bash' }: CodeBlockProps) => {
 };
 
 const InstallPage = () => {
-  const [activeTab, setActiveTab] = useState<'aio' | 'multi'>('aio');
+  const [activeTab, setActiveTab] = useState<'aio' | 'multi'>('multi');
 
   return (
     <div className="install-page">
@@ -114,16 +114,16 @@ const InstallPage = () => {
 
           <div className="install-tabs">
             <button
-              className={`install-tab ${activeTab === 'aio' ? 'install-tab--active' : ''}`}
-              onClick={() => setActiveTab('aio')}
-            >
-              All-in-One Image (Recommended)
-            </button>
-            <button
               className={`install-tab ${activeTab === 'multi' ? 'install-tab--active' : ''}`}
               onClick={() => setActiveTab('multi')}
             >
-              Multi-Container
+              Multi-Container (Recommended)
+            </button>
+            <button
+              className={`install-tab ${activeTab === 'aio' ? 'install-tab--active' : ''}`}
+              onClick={() => setActiveTab('aio')}
+            >
+              All-in-One Image (Legacy)
             </button>
           </div>
 
@@ -131,7 +131,7 @@ const InstallPage = () => {
             <>
               <section className="install-section">
                 <p className="install-section__description">
-                  One container with everything included — no cloning, no building. The image is available on both{' '}
+                  Legacy deployment mode. One container with everything included — no cloning, no building. The image is available on both{' '}
                   <strong>GHCR</strong> and <strong>Docker Hub</strong>.
                 </p>
               </section>
@@ -231,7 +231,7 @@ const InstallPage = () => {
               <section className="install-section">
                 <p className="install-section__description">
                   Runs 4 separate containers (database, backend, scheduler, frontend).
-                  Best for development or if you need independent control over each service.
+                  This is the active deployment model and the best option when you want each service built and deployed independently.
                 </p>
               </section>
 
@@ -269,6 +269,10 @@ SPOTIFY_CLIENT_SECRET=your-client-secret
 # RESEND_API_KEY=re_your-resend-key
 # ADMIN_EMAIL=you@yourdomain.com
 # EMAIL_DOMAIN=yourdomain.com
+# VITE_HIDE_PUBLIC_LOGIN=false
+# FRONTEND_IMAGE=ghcr.io/emlopezr/trackwatch-frontend:latest
+# BACKEND_IMAGE=ghcr.io/emlopezr/trackwatch-backend:latest
+# SCHEDULER_IMAGE=ghcr.io/emlopezr/trackwatch-scheduler:latest
 # SCHEDULER_HOURS=8,16,22`}
                 />
               </section>
@@ -296,6 +300,14 @@ SPOTIFY_CLIENT_SECRET=your-client-secret
                     <code>http://127.0.0.1:8080</code>
                   </div>
                 </div>
+              </section>
+
+              <section className="install-section">
+                <h2 className="install-section__title">Optional Scheduler</h2>
+                <p className="install-section__description">
+                  The scheduler is optional. Enable it only if you want TrackWatch to run scheduled release checks internally.
+                </p>
+                <CodeBlock code={`docker-compose --profile scheduler up -d --build`} />
               </section>
 
               <section className="install-section">

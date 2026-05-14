@@ -25,31 +25,14 @@
 - [Docker](https://docs.docker.com/get-docker/) installed
 - A [Spotify Developer](https://developer.spotify.com/dashboard) app with Redirect URI: `http://127.0.0.1:80/callback`
 
-### Option A: All-in-One Image (Recommended)
+### Option A: Multi-Container (Docker Compose, Recommended)
 
-One container with everything included — no cloning, no building. Available on [GHCR](https://ghcr.io/emlopezr/trackwatch) and [Docker Hub](https://hub.docker.com/r/emlopezr/trackwatch).
+Recommended for both self-hosting and deployment. Each service runs as its own container:
 
-```bash
-docker run -d \
-  --name trackwatch \
-  -e SPOTIFY_CLIENT_ID=your-client-id \
-  -e SPOTIFY_CLIENT_SECRET=your-client-secret \
-  -e SECRET_KEY=your-secret-key \
-  -v trackwatch_data:/var/lib/postgresql/data \
-  -p 80:80 \
-  --restart unless-stopped \
-  ghcr.io/emlopezr/trackwatch:latest
-```
-
-Open **http://127.0.0.1** and you're done.
-
-> *If port 80 is in use, change `-p 80:80` to `-p 8080:80` and access at `http://127.0.0.1:8080`*
-
-For the full AiO guide (optional variables, Docker Compose, email setup, backups), see **[docs/DOCKER_AIO_SETUP.md](docs/DOCKER_AIO_SETUP.md)**.
-
-### Option B: Multi-Container (Docker Compose)
-
-Best for development or if you need independent control over each service.
+- `frontend`: Nginx serving the React app and proxying `/api`
+- `backend`: Django + Gunicorn
+- `scheduler`: optional APScheduler worker
+- `db`: PostgreSQL
 
 ```bash
 git clone https://github.com/emlopezr/trackwatch.git
@@ -67,18 +50,41 @@ SPOTIFY_CLIENT_SECRET=your-client-secret
 ```
 
 ```bash
-docker-compose up -d
+docker-compose up -d --build
 ```
 
 Open **http://127.0.0.1** and you're done.
 
+To also run the internal scheduler:
+
+```bash
+docker-compose --profile scheduler up -d --build
+```
+
+If you want to deploy using prebuilt images instead of local builds, set these optional variables and pull them explicitly:
+
+```env
+FRONTEND_IMAGE=ghcr.io/emlopezr/trackwatch-frontend:latest
+BACKEND_IMAGE=ghcr.io/emlopezr/trackwatch-backend:latest
+SCHEDULER_IMAGE=ghcr.io/emlopezr/trackwatch-scheduler:latest
+```
+
+```bash
+docker-compose pull
+docker-compose up -d
+```
+
+### Option B: All-in-One Image (Legacy)
+
+The previous AiO image is still documented for compatibility, but the active deployment model is now the multi-container setup above.
+
+For the full legacy guide, see **[docs/DOCKER_AIO_SETUP.md](docs/DOCKER_AIO_SETUP.md)**.
+
+For production deployment details, including running without the scheduler and triggering updates from n8n, see **[docs/DOCKER_MULTI_CONTAINER_SETUP.md](docs/DOCKER_MULTI_CONTAINER_SETUP.md)**.
+
 ### Stop TrackWatch
 
 ```bash
-# AiO
-docker stop trackwatch
-
-# Multi-container
 docker-compose down
 ```
 
@@ -126,7 +132,11 @@ If deploying to a custom domain:
 | `SPOTIFY_CLIENT_ID` | Yes | - | From Spotify Developer Dashboard |
 | `SPOTIFY_CLIENT_SECRET` | Yes | - | From Spotify Developer Dashboard |
 | `VITE_SPOTIFY_REDIRECT_URI` | No | `http://127.0.0.1:80/callback` | OAuth callback URL |
+| `VITE_HIDE_PUBLIC_LOGIN` | No | `false` | Hide public login UI |
 | `PORT` | No | `80` | Frontend port |
+| `FRONTEND_IMAGE` | No | `ghcr.io/emlopezr/trackwatch-frontend:latest` | Frontend image override |
+| `BACKEND_IMAGE` | No | `ghcr.io/emlopezr/trackwatch-backend:latest` | Backend image override |
+| `SCHEDULER_IMAGE` | No | `ghcr.io/emlopezr/trackwatch-scheduler:latest` | Scheduler image override |
 | `DEBUG` | No | `False` | Django debug mode |
 | `SCHEDULER_HOURS` | No | `7,14,21` | Hours to check for releases (24h) |
 | `SCHEDULER_MINUTE` | No | `0` | Minute of the hour to run |
@@ -157,12 +167,12 @@ If deploying to a custom domain:
 
 ### Background Tasks
 
-The `scheduler` service runs independently from the web server, checking for new releases at configured times (default: 7am, 2pm, 9pm).
+The `scheduler` service is optional and runs independently from the web server when enabled with `--profile scheduler`, checking for new releases at configured times (default: 7am, 2pm, 9pm).
 
 **Alternative: External Triggers**
 
 If you prefer external scheduling (e.g., n8n, system cron), you can:
-1. Stop the scheduler service: `docker-compose stop scheduler`
+1. Start Compose without the scheduler profile: `docker-compose up -d`
 2. Trigger updates via webhook:
    ```bash
    curl -X POST http://localhost/api/actions/releases \

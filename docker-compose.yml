@@ -21,9 +21,11 @@ services:
             - trackwatch-network
 
     backend:
+        image: ${BACKEND_IMAGE:-ghcr.io/emlopezr/trackwatch-backend:latest}
         build:
             context: ./backend
-            dockerfile: Dockerfile.compose
+            dockerfile: Dockerfile
+            target: backend
         restart: unless-stopped
         environment: &backend-env
             # Django settings
@@ -64,12 +66,14 @@ services:
             - trackwatch-network
 
     scheduler:
+        image: ${SCHEDULER_IMAGE:-ghcr.io/emlopezr/trackwatch-scheduler:latest}
+        profiles:
+            - scheduler
         build:
             context: ./backend
-            dockerfile: Dockerfile.compose
+            dockerfile: Dockerfile
+            target: scheduler
         restart: unless-stopped
-        entrypoint: []
-        command: ["python", "manage.py", "run_scheduler"]
         environment:
             <<: *backend-env
             SCHEDULER_HOURS: ${SCHEDULER_HOURS:-7,14,21}
@@ -81,15 +85,17 @@ services:
             - trackwatch-network
 
     frontend:
+        image: ${FRONTEND_IMAGE:-ghcr.io/emlopezr/trackwatch-frontend:latest}
         build:
             context: ./frontend
-            dockerfile: Dockerfile.compose
-            args:
-                VITE_SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID:?Spotify Client ID required}
-                VITE_SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET:?Spotify Client Secret required}
-                VITE_SPOTIFY_REDIRECT_URI: ${VITE_SPOTIFY_REDIRECT_URI:-http://127.0.0.1:80/callback}
-                VITE_TRACKWATCH_API_BASE_URL: ${VITE_TRACKWATCH_API_BASE_URL:-/api}
+            dockerfile: Dockerfile
         restart: unless-stopped
+        environment:
+            VITE_SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID:?Spotify Client ID required}
+            VITE_SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET:?Spotify Client Secret required}
+            VITE_SPOTIFY_REDIRECT_URI: ${VITE_SPOTIFY_REDIRECT_URI:-http://127.0.0.1:80/callback}
+            VITE_TRACKWATCH_API_BASE_URL: ${VITE_TRACKWATCH_API_BASE_URL:-/api}
+            VITE_HIDE_PUBLIC_LOGIN: ${VITE_HIDE_PUBLIC_LOGIN:-false}
         ports:
             - "${PORT:-80}:80"
         depends_on:

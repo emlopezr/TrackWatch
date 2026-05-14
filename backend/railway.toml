@@ -1,5 +1,5 @@
 # Railway deployment configuration
-# Dockerfile.compose is for Docker Compose (self-hosted), Railway uses Nixpacks
+# Self-hosted Docker now uses backend/Dockerfile targets; Railway still uses Nixpacks
 [deploy]
 startCommand = "python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn trackwatch.wsgi:application --bind 0.0.0.0:$PORT"
 healthcheckPath = "/ping"

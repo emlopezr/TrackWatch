@@ -1,5 +1,7 @@
 # Docker All-in-One Setup
 
+> Legacy deployment mode. The recommended deployment path for this repository is now the multi-container setup from the [main README](../README.md).
+
 This guide covers deploying TrackWatch using the **All-in-One (AiO) Docker image**, which bundles everything into a single container: frontend, backend, background scheduler, and PostgreSQL database.
 
 For multi-container deployment, see the [main README](../README.md). For local development without Docker, see [Manual Setup](./MANUAL_SETUP.md).
