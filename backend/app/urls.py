@@ -9,6 +9,13 @@ health_urlpatterns = [
 
 # Action endpoints
 action_urlpatterns = [
+  path(Endpoints.SPOTIFY_LOGIN, views.spotify_login, name='spotify_login'),
+  path(Endpoints.SPOTIFY_EXCHANGE, views.spotify_exchange, name='spotify_exchange'),
+  path(Endpoints.LOGOUT, views.logout, name='logout'),
+  path(Endpoints.SPOTIFY_ME, views.spotify_me, name='spotify_me'),
+  path(Endpoints.SPOTIFY_SEARCH, views.spotify_search, name='spotify_search'),
+  path(Endpoints.SPOTIFY_ARTIST_DETAIL, views.spotify_artist_detail, name='spotify_artist_detail'),
+  path(Endpoints.SPOTIFY_FOLLOWING, views.spotify_following, name='spotify_following'),
   path(Endpoints.GENERATE_PLAYLIST, views.generate_artist_playlist, name='generate_artist_playlist'),
   path(Endpoints.UPDATE_RELEASES, views.update_new_releases, name='update_new_releases'),
 ]

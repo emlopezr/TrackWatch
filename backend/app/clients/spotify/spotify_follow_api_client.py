@@ -1,5 +1,5 @@
 from .spotify_api_client import spotify_api_request
-from app.exceptions import InternalServerErrorException, ErrorCode
+from app.exceptions import InternalServerErrorException, ErrorCode, CustomException
 from app.classes import Artist
 
 
@@ -45,6 +45,8 @@ def get_followed_artists(access_token: str) -> list[Artist]:
 
         return artists
 
+    except CustomException:
+        raise
     except Exception as e:
         raise InternalServerErrorException(
             ErrorCode.UNHANDLED_EXCEPTION,
@@ -63,6 +65,8 @@ def follow_artist(access_token: str, artist_id: str) -> None:
             token=access_token,
             params={"type": "artist", "ids": artist_id}
         )
+    except CustomException:
+        raise
     except Exception as e:
         raise InternalServerErrorException(
             ErrorCode.UNHANDLED_EXCEPTION,
@@ -81,6 +85,8 @@ def unfollow_artist(access_token: str, artist_id: str) -> None:
             token=access_token,
             params={"type": "artist", "ids": artist_id}
         )
+    except CustomException:
+        raise
     except Exception as e:
         raise InternalServerErrorException(
             ErrorCode.UNHANDLED_EXCEPTION,

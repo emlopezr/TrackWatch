@@ -1,4 +1,4 @@
-import { TRACKWATCH_API_BASE_URL } from "../../common/constants";
+import { apiFetch } from "../api";
 import type {
   PlaylistListResponse,
   ScanResult,
@@ -7,18 +7,10 @@ import type {
   RemoveRequest,
 } from "../../types/trackwatch/GhostTrack";
 
-export const getOwnedPlaylists = async (
-  accessToken: string
-): Promise<PlaylistListResponse> => {
-  const response = await fetch(
-    `${TRACKWATCH_API_BASE_URL}/ghost-tracks/playlists`,
-    {
-      method: 'GET',
-      headers: {
-        'X-Spotify-Access-Token': accessToken,
-      },
-    }
-  );
+export const getOwnedPlaylists = async (): Promise<PlaylistListResponse> => {
+  const response = await apiFetch("/ghost-tracks/playlists", {
+    method: 'GET',
+  });
 
   if (!response.ok) {
     throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -28,20 +20,15 @@ export const getOwnedPlaylists = async (
 };
 
 export const scanGhostTracks = async (
-  accessToken: string,
   request: ScanRequest
 ): Promise<ScanResult> => {
-  const response = await fetch(
-    `${TRACKWATCH_API_BASE_URL}/ghost-tracks/scan`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Spotify-Access-Token': accessToken,
-      },
-      body: JSON.stringify(request),
-    }
-  );
+  const response = await apiFetch("/ghost-tracks/scan", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(request),
+  });
 
   if (!response.ok) {
     throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -51,20 +38,15 @@ export const scanGhostTracks = async (
 };
 
 export const removeGhostTracks = async (
-  accessToken: string,
   request: RemoveRequest
 ): Promise<RemoveResponse> => {
-  const response = await fetch(
-    `${TRACKWATCH_API_BASE_URL}/ghost-tracks/remove`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Spotify-Access-Token': accessToken,
-      },
-      body: JSON.stringify(request),
-    }
-  );
+  const response = await apiFetch("/ghost-tracks/remove", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(request),
+  });
 
   if (!response.ok) {
     throw new Error(`Error ${response.status}: ${response.statusText}`);

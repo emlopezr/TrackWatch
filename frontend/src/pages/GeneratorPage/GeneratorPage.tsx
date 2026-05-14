@@ -1,5 +1,4 @@
 import { useState, useRef, type ReactNode } from 'react';
-import { useTokenManager } from '../../hooks/useTokenManager';
 import SearchBar, { SearchBarHandle } from '../../layout/SearchBar/SearchBar';
 import type SpotifyArtistResponse from '../../types/spotify/SpotifyArtistResponse';
 import './GeneratorPage.css';
@@ -11,7 +10,6 @@ import Modal from '../../components/Modal/Modal';
 import spotifyLogo from '../../assets/svg/spotify.svg';
 
 const GeneratorPage = () => {
-  const { accessToken } = useTokenManager();
   const [artistsData, setArtistsData] = useState<SpotifyArtistResponse[]>([]);
   const [selectedArtist, setSelectedArtist] = useState<SpotifyArtistResponse | null>(null);
   const [showResults, setShowResults] = useState(false);
@@ -46,7 +44,7 @@ const GeneratorPage = () => {
   };
 
   const handleGeneratePlaylist = async () => {
-    if (!selectedArtist || !userData || !accessToken) {
+    if (!selectedArtist || !userData) {
       setModalData({
         title: 'Error',
         content: 'Missing required information to generate playlist',
@@ -60,8 +58,6 @@ const GeneratorPage = () => {
 
     try {
       const response: GeneratePlaylistResponse = await generatePlaylist(
-        accessToken,
-        userData.id,
         selectedArtist.id
       );
 
@@ -121,7 +117,6 @@ const GeneratorPage = () => {
       <div className="generator-page__search-container">
         <SearchBar
           ref={searchBarRef}
-          accessToken={accessToken || ''}
           debounceTime={150}
           setArtistsData={(data) => {
             setArtistsData(data);

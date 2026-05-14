@@ -1,4 +1,4 @@
-import { TRACKWATCH_API_BASE_URL } from "../../common/constants";
+import { apiFetch } from "../api";
 
 export interface GeneratePlaylistResponse {
   message: string;
@@ -7,20 +7,12 @@ export interface GeneratePlaylistResponse {
 }
 
 export const generatePlaylist = async (
-  accessToken: string,
-  userId: string,
   artistId: string
 ): Promise<GeneratePlaylistResponse> => {
   try {
-    const response = await fetch(
-      `${TRACKWATCH_API_BASE_URL}/actions/generate?userId=${userId}&artistId=${artistId}`,
-      {
-        method: 'POST',
-        headers: {
-          'X-Spotify-Access-Token': accessToken,
-        },
-      }
-    );
+    const response = await apiFetch(`/actions/generate?artistId=${artistId}`, {
+      method: 'POST',
+    });
 
     if (!response.ok) {
       throw new Error(`Error ${response.status}: ${response.statusText}`);

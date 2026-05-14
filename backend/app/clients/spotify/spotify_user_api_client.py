@@ -10,6 +10,8 @@ def get_spotify_user(access_token: str):
     )
     return map_to_spotify_user_dto(response)
 
+  except CustomException:
+    raise
   except Exception as e:
     if hasattr(e, "response") and hasattr(e.response, "status_code"):
       code = e.response.status_code

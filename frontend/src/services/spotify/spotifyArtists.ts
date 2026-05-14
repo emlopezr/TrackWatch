@@ -1,4 +1,4 @@
-import { SPOTIFY_API_URL } from "../../common/constants";
+import { apiFetch } from "../api";
 import SpotifyArtistResponse from "../../types/spotify/SpotifyArtistResponse";
 import TrackWatchArtist from "../../types/trackwatch/TrackWatchArtist";
 
@@ -7,14 +7,11 @@ const MAX_CONCURRENT_REQUESTS = 5;
 const artistCache: { [artistId: string]: SpotifyArtistResponse } = {};
 
 const fetchSingleArtist = async (
-    accessToken: string,
     artistId: string
 ): Promise<SpotifyArtistResponse | null> => {
-    const response = await fetch(`${SPOTIFY_API_URL}/artists/${artistId}`, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-    });
+    const response = await apiFetch(`/spotify/artists/${artistId}`);
     if (response.status === 401) {
-        console.error("Invalid access token");
+        console.error("Invalid session");
         return null;
     }
     if (!response.ok) return null;
@@ -41,7 +38,6 @@ const runWithConcurrency = async <T>(
 };
 
 export const batchGetArtists = async (
-    accessToken: string,
     artists: TrackWatchArtist[]
 ): Promise<SpotifyArtistResponse[]> => {
     try {
@@ -53,7 +49,7 @@ export const batchGetArtists = async (
         }
 
         const tasks = idsToFetch.map((id) => async () => {
-            const artist = await fetchSingleArtist(accessToken, id);
+            const artist = await fetchSingleArtist(id);
             if (artist) artistCache[artist.id] = artist;
             return artist;
         });

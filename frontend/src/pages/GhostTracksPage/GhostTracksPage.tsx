@@ -1,5 +1,4 @@
 import { useState, useEffect, type ReactNode } from 'react';
-import { useTokenManager } from '../../hooks/useTokenManager';
 import {
   getOwnedPlaylists,
   scanGhostTracks,
@@ -19,8 +18,6 @@ import './GhostTracksPage.css';
 type PagePhase = 'select' | 'results';
 
 const GhostTracksPage = () => {
-  const { accessToken } = useTokenManager();
-
   // Phase state
   const [phase, setPhase] = useState<PagePhase>('select');
 
@@ -49,16 +46,13 @@ const GhostTracksPage = () => {
 
   // Load playlists on mount
   useEffect(() => {
-    if (accessToken) {
-      loadPlaylists();
-    }
-  }, [accessToken]);
+    loadPlaylists();
+  }, []);
 
   const loadPlaylists = async () => {
-    if (!accessToken) return;
     setIsLoadingPlaylists(true);
     try {
-      const response = await getOwnedPlaylists(accessToken);
+      const response = await getOwnedPlaylists();
       setPlaylists(response.playlists);
     } catch (error) {
       // Handle token expiration
@@ -75,14 +69,14 @@ const GhostTracksPage = () => {
   };
 
   const handleScan = async () => {
-    if (!accessToken || selectedPlaylistIds.size === 0) return;
+    if (selectedPlaylistIds.size === 0) return;
 
     setIsScanning(true);
     setScanResult(null);
     setSelectedTrackKeys(new Set());
 
     try {
-      const result = await scanGhostTracks(accessToken, {
+      const result = await scanGhostTracks({
         playlistIds: Array.from(selectedPlaylistIds),
         countryCode: 'CO' // Default country code
       });
@@ -130,7 +124,7 @@ const GhostTracksPage = () => {
 
   // Remove selected tracks
   const handleRemove = async () => {
-    if (!accessToken || selectedTrackKeys.size === 0 || !scanResult) return;
+    if (selectedTrackKeys.size === 0 || !scanResult) return;
 
     // Warn if all tracks in a playlist are selected
     const playlistsToEmpty: string[] = [];
@@ -175,7 +169,7 @@ const GhostTracksPage = () => {
         removalsByPlaylist.get(playlistId)!.trackUris.push(trackUri);
       });
 
-      const response: RemoveResponse = await removeGhostTracks(accessToken, {
+      const response: RemoveResponse = await removeGhostTracks({
         removals: Array.from(removalsByPlaylist.values())
       });
 

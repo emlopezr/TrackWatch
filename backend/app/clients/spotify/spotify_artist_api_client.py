@@ -1,5 +1,5 @@
 from .spotify_api_client import spotify_api_request
-from app.exceptions import InternalServerErrorException, ErrorCode
+from app.exceptions import InternalServerErrorException, ErrorCode, CustomException
 from app.classes import Artist, Track, TrackImage
 import datetime
 import requests
@@ -12,6 +12,8 @@ def get_artist_info(artist_id, access_token):
       token=access_token
     )
     return parse_artist_info(response)
+  except CustomException:
+    raise
   except Exception as e:
     raise InternalServerErrorException(
       ErrorCode.UNHANDLED_EXCEPTION,
@@ -53,6 +55,8 @@ def search_artist_tracks(artist, access_token, days_limit, page):
 
     return parse_tracks(response)
 
+  except CustomException:
+    raise
   except Exception as e:
     raise InternalServerErrorException(
       ErrorCode.UNHANDLED_EXCEPTION,
