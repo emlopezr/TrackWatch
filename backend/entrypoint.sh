@@ -15,14 +15,15 @@ else
     until python << 'EOF'
 import sys
 import psycopg2
-from decouple import config
+from trackwatch.settings import DATABASES
 try:
+    database = DATABASES["default"]
     conn = psycopg2.connect(
-        dbname=config('DATABASE_NAME'),
-        user=config('DATABASE_USER'),
-        password=config('DATABASE_PASSWORD'),
-        host=config('DATABASE_HOST'),
-        port=config('DATABASE_PORT', default='5432')
+        dbname=database["NAME"],
+        user=database["USER"],
+        password=database["PASSWORD"],
+        host=database["HOST"],
+        port=database["PORT"]
     )
     conn.close()
     print("Database connection successful")
