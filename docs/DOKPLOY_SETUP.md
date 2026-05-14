@@ -96,6 +96,7 @@ VITE_SPOTIFY_REDIRECT_URI=https://trackwatch.emlopezr.com/callback
 VITE_TRACKWATCH_API_BASE_URL=/api
 VITE_HIDE_PUBLIC_LOGIN=true
 BACKEND_PROXY_PASS=https://trackwatch-api.emlopezr.com
+BACKEND_PROXY_HOST=trackwatch-api.emlopezr.com
 ```
 
 `BACKEND_PROXY_PASS` tells the frontend Nginx container where to send `/api/*` requests. With the value above:
@@ -103,6 +104,8 @@ BACKEND_PROXY_PASS=https://trackwatch-api.emlopezr.com
 - Browser calls `https://trackwatch.emlopezr.com/api/ping`
 - Frontend strips `/api`
 - Frontend proxies to `https://trackwatch-api.emlopezr.com/ping`
+
+`BACKEND_PROXY_HOST` is used for the upstream `Host` header and TLS SNI. It must match the backend domain when `BACKEND_PROXY_PASS` uses `https://`.
 
 Health check:
 

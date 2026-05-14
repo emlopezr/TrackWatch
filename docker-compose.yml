@@ -97,6 +97,8 @@ services:
             VITE_TRACKWATCH_API_BASE_URL: ${VITE_TRACKWATCH_API_BASE_URL:-/api}
             VITE_HIDE_PUBLIC_LOGIN: ${VITE_HIDE_PUBLIC_LOGIN:-false}
             BACKEND_PROXY_PASS: ${BACKEND_PROXY_PASS:-http://backend:8000}
+            BACKEND_PROXY_HOST: ${BACKEND_PROXY_HOST:-backend}
+            NGINX_RESOLVER: ${NGINX_RESOLVER:-127.0.0.11}
         ports:
             - "${PORT:-80}:80"
         depends_on:

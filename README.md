@@ -136,6 +136,7 @@ If deploying to a custom domain:
 | `VITE_SPOTIFY_REDIRECT_URI` | No | `http://127.0.0.1:80/callback` | OAuth callback URL |
 | `VITE_HIDE_PUBLIC_LOGIN` | No | `false` | Hide public login UI |
 | `BACKEND_PROXY_PASS` | No | `http://backend:8000` | Frontend Nginx upstream for `/api` |
+| `BACKEND_PROXY_HOST` | No | `backend` | Upstream host header and TLS SNI for `/api` proxy |
 | `PORT` | No | `80` | Frontend port |
 | `FRONTEND_IMAGE` | No | `ghcr.io/emlopezr/trackwatch-frontend:latest` | Frontend image override |
 | `BACKEND_IMAGE` | No | `ghcr.io/emlopezr/trackwatch-backend:latest` | Backend image override |
