@@ -82,6 +82,8 @@ For the full legacy guide, see **[docs/DOCKER_AIO_SETUP.md](docs/DOCKER_AIO_SETU
 
 For production deployment details, including running without the scheduler and triggering updates from n8n, see **[docs/DOCKER_MULTI_CONTAINER_SETUP.md](docs/DOCKER_MULTI_CONTAINER_SETUP.md)**.
 
+For Dokploy deployments with each component as a separate app, see **[docs/DOKPLOY_SETUP.md](docs/DOKPLOY_SETUP.md)**.
+
 ### Stop TrackWatch
 
 ```bash
@@ -133,6 +135,7 @@ If deploying to a custom domain:
 | `SPOTIFY_CLIENT_SECRET` | Yes | - | From Spotify Developer Dashboard |
 | `VITE_SPOTIFY_REDIRECT_URI` | No | `http://127.0.0.1:80/callback` | OAuth callback URL |
 | `VITE_HIDE_PUBLIC_LOGIN` | No | `false` | Hide public login UI |
+| `BACKEND_PROXY_PASS` | No | `http://backend:8000` | Frontend Nginx upstream for `/api` |
 | `PORT` | No | `80` | Frontend port |
 | `FRONTEND_IMAGE` | No | `ghcr.io/emlopezr/trackwatch-frontend:latest` | Frontend image override |
 | `BACKEND_IMAGE` | No | `ghcr.io/emlopezr/trackwatch-backend:latest` | Backend image override |

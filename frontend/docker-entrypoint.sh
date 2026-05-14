@@ -1,6 +1,12 @@
 #!/bin/sh
 set -eu
 
+export BACKEND_PROXY_PASS="${BACKEND_PROXY_PASS:-http://backend:8000}"
+
+envsubst '${BACKEND_PROXY_PASS}' \
+  < /etc/nginx/templates/default.conf.template \
+  > /etc/nginx/conf.d/default.conf
+
 cat > /usr/share/nginx/html/env.js << EOF
 window.__ENV__ = {
   VITE_SPOTIFY_CLIENT_ID: "${VITE_SPOTIFY_CLIENT_ID:-}",

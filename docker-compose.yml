@@ -96,6 +96,7 @@ services:
             VITE_SPOTIFY_REDIRECT_URI: ${VITE_SPOTIFY_REDIRECT_URI:-http://127.0.0.1:80/callback}
             VITE_TRACKWATCH_API_BASE_URL: ${VITE_TRACKWATCH_API_BASE_URL:-/api}
             VITE_HIDE_PUBLIC_LOGIN: ${VITE_HIDE_PUBLIC_LOGIN:-false}
+            BACKEND_PROXY_PASS: ${BACKEND_PROXY_PASS:-http://backend:8000}
         ports:
             - "${PORT:-80}:80"
         depends_on:

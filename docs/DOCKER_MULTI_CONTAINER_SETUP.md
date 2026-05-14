@@ -52,6 +52,7 @@ SPOTIFY_CLIENT_SECRET=xxx
 VITE_SPOTIFY_REDIRECT_URI=https://trackwatch.emlopezr.com/callback
 VITE_TRACKWATCH_API_BASE_URL=/api
 VITE_HIDE_PUBLIC_LOGIN=true
+BACKEND_PROXY_PASS=http://backend:8000
 
 RESEND_API_KEY=xxx
 ADMIN_EMAIL=lopezrodemmanuel@gmail.com
