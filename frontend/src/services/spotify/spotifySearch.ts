@@ -1,8 +1,7 @@
-import { SPOTIFY_API_URL } from "../../common/constants";
+import { apiFetch } from "../api";
 import SpotifyArtistResponse from "../../types/spotify/SpotifyArtistResponse";
 
 export const searchArtists = async (
-    accessToken: string,
     searchQuery: string,
     setArtistsData: (data: SpotifyArtistResponse[]) => void
 ): Promise<SpotifyArtistResponse[]> => {
@@ -18,12 +17,10 @@ export const searchArtists = async (
             limit: "10",
         });
 
-        const response = await fetch(`${SPOTIFY_API_URL}/search?${params}`, {
-            headers: { Authorization: `Bearer ${accessToken}` },
-        });
+        const response = await apiFetch(`/spotify/search?${params}`);
 
         if (response.status === 401) {
-            console.error("Invalid access token");
+            console.error("Invalid session");
             return [];
         }
 

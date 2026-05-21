@@ -1,5 +1,5 @@
 from .spotify_api_client import spotify_api_request
-from app.exceptions import InternalServerErrorException, ErrorCode
+from app.exceptions import InternalServerErrorException, ErrorCode, CustomException
 import time
 
 LIBRARY_CONTAINS_MAX_URIS = 40
@@ -14,6 +14,8 @@ def add_tracks_to_playlist(user, playlist_id, track_uris):
       json_data=body
     )
     return response
+  except CustomException:
+    raise
   except Exception as e:
     raise InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, str(e))
 
@@ -36,6 +38,8 @@ def get_playlist_tracks(user, playlist_id):
       if offset >= total:
         break
     return track_uris
+  except CustomException:
+    raise
   except Exception as e:
     raise InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, str(e))
 
@@ -60,6 +64,8 @@ def filter_saved_tracks(user, uris):
           filtered_uris.append(uri)
 
     return filtered_uris
+  except CustomException:
+    raise
   except Exception as e:
     raise InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, str(e))
 
@@ -77,6 +83,8 @@ def create_playlist(user, name, description, is_public):
       json_data=body
     )
     return response["id"]
+  except CustomException:
+    raise
   except Exception as e:
     raise InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, str(e))
 
@@ -110,6 +118,8 @@ def check_playlist_exists(user):
       if offset >= total:
         break
     return False
+  except CustomException:
+    raise
   except Exception as e:
     raise InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, str(e))
 
@@ -122,6 +132,8 @@ def update_playlist_cover(user, playlist_id, image_base64):
       data=image_base64,
       headers={"Content-Type": "image/jpeg"}
     )
+  except CustomException:
+    raise
   except Exception as e:
     print(f"Error updating playlist cover: {e}")
     # raise InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, str(e))
@@ -172,6 +184,8 @@ def get_user_playlists(token):
       if offset >= total:
         break
     return playlists
+  except CustomException:
+    raise
   except Exception as e:
     raise InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, str(e))
 
@@ -196,6 +210,8 @@ def get_playlist_tracks_with_market(token, playlist_id, market):
       if offset >= total:
         break
     return tracks
+  except CustomException:
+    raise
   except Exception as e:
     raise InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, str(e))
 
@@ -213,5 +229,7 @@ def remove_tracks_from_playlist(token, playlist_id, track_uris):
       json_data=body
     )
     return response
+  except CustomException:
+    raise
   except Exception as e:
     raise InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, str(e))

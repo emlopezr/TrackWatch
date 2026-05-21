@@ -9,6 +9,13 @@ class Headers:
 
 class Endpoints:
   PING = "ping"
+  SPOTIFY_LOGIN = "auth/spotify/login"
+  SPOTIFY_EXCHANGE = "auth/spotify/exchange"
+  LOGOUT = "auth/logout"
+  SPOTIFY_ME = "spotify/me"
+  SPOTIFY_SEARCH = "spotify/search"
+  SPOTIFY_ARTIST_DETAIL = "spotify/artists/<artist_id>"
+  SPOTIFY_FOLLOWING = "spotify/me/following"
   GENERATE_PLAYLIST = "actions/generate"
   UPDATE_RELEASES = "actions/releases"
   FOLLOW_ARTIST = "artists/follow"
@@ -32,6 +39,22 @@ class AppInfo:
 class Domains:
   PRODUCTION_DOMAIN = "https://trackwatch.emlopezr.com"
   DEVELOPMENT_DOMAIN = "http://localhost:5173"
+
+class Spotify:
+  AUTH_BASE_URL = "https://accounts.spotify.com"
+  SESSION_USER_KEY = "trackwatch_user_id"
+  OAUTH_STATE_KEY = "spotify_oauth_state"
+  SCOPES = [
+    "user-read-private",
+    "playlist-read-private",
+    "playlist-modify-private",
+    "playlist-modify-public",
+    "user-read-email",
+    "user-library-read",
+    "ugc-image-upload",
+    "user-follow-read",
+    "user-follow-modify",
+  ]
 
 class Database:
   USER_TABLE = "users"

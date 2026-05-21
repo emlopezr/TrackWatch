@@ -1,5 +1,6 @@
 import requests
 import time
+from app.exceptions import UnauthorizedException, ForbiddenException, BadRequestException, ErrorCode
 
 SPOTIFY_API_BASE_URL = "https://api.spotify.com/v1"
 SPOTIFY_AUTH_BASE_URL = "https://accounts.spotify.com/api"
@@ -50,6 +51,23 @@ def spotify_api_request(method, endpoint, token=None, params=None, data=None, js
 
   return None
 
+def spotify_api_raw_request(method, endpoint, token=None, params=None, data=None, json_data=None, headers=None):
+  url = endpoint if endpoint.startswith("http") else f"{SPOTIFY_API_BASE_URL}{endpoint}"
+  request_headers = dict(headers or {})
+
+  if token:
+    request_headers["Authorization"] = f"Bearer {token}"
+
+  return requests.request(
+    method,
+    url,
+    params=params,
+    data=data,
+    json=json_data,
+    headers=request_headers,
+    timeout=(10, 60)
+  )
+
 def spotify_auth_request(method, endpoint, params=None, data=None, auth=None):
   url = f"{SPOTIFY_AUTH_BASE_URL}{endpoint}"
 
@@ -64,3 +82,25 @@ def spotify_auth_request(method, endpoint, params=None, data=None, auth=None):
 
   response.raise_for_status()
   return response.json()
+
+def spotify_auth_raw_request(method, endpoint, params=None, data=None, auth=None, headers=None):
+  url = endpoint if endpoint.startswith("http") else f"{SPOTIFY_AUTH_BASE_URL}{endpoint}"
+
+  return requests.request(
+    method,
+    url,
+    params=params,
+    data=data,
+    auth=auth,
+    headers=headers,
+    timeout=(10, 30)
+  )
+
+def raise_for_spotify_response(response):
+  if response.status_code == 401:
+    raise UnauthorizedException(ErrorCode.SPOTIFY_INVALID_ACCESS_TOKEN, details=response.text)
+  if response.status_code == 403:
+    raise ForbiddenException(ErrorCode.SPOTIFY_FORBIDDEN_REQUEST, details=response.text)
+  if response.status_code == 404:
+    raise BadRequestException(ErrorCode.SPOTIFY_USER_NOT_FOUND, details=response.text)
+  response.raise_for_status()

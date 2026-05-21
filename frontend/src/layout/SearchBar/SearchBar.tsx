@@ -6,7 +6,6 @@ import './SearchBar.css';
 import SpotifyArtistResponse from "../../types/spotify/SpotifyArtistResponse";
 
 interface SearchBarProps {
-  accessToken: string;
   setArtistsData: (data: SpotifyArtistResponse[]) => void;
   setSearching: (value: SetStateAction<boolean>) => void;
   debounceTime?: number; // Optional debounce time in milliseconds
@@ -16,7 +15,7 @@ export interface SearchBarHandle {
   clearSearch: () => void;
 }
 
-const SearchBar = forwardRef<SearchBarHandle, SearchBarProps>(({ accessToken, setArtistsData, setSearching, debounceTime = 350 }, ref) => {
+const SearchBar = forwardRef<SearchBarHandle, SearchBarProps>(({ setArtistsData, setSearching, debounceTime = 350 }, ref) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchTimer, setSearchTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
   const isEmptySearch = useRef(false);
@@ -45,7 +44,7 @@ const SearchBar = forwardRef<SearchBarHandle, SearchBarProps>(({ accessToken, se
       if (query && !isEmptySearch.current) {
         // Only call the API and update results if the search is not empty
         // This prevents race conditions where API results arrive after clearing
-        searchArtists(accessToken, query as string, (results) => {
+        searchArtists(query as string, (results) => {
           // Double-check we're not in an empty search state before updating results
           if (!isEmptySearch.current) {
             setArtistsData(results);

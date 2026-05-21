@@ -1,11 +1,9 @@
 from app.constants import *
-from .user_service import find_user_by_id
 from .playlist_service import *
 from .track_service import *
 from app.clients.spotify.spotify_artist_api_client import get_artist_info
 
-def generate_artist_playlist(user_id, artist_id, playlist_id, access_token):
-  user = retrieve_and_validate_user(user_id, access_token)
+def generate_artist_playlist(user, artist_id, playlist_id, access_token):
   artist = get_artist_info(artist_id, access_token)
   print(f"Generating playlist for artist: {artist.name}")
 
@@ -21,14 +19,6 @@ def generate_artist_playlist(user_id, artist_id, playlist_id, access_token):
     "playlist_id": final_playlist_id,
     "artist_image_url": artist.image_url
   }
-
-def retrieve_and_validate_user(user_id, access_token):
-  user = find_user_by_id(user_id)
-  if user is None:
-    from app.exceptions import NotFoundException, ErrorCode
-    raise NotFoundException(ErrorCode.USER_NOT_FOUND)
-  user.validate_token(access_token)
-  return user
 
 def collect_artist_tracks(artist, access_token):
   findings = []

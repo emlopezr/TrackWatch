@@ -7,10 +7,8 @@ export const followArtist = async (
     setUserData: (value: TrackWatchUser) => void,
     artist: TrackWatchArtist
 ) => {
-    const accessToken = localStorage.getItem("spotify_access_token") || "";
-
     try {
-        await followArtistOnSpotify(accessToken, artist.id);
+        await followArtistOnSpotify(artist.id);
 
         setUserData({
             ...userData,
@@ -29,10 +27,8 @@ export const unfollowArtist = async (
     userData: TrackWatchUser,
     setUserData: (value: TrackWatchUser) => void
 ) => {
-    const accessToken = localStorage.getItem("spotify_access_token") || "";
-
     try {
-        await unfollowArtistOnSpotify(accessToken, artistId);
+        await unfollowArtistOnSpotify(artistId);
 
         setUserData({
             ...userData,

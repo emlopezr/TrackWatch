@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useUser } from '../../context/useUser';
-import { useTokenManager } from '../../hooks/useTokenManager';
-import { getTrackWatchUserData } from '../../services/trackwatch/trackwatchUsers';
+import { useSessionManager } from '../../hooks/useSessionManager';
+import { logoutTrackWatchUser } from '../../services/trackwatch/trackwatchUsers';
 import SpotifyArtistResponse from '../../types/spotify/SpotifyArtistResponse';
 import LandingPage from '../../pages/LandingPage/LandingPage';
 import Spinner from '../../components/Spinner/Spinner';
@@ -16,7 +16,7 @@ type PageType = 'home' | 'generator' | 'ghost-tracks';
 
 const MainRoute = () => {
   const { userData, setUserData } = useUser();
-  const { loading, accessToken, setAccessToken } = useTokenManager();
+  const { loading } = useSessionManager();
 
   const [searching, setSearching] = useState(false)
   const [artistsData, setArtistsData] = useState<SpotifyArtistResponse[]>([]);
@@ -38,12 +38,6 @@ const MainRoute = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  useEffect(() => {
-    if (accessToken && !userData) {
-      getTrackWatchUserData(setAccessToken, setUserData);
-    }
-  }, [accessToken, setUserData, userData]);
-
   // Close user menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -56,13 +50,9 @@ const MainRoute = () => {
     return () => { document.removeEventListener('mousedown', handleClickOutside); };
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('spotify_access_token');
-    localStorage.removeItem('spotify_refresh_token');
-
-    setAccessToken(null);
+  const handleLogout = async () => {
+    await logoutTrackWatchUser();
     setUserData(null);
-
     window.location.href = '/';
   };
 
@@ -79,7 +69,6 @@ const MainRoute = () => {
     switch (activePage) {
       case 'home':
         return <HomePage
-          accessToken={accessToken}
           searching={searching}
           artistsData={artistsData}
           setArtistsData={setArtistsData}
@@ -98,12 +87,8 @@ const MainRoute = () => {
     return <Spinner />;
   }
 
-  if (!accessToken) {
-    return <LandingPage />;
-  }
-
   if (!userData) {
-    return <Spinner />;
+    return <LandingPage />;
   }
 
   return (

@@ -7,38 +7,36 @@ import SearchBar from "../../layout/SearchBar/SearchBar";
 import TrackWatchUser from "../../types/trackwatch/TrackWatchUser";
 
 interface HomePageProps {
-  accessToken: string | null;
   searching: boolean;
   artistsData: SpotifyArtistResponse[];
   setArtistsData: (data: SpotifyArtistResponse[]) => void;
   setSearching: (value: SetStateAction<boolean>) => void;
 }
 
-const HomePage = ({ accessToken, searching, artistsData, setArtistsData, setSearching }: HomePageProps) => {
+const HomePage = ({ searching, artistsData, setArtistsData, setSearching }: HomePageProps) => {
   const { userData } = useUser();
 
-  const renderList = (searching: boolean, userData: TrackWatchUser | null, accessToken: string | null) => {
+  const renderList = (searching: boolean, userData: TrackWatchUser | null) => {
     if (searching) {
       return <ArtistList title="Search Results" artistsData={artistsData} />
-    } else if (userData && accessToken) {
+    } else if (userData) {
       const followedArtists = userData.followedArtists
-      return <FollowedArtists accessToken={accessToken} followedArtists={followedArtists} />
+      return <FollowedArtists followedArtists={followedArtists} />
     }
   }
 
   return (
     <>
-      {accessToken && (
+      {userData && (
         <div className="search-container sticky-element">
           <SearchBar
-            accessToken={accessToken}
             setArtistsData={setArtistsData}
             setSearching={setSearching}
           />
         </div>
       )}
 
-      {renderList(searching, userData, accessToken)}
+      {renderList(searching, userData)}
     </>
   )
 }

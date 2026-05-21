@@ -1,4 +1,4 @@
-import { SPOTIFY_API_URL } from "../../common/constants";
+import { apiFetch } from "../api";
 import {
     SpotifyFollowedArtistsResponse,
     SpotifyArtist,
@@ -6,26 +6,24 @@ import {
 import TrackWatchArtist from "../../types/trackwatch/TrackWatchArtist";
 
 export const getFollowedArtists = async (
-    accessToken: string
 ): Promise<TrackWatchArtist[]> => {
     const artists: TrackWatchArtist[] = [];
     let after: string | null = null;
 
     try {
         do {
-            const url = new URL(`${SPOTIFY_API_URL}/me/following`);
-            url.searchParams.set("type", "artist");
-            url.searchParams.set("limit", "50");
+            const params = new URLSearchParams({
+                type: "artist",
+                limit: "50",
+            });
             if (after) {
-                url.searchParams.set("after", after);
+                params.set("after", after);
             }
 
-            const response = await fetch(url.toString(), {
-                headers: { Authorization: `Bearer ${accessToken}` },
-            });
+            const response = await apiFetch(`/spotify/me/following?${params.toString()}`);
 
             if (response.status === 401) {
-                throw new Error("Token expired");
+                throw new Error("Session expired");
             }
 
             if (!response.ok) {
@@ -49,20 +47,19 @@ export const getFollowedArtists = async (
 };
 
 export const followArtistOnSpotify = async (
-    accessToken: string,
     artistId: string
 ): Promise<void> => {
-    const url = new URL(`${SPOTIFY_API_URL}/me/following`);
-    url.searchParams.set("type", "artist");
-    url.searchParams.set("ids", artistId);
+    const params = new URLSearchParams({
+        type: "artist",
+        ids: artistId,
+    });
 
-    const response = await fetch(url.toString(), {
+    const response = await apiFetch(`/spotify/me/following?${params.toString()}`, {
         method: "PUT",
-        headers: { Authorization: `Bearer ${accessToken}` },
     });
 
     if (response.status === 401) {
-        throw new Error("Token expired");
+        throw new Error("Session expired");
     }
 
     if (!response.ok) {
@@ -71,20 +68,19 @@ export const followArtistOnSpotify = async (
 };
 
 export const unfollowArtistOnSpotify = async (
-    accessToken: string,
     artistId: string
 ): Promise<void> => {
-    const url = new URL(`${SPOTIFY_API_URL}/me/following`);
-    url.searchParams.set("type", "artist");
-    url.searchParams.set("ids", artistId);
+    const params = new URLSearchParams({
+        type: "artist",
+        ids: artistId,
+    });
 
-    const response = await fetch(url.toString(), {
+    const response = await apiFetch(`/spotify/me/following?${params.toString()}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${accessToken}` },
     });
 
     if (response.status === 401) {
-        throw new Error("Token expired");
+        throw new Error("Session expired");
     }
 
     if (!response.ok) {

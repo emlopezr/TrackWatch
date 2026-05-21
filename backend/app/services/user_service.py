@@ -38,6 +38,31 @@ def register_user(access_token: str, refresh_token: str):
   send_welcome_email(user)
   return user_response_dict(user, access_token)
 
+def authenticate_spotify_user(access_token: str, refresh_token: str):
+  spotify_user = get_spotify_user(access_token)
+
+  try:
+    user = User.objects.get(id=spotify_user['id'])
+    sync_user_with_spotify(user, spotify_user)
+    user.update_tokens(access_token, refresh_token)
+  except User.DoesNotExist:
+    user = User(
+      id=spotify_user['id'],
+      email=spotify_user['email'],
+      name=spotify_user.get('display_name') or spotify_user.get('name', ''),
+      image_url=spotify_user.get('image_url', ''),
+      current_access_token=access_token,
+      current_refresh_token=refresh_token
+    )
+    user.save()
+
+    playlist_id = create_playlist_for_user(user)
+    user.playlist_id = playlist_id
+    user.save()
+    send_welcome_email(user)
+
+  return user, user_response_dict(user, access_token)
+
 def get_current_user(access_token: str, refresh_token: str):
   spotify_user = get_spotify_user(access_token)
 
@@ -47,6 +72,7 @@ def get_current_user(access_token: str, refresh_token: str):
     raise NotFoundException(ErrorCode.USER_NOT_FOUND)
 
   user.update_tokens(access_token, refresh_token)
+  sync_user_with_spotify(user, spotify_user)
   return user_response_dict(user, access_token)
 
 def get_valid_access_token(user: User):
@@ -91,3 +117,9 @@ def user_response_dict(user, access_token: str = None):
     "settings": user_settings_to_dict(user),
     "followed_artists": followed_artists
   }
+
+def sync_user_with_spotify(user, spotify_user):
+  user.email = spotify_user['email']
+  user.name = spotify_user.get('name') or user.name
+  user.image_url = spotify_user.get('image_url', '')
+  user.save(update_fields=["email", "name", "image_url"])

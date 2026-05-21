@@ -1,53 +1,43 @@
 import re
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
-from app.constants import Headers
 from app.services.ghost_tracks_service import (
     get_owned_playlists,
     scan_playlists_parallel,
     remove_tracks_from_playlists
 )
-from app.clients.spotify.spotify_user_api_client import get_spotify_user
+from app.services.session_service import get_session_user, with_user_access_token
 
 
 DEFAULT_COUNTRY_CODE = "CO"
 
 
 def get_token_and_user(request):
-    """Extract token from headers and get current user info."""
-    token = request.headers.get(Headers.SPOTIFY_ACCESS_TOKEN)
-
-    if not token:
-        return None, None, Response(
-            {"error": "Missing Spotify access token"},
-            status=status.HTTP_401_UNAUTHORIZED
-        )
-
     try:
-        user_info = get_spotify_user(token)
-        user_id = user_info.get("id")
-        return token, user_id, None
+        user = get_session_user(request)
+        return user, None
     except Exception as e:
-        return None, None, Response(
-            {"error": f"Failed to get user info: {str(e)}"},
+        return None, Response(
+            {"error": f"Failed to authenticate user: {str(e)}"},
             status=status.HTTP_401_UNAUTHORIZED
         )
 
 
-@csrf_exempt
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([])
 def get_playlists(request):
-    token, user_id, error_response = get_token_and_user(request)
+    user, error_response = get_token_and_user(request)
 
     if error_response:
         return error_response
 
     try:
-        playlists = get_owned_playlists(token, user_id)
+        playlists = with_user_access_token(
+            user,
+            lambda access_token: get_owned_playlists(access_token, user.id)
+        )
         return Response({"playlists": playlists}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(
@@ -56,12 +46,11 @@ def get_playlists(request):
         )
 
 
-@csrf_exempt
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([])
 def scan_ghost_tracks(request):
-    token, user_id, error_response = get_token_and_user(request)
+    user, error_response = get_token_and_user(request)
     if error_response:
         return error_response
 
@@ -85,7 +74,10 @@ def scan_ghost_tracks(request):
 
     try:
         # Get playlist names for the response
-        owned_playlists = get_owned_playlists(token, user_id)
+        owned_playlists = with_user_access_token(
+            user,
+            lambda access_token: get_owned_playlists(access_token, user.id)
+        )
         playlist_map = {p["id"]: p["name"] for p in owned_playlists}
 
         # Build playlist info list
@@ -95,7 +87,10 @@ def scan_ghost_tracks(request):
             playlist_infos.append({"id": pid, "name": name})
 
         # Scan playlists
-        result = scan_playlists_parallel(token, playlist_infos, country_code)
+        result = with_user_access_token(
+            user,
+            lambda access_token: scan_playlists_parallel(access_token, playlist_infos, country_code)
+        )
         return Response(result, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(
@@ -104,12 +99,11 @@ def scan_ghost_tracks(request):
         )
 
 
-@csrf_exempt
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([])
 def remove_ghost_tracks(request):
-    token, user_id, error_response = get_token_and_user(request)
+    user, error_response = get_token_and_user(request)
     if error_response:
         return error_response
 
@@ -132,14 +126,20 @@ def remove_ghost_tracks(request):
 
     try:
         # Get playlist names for the response
-        owned_playlists = get_owned_playlists(token, user_id)
+        owned_playlists = with_user_access_token(
+            user,
+            lambda access_token: get_owned_playlists(access_token, user.id)
+        )
         playlist_map = {p["id"]: p["name"] for p in owned_playlists}
 
         # Add playlist names to removals
         for removal in removals:
             removal["playlistName"] = playlist_map.get(removal["playlistId"], "Unknown Playlist")
 
-        results = remove_tracks_from_playlists(token, removals)
+        results = with_user_access_token(
+            user,
+            lambda access_token: remove_tracks_from_playlists(access_token, removals)
+        )
 
         total_removed = sum(r["removedCount"] for r in results)
         total_failed = sum(r["failedCount"] for r in results)

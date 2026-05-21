@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { TRACKWATCH_API_BASE_URL } from '../../common/constants';
+import { apiFetch } from '../../services/api';
 import Spinner from '../../components/Spinner/Spinner';
 import './LegalDocumentPage.css';
 
@@ -16,7 +16,7 @@ const LegalDocumentPage = ({ endpoint, title }: LegalDocumentPageProps) => {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const response = await fetch(`${TRACKWATCH_API_BASE_URL}/${endpoint}`);
+        const response = await apiFetch(`/${endpoint}`);
         if (!response.ok) {
           throw new Error(`Failed to fetch document: ${response.status}`);
         }

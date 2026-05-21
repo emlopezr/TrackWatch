@@ -5,18 +5,17 @@ import { batchGetArtists } from '../../services/spotify/spotifyArtists';
 import ArtistList from '../ArtistList/ArtistList';
 
 interface FollowedArtistsProps {
-  accessToken: string;
   followedArtists: TrackWatchArtist[];
 }
 
-const FollowedArtists = ({ accessToken, followedArtists }: FollowedArtistsProps) => {
+const FollowedArtists = ({ followedArtists }: FollowedArtistsProps) => {
   const [artistsData, setArtistsData] = useState<SpotifyArtistResponse[]>([]);
   const [loadingPage, setLoadingPage] = useState<boolean>(false);
 
   useEffect(() => {
     const loadArtists = async () => {
       setLoadingPage(true);
-      const data = await batchGetArtists(accessToken, followedArtists);
+      const data = await batchGetArtists(followedArtists);
       const sortedData = data.sort((a, b) => a.name.localeCompare(b.name));
 
       setArtistsData(sortedData);
@@ -24,7 +23,7 @@ const FollowedArtists = ({ accessToken, followedArtists }: FollowedArtistsProps)
     };
 
     loadArtists();
-  }, [accessToken, followedArtists]);
+  }, [followedArtists]);
 
   const emptyStateMessage = (
     <p>
