@@ -1,7 +1,8 @@
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse
+from django.conf import settings
 from django.http import HttpResponse
 from app.constants import Spotify
-from app.exceptions import UnauthorizedException, ErrorCode, NotFoundException
+from app.exceptions import BadRequestException, UnauthorizedException, ErrorCode, NotFoundException
 from app.models import User
 from app.services.user_service import get_valid_access_token
 
@@ -16,6 +17,42 @@ def get_public_origin(request):
 
 def get_spotify_redirect_uri(request):
   return f"{get_public_origin(request)}/callback"
+
+
+def get_allowed_redirect_origins(request):
+  return {
+    *getattr(settings, "CORS_ALLOWED_ORIGINS", []),
+    get_public_origin(request),
+  }
+
+
+def validate_spotify_redirect_uri(request, redirect_uri):
+  parsed = urlparse(redirect_uri or "")
+  origin = f"{parsed.scheme}://{parsed.netloc}"
+
+  if (
+    parsed.scheme not in {"http", "https"}
+    or not parsed.netloc
+    or parsed.path != "/callback"
+    or parsed.params
+    or parsed.query
+    or parsed.fragment
+    or origin not in get_allowed_redirect_origins(request)
+  ):
+    raise BadRequestException(
+      ErrorCode.INVALID_REQUEST_BODY,
+      details="Invalid Spotify redirect URI",
+    )
+
+  return redirect_uri
+
+
+def get_session_spotify_redirect_uri(request):
+  return request.session.get(Spotify.OAUTH_REDIRECT_URI_KEY) or get_spotify_redirect_uri(request)
+
+
+def set_session_spotify_redirect_uri(request, redirect_uri):
+  request.session[Spotify.OAUTH_REDIRECT_URI_KEY] = validate_spotify_redirect_uri(request, redirect_uri)
 
 
 def set_authenticated_session(request, user):
@@ -47,11 +84,11 @@ def with_user_access_token(user, callback):
     return callback(refreshed_user.current_access_token)
 
 
-def build_spotify_authorize_url(request, client_id):
+def build_spotify_authorize_url(request, client_id, redirect_uri=None):
   params = urlencode({
     "client_id": client_id,
     "response_type": "code",
-    "redirect_uri": get_spotify_redirect_uri(request),
+    "redirect_uri": redirect_uri or get_spotify_redirect_uri(request),
     "state": request.session[Spotify.OAUTH_STATE_KEY],
     "scope": " ".join(Spotify.SCOPES),
   })

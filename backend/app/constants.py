@@ -44,6 +44,7 @@ class Spotify:
   AUTH_BASE_URL = "https://accounts.spotify.com"
   SESSION_USER_KEY = "trackwatch_user_id"
   OAUTH_STATE_KEY = "spotify_oauth_state"
+  OAUTH_REDIRECT_URI_KEY = "spotify_oauth_redirect_uri"
   SCOPES = [
     "user-read-private",
     "playlist-read-private",

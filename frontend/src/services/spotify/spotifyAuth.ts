@@ -1,3 +1,4 @@
 export const getSpotifyAuthUrl = (): string => {
-    return "/api/auth/spotify/login";
+    const redirectUri = `${window.location.origin}/callback`;
+    return `/api/auth/spotify/login?redirect_uri=${encodeURIComponent(redirectUri)}`;
 };

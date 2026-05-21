@@ -11,7 +11,8 @@ from app.services.session_service import (
   set_authenticated_session,
   clear_authenticated_session,
   build_spotify_authorize_url,
-  get_spotify_redirect_uri,
+  get_session_spotify_redirect_uri,
+  set_session_spotify_redirect_uri,
 )
 from app.services.user_service import authenticate_spotify_user
 
@@ -27,8 +28,19 @@ def _parse_request_body(request):
 @require_GET
 def spotify_login(request):
   request.session[Spotify.OAUTH_STATE_KEY] = secrets.token_urlsafe(32)
+  redirect_uri = request.GET.get("redirect_uri")
+  if redirect_uri:
+    set_session_spotify_redirect_uri(request, redirect_uri)
+  else:
+    request.session.pop(Spotify.OAUTH_REDIRECT_URI_KEY, None)
   client_id = config("SPOTIFY_CLIENT_ID")
-  return HttpResponseRedirect(build_spotify_authorize_url(request, client_id))
+  return HttpResponseRedirect(
+    build_spotify_authorize_url(
+      request,
+      client_id,
+      request.session.get(Spotify.OAUTH_REDIRECT_URI_KEY),
+    )
+  )
 
 
 @require_POST
@@ -49,7 +61,7 @@ def spotify_exchange(request):
     endpoint="/token",
     data={
       "code": code,
-      "redirect_uri": get_spotify_redirect_uri(request),
+      "redirect_uri": get_session_spotify_redirect_uri(request),
       "grant_type": "authorization_code",
     },
     auth=(config("SPOTIFY_CLIENT_ID"), config("SPOTIFY_CLIENT_SECRET"))
@@ -67,6 +79,7 @@ def spotify_exchange(request):
   user, user_dict = authenticate_spotify_user(access_token, refresh_token)
   set_authenticated_session(request, user)
   request.session.pop(Spotify.OAUTH_STATE_KEY, None)
+  request.session.pop(Spotify.OAUTH_REDIRECT_URI_KEY, None)
   return JsonResponse(user_dict, status=200)
 
 
