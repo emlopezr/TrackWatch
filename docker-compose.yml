@@ -30,6 +30,7 @@ services:
         environment: &backend-env
             # Django settings
             SECRET_KEY: ${SECRET_KEY:?Django secret key required}
+            ADMIN_KEY: ${ADMIN_KEY:-}
             DEBUG: ${DEBUG:-False}
             ALLOWED_HOSTS: ${ALLOWED_HOSTS:-*}
 
