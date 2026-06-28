@@ -1,5 +1,5 @@
 from app.models import User
-from app.exceptions import BadRequestException, NotFoundException, ErrorCode
+from app.exceptions import BadRequestException, NotFoundException, ErrorCode, SpotifyReauthorizationRequiredException
 from app.clients.spotify.spotify_user_api_client import get_spotify_user
 from app.clients.spotify.spotify_auth_api_client import refresh_access_token_with_retries
 from app.clients.spotify import get_followed_artists
@@ -77,7 +77,12 @@ def get_current_user(access_token: str, refresh_token: str):
 
 def get_valid_access_token(user: User):
   refresh_token = user.current_refresh_token
-  new_tokens = refresh_access_token_with_retries(refresh_token)
+  try:
+    new_tokens = refresh_access_token_with_retries(refresh_token)
+  except SpotifyReauthorizationRequiredException:
+    user.clear_spotify_tokens()
+    raise
+
   user.update_tokens(new_tokens['access_token'], new_tokens['refresh_token'])
   return user
 

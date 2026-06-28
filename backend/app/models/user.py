@@ -47,6 +47,18 @@ class User(AbstractBaseUser, PermissionsMixin):
     self.current_refresh_token = refresh_token
     self.save()
 
-    def get_full_name(self): return self.name
-    def get_short_name(self): return self.name
-    def __str__(self): return self.email
+  def clear_spotify_tokens(self):
+    self.last_access_token = ""
+    self.last_refresh_token = ""
+    self.current_access_token = ""
+    self.current_refresh_token = ""
+    self.save(update_fields=[
+      "last_access_token",
+      "last_refresh_token",
+      "current_access_token",
+      "current_refresh_token",
+    ])
+
+  def get_full_name(self): return self.name
+  def get_short_name(self): return self.name
+  def __str__(self): return self.email
