@@ -75,8 +75,9 @@ def send_spotify_reauth_reminder_if_needed(user):
 
   days_remaining = max((expires_at.date() - now.date()).days, 0)
   try:
-    send_spotify_reauth_reminder_email(user, expires_at, days_remaining)
-    user.mark_spotify_reauth_notified()
+    sent = send_spotify_reauth_reminder_email(user, expires_at, days_remaining)
+    if sent:
+      user.mark_spotify_reauth_notified()
   except Exception as e:
     print(f"Failed to send Spotify reauthorization reminder for user {user.id}: {str(e)}")
 

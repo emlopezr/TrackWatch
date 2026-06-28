@@ -75,3 +75,16 @@ class SpotifyReauthReminderTests(SimpleTestCase):
 
     send_email.assert_called_once()
     self.assertFalse(user.marked_notified)
+
+  @patch("app.services.search_followed_releases_use_case.send_spotify_reauth_reminder_email")
+  def test_disabled_email_does_not_mark_user_as_notified(self, send_email):
+    authorized_at = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(
+      days=System.SPOTIFY_REFRESH_TOKEN_LIFETIME_DAYS,
+    )
+    user = FakeUser(authorized_at)
+    send_email.return_value = False
+
+    send_spotify_reauth_reminder_if_needed(user)
+
+    send_email.assert_called_once()
+    self.assertFalse(user.marked_notified)
