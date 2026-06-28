@@ -2,8 +2,23 @@ import json
 
 from django.test import RequestFactory, SimpleTestCase, override_settings
 
-from app.exceptions.exceptions import BadRequestException, ErrorCode, InternalServerErrorException
+from app.exceptions.exceptions import (
+  BadRequestException,
+  ErrorCode,
+  InternalServerErrorException,
+  SpotifyReauthorizationRequiredException,
+)
 from app.exceptions.middleware import GlobalExceptionMiddleware
+
+
+class FakeSession(dict):
+  def __init__(self):
+    super().__init__({"trackwatch_user_id": "spotify-user-id"})
+    self.flushed = False
+
+  def flush(self):
+    self.flushed = True
+    self.clear()
 
 
 class GlobalExceptionMiddlewareTests(SimpleTestCase):
@@ -37,3 +52,19 @@ class GlobalExceptionMiddlewareTests(SimpleTestCase):
     payload = json.loads(response.content)
     self.assertEqual(response.status_code, 400)
     self.assertEqual(payload["details"], "missing field")
+
+  @override_settings(DEBUG=False)
+  def test_spotify_reauthorization_required_flushes_session(self):
+    request = self.factory.get("/users/me")
+    request.session = FakeSession()
+
+    response = self.middleware.process_exception(
+      request,
+      SpotifyReauthorizationRequiredException(ErrorCode.SPOTIFY_REAUTH_REQUIRED),
+    )
+
+    payload = json.loads(response.content)
+    self.assertEqual(response.status_code, 401)
+    self.assertEqual(payload["code"], "SPOTIFY_REAUTH_REQUIRED")
+    self.assertTrue(request.session.flushed)
+    self.assertEqual(dict(request.session), {})

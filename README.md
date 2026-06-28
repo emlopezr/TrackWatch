@@ -135,6 +135,7 @@ If deploying to a custom domain:
 | `SPOTIFY_CLIENT_SECRET` | Yes | - | From Spotify Developer Dashboard |
 | `VITE_SPOTIFY_REDIRECT_URI` | No | `http://127.0.0.1:80/callback` | OAuth callback URL |
 | `VITE_HIDE_PUBLIC_LOGIN` | No | `false` | Hide public login UI |
+| `FRONTEND_BASE_URL` | No | `https://trackwatch.emlopezr.com` | Public frontend URL used in reauthorization emails |
 | `BACKEND_PROXY_PASS` | No | `http://backend:8000` | Frontend Nginx upstream for `/api` |
 | `BACKEND_PROXY_HOST` | No | `backend` | Upstream host header and TLS SNI for `/api` proxy |
 | `PORT` | No | `80` | Frontend port |

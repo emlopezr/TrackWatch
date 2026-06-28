@@ -11,20 +11,23 @@ def _configure_api_key():
   return True
 
 def send_admin_email(admin_email, email_subject, email_body):
-  if not _configure_api_key(): return
+  if not _configure_api_key(): return False
   params = create_email_params(admin_email, email_subject, email_body)
 
   try:
     resend.Emails.send(params)
+    return True
   except Exception as e:
     print(f"Failed to send admin email: {str(e)}")
+    return False
 
 def send_email(recipient, email_subject, email_body):
-  if not _configure_api_key(): return
+  if not _configure_api_key(): return False
   params = create_email_params(recipient, email_subject, email_body)
 
   try:
     resend.Emails.send(params)
+    return True
   except Exception as e:
     print(f"Failed to send email: {str(e)}")
     raise InternalServerErrorException(ErrorCode.UNHANDLED_EXCEPTION, f"Failed to send email: {str(e)}")

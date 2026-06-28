@@ -1,6 +1,9 @@
 from app.constants import AppInfo, Colors, Assets
+from app.constants import Domains
+from decouple import config
 import datetime
 import logging
+from urllib.parse import urlencode
 
 logger = logging.getLogger(__name__)
 
@@ -154,6 +157,75 @@ def generate_today_date():
 def generate_current_year():
     now = datetime.datetime.now(datetime.timezone.utc)
     return str(now.year)
+
+
+def get_frontend_base_url():
+    return config("FRONTEND_BASE_URL", default=Domains.PRODUCTION_DOMAIN).rstrip("/")
+
+
+def generate_spotify_reauth_url():
+    frontend_base_url = get_frontend_base_url()
+    redirect_uri = f"{frontend_base_url}/callback"
+    params = urlencode({"redirect_uri": redirect_uri})
+    return f"{frontend_base_url}/api/auth/spotify/login?{params}"
+
+
+def generate_spotify_reauth_reminder_email_subject(days_remaining):
+    if days_remaining <= 0:
+        return f"[{AppInfo.APP_NAME}] Reconnect Spotify to keep updates running"
+
+    return f"[{AppInfo.APP_NAME}] Spotify reconnect needed soon"
+
+
+def generate_spotify_reauth_reminder_email_body(user, expires_at, days_remaining):
+    year = generate_current_year()
+    reauth_url = generate_spotify_reauth_url()
+    expiry_date = expires_at.strftime("%A, %B %d, %Y")
+
+    if days_remaining <= 0:
+        intro = "Your Spotify connection has reached its refresh window and needs to be renewed."
+        detail = "Until you reconnect Spotify, TrackWatch cannot check your followed artists or update your release playlist automatically."
+    elif days_remaining == 1:
+        intro = "Your Spotify connection needs to be renewed within 1 day."
+        detail = "Reconnect now so TrackWatch can keep checking your followed artists and updating your release playlist automatically."
+    else:
+        intro = f"Your Spotify connection needs to be renewed within {days_remaining} days."
+        detail = "Reconnect now so TrackWatch can keep checking your followed artists and updating your release playlist automatically."
+
+    return f"""\
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {{ font-family: Arial, sans-serif; background-color: {Colors.LIGHT_GRAY_1}; color: {Colors.DARK_GRAY}; }}
+    .email-container {{ max-width: 600px; margin: 20px auto; background-color: {Colors.WHITE}; border-radius: 8px; border: 1px solid {Colors.LIGHT_GRAY_3}; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }}
+    .header {{ background-color: {Colors.GREEN}; color: {Colors.WHITE}; text-align: center; padding: 20px; font-size: 20px; font-weight: bold; }}
+    .header-subtitle {{ font-size: 12px; font-weight: normal; }}
+    .content {{ padding: 20px; }}
+    .button {{ display: inline-block; margin-top: 16px; padding: 12px 18px; background-color: {Colors.GREEN}; color: {Colors.WHITE}; text-decoration: none; border-radius: 6px; font-weight: bold; }}
+    .footer {{ background-color: {Colors.LIGHT_GRAY_2}; color: #666; text-align: center; padding: 10px; font-size: 12px; }}
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      Reconnect Spotify
+      <div class="header-subtitle">Your authorization expires around {expiry_date}</div>
+    </div>
+    <div class="content">
+      <p>Hi {user.name},</p>
+      <p>{intro}</p>
+      <p>{detail}</p>
+      <a class="button" href="{reauth_url}">Reconnect Spotify</a>
+      <p style="margin-top: 20px;">Spotify now requires apps to refresh user authorization every 6 months.</p>
+    </div>
+    <div class="footer">
+      © {year} {AppInfo.APP_NAME} · Developed by <a href="{AppInfo.GITHUB_USER_PROFILE}" style="color: {Colors.GREEN}; text-decoration: none;">@{AppInfo.DEVELOPER}</a>
+    </div>
+  </div>
+</body>
+</html>
+"""
 
 
 def generate_admin_notification_email_body(users_count, errors=None):

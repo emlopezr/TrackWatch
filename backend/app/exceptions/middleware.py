@@ -21,6 +21,9 @@ def _log_exception(message, request, code, exception):
 
 class GlobalExceptionMiddleware(MiddlewareMixin):
   def process_exception(self, request, exception):
+    if isinstance(exception, SpotifyReauthorizationRequiredException) and hasattr(request, "session"):
+      request.session.flush()
+
     if isinstance(exception, BadRequestException): status = 400
     elif isinstance(exception, UnauthorizedException): status = 401
     elif isinstance(exception, ForbiddenException): status = 403
