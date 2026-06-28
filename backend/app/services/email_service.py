@@ -13,6 +13,11 @@ def send_added_tracks_email(user, added_tracks):
     html_body = generate_added_tracks_email_body(added_tracks)
     send_email(user, subject, html_body)
 
+def send_spotify_reauth_reminder_email(user, expires_at, days_remaining):
+  subject = generate_spotify_reauth_reminder_email_subject(days_remaining)
+  html_body = generate_spotify_reauth_reminder_email_body(user, expires_at, days_remaining)
+  send_email(user, subject, html_body)
+
 def send_admin_notification_email(users_count, errors=None):
   admin_email = config('ADMIN_EMAIL', default=None)
 

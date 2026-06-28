@@ -1,4 +1,5 @@
 from django.test import SimpleTestCase
+from django.utils import timezone
 from unittest.mock import patch
 
 from app.exceptions import ErrorCode, SpotifyReauthorizationRequiredException
@@ -60,3 +61,23 @@ class UserServiceTokenTests(SimpleTestCase):
         "current_refresh_token",
       ],
     )
+
+  def test_update_tokens_from_authorization_resets_reauth_notification(self):
+    user = User(
+      id="spotify-user-id",
+      email="user@example.com",
+      name="User",
+      current_access_token="old-access-token",
+      current_refresh_token="old-refresh-token",
+      spotify_reauth_notified_at=timezone.now(),
+    )
+
+    user.save = lambda *args, **kwargs: None
+    user.update_tokens_from_authorization("new-access-token", "new-refresh-token")
+
+    self.assertEqual(user.last_access_token, "old-access-token")
+    self.assertEqual(user.last_refresh_token, "old-refresh-token")
+    self.assertEqual(user.current_access_token, "new-access-token")
+    self.assertEqual(user.current_refresh_token, "new-refresh-token")
+    self.assertIsNotNone(user.spotify_authorized_at)
+    self.assertIsNone(user.spotify_reauth_notified_at)

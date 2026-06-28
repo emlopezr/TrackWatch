@@ -66,6 +66,8 @@ class System:
   PAGES_TO_FETCH = 15  # limit=10 × 15 pages = 150 results (equivalent to previous limit=50 × 3 pages)
   FILTER_DAYS_LIMIT = 2
   CLEANUP_DAYS_LIMIT = 30
+  SPOTIFY_REFRESH_TOKEN_LIFETIME_DAYS = 180
+  SPOTIFY_REAUTH_REMINDER_DAYS = 30
   MAX_LOOP_ITERATION = 99  # limit=10 × 100 iterations = 1000 results (equivalent to previous limit=50 × 20)
   DEFAULT_WAIT_TIME_SECONDS = 3
 

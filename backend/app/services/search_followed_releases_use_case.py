@@ -46,6 +46,7 @@ def update_new_releases_for_all_users(days_limit: int = System.FILTER_DAYS_LIMIT
   return result
 
 def update_user_new_releases(user, days_limit: int = System.FILTER_DAYS_LIMIT):
+  send_spotify_reauth_reminder_if_needed(user)
   active_user = get_user_with_valid_token(user)
   access_token = getattr(active_user, "current_access_token", None)
 
@@ -60,6 +61,24 @@ def update_user_new_releases(user, days_limit: int = System.FILTER_DAYS_LIMIT):
 
 def get_user_with_valid_token(user):
   return get_valid_access_token(user)
+
+def send_spotify_reauth_reminder_if_needed(user):
+  if not user.current_refresh_token or not user.spotify_authorized_at:
+    return
+
+  expires_at = user.spotify_authorized_at + datetime.timedelta(days=System.SPOTIFY_REFRESH_TOKEN_LIFETIME_DAYS)
+  reminder_at = expires_at - datetime.timedelta(days=System.SPOTIFY_REAUTH_REMINDER_DAYS)
+  now = datetime.datetime.now(datetime.timezone.utc)
+
+  if now < reminder_at or user.spotify_reauth_notified_at:
+    return
+
+  days_remaining = max((expires_at.date() - now.date()).days, 0)
+  try:
+    send_spotify_reauth_reminder_email(user, expires_at, days_remaining)
+    user.mark_spotify_reauth_notified()
+  except Exception as e:
+    print(f"Failed to send Spotify reauthorization reminder for user {user.id}: {str(e)}")
 
 def find_new_releases_for_user(user, access_token, days_limit: int):
   new_releases = []
