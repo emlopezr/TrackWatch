@@ -82,12 +82,9 @@ python manage.py collectstatic --noinput
 
 # Generate runtime env.js for frontend (allows pre-built images to use env vars)
 echo "Generating frontend runtime configuration..."
+# Only expose public frontend flags here; Spotify secrets must stay server-side.
 cat > /usr/share/nginx/html/env.js << ENVEOF
 window.__ENV__ = {
-  VITE_SPOTIFY_CLIENT_ID: "${SPOTIFY_CLIENT_ID:-}",
-  VITE_SPOTIFY_CLIENT_SECRET: "${SPOTIFY_CLIENT_SECRET:-}",
-  VITE_SPOTIFY_REDIRECT_URI: "${VITE_SPOTIFY_REDIRECT_URI:-}",
-  VITE_TRACKWATCH_API_BASE_URL: "${VITE_TRACKWATCH_API_BASE_URL:-/api}",
   VITE_HIDE_PUBLIC_LOGIN: "${VITE_HIDE_PUBLIC_LOGIN:-false}"
 };
 ENVEOF

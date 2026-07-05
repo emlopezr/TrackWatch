@@ -84,7 +84,7 @@ pnpm install
 
 # Configure environment
 cp .env.example .env
-# Edit .env with your Spotify credentials
+# Edit .env if you need to hide the public login button
 
 # Start development server
 pnpm run dev
@@ -96,10 +96,7 @@ pnpm run dev
 Create a `.env` file in the `frontend/` directory:
 
 ```env
-VITE_SPOTIFY_CLIENT_ID=your-spotify-client-id
-VITE_SPOTIFY_CLIENT_SECRET=your-spotify-client-secret
-VITE_SPOTIFY_REDIRECT_URI=http://127.0.0.1:5173/callback
-VITE_TRACKWATCH_API_BASE_URL=http://127.0.0.1:8000
+VITE_HIDE_PUBLIC_LOGIN=false
 ```
 
 ## Running the Background Scheduler

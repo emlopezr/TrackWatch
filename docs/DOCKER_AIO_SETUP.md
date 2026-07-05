@@ -278,8 +278,6 @@ docker exec -i trackwatch psql -U trackwatch trackwatch < backup.sql
 | `PORT` | `80` | Host port to expose |
 | `DEBUG` | `False` | Django debug mode |
 | `ALLOWED_HOSTS` | `*` | Comma-separated allowed hosts |
-| `VITE_SPOTIFY_REDIRECT_URI` | `http://<host>:<port>/callback` | Spotify OAuth redirect URI |
-| `VITE_TRACKWATCH_API_BASE_URL` | `/api` | API base URL for frontend |
 | `VITE_HIDE_PUBLIC_LOGIN` | `false` | Hide the public login button |
 | `RESEND_API_KEY` | *(empty)* | [Resend](https://resend.com) API key for email notifications |
 | `ADMIN_EMAIL` | *(empty)* | Admin email for notifications |
@@ -295,11 +293,8 @@ docker exec -i trackwatch psql -U trackwatch trackwatch < backup.sql
 If deploying behind a reverse proxy with a custom domain:
 
 1. Set the redirect URI in your Spotify app to `https://yourdomain.com/callback`
-2. Set the environment variable:
-   ```env
-   VITE_SPOTIFY_REDIRECT_URI=https://yourdomain.com/callback
-   ```
-3. Configure your reverse proxy to forward traffic to the container's port
+2. Configure your reverse proxy to forward traffic to the container's port
+3. Ensure your reverse proxy forwards `X-Forwarded-Proto` and `X-Forwarded-Host` so the backend derives the public callback URL
 
 ## Updating
 

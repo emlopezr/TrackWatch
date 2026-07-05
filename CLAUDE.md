@@ -112,7 +112,7 @@ The application is designed for Docker-first deployment:
 
 ### Docker Networking
 
-In Docker mode, the frontend Nginx proxies `/api/*` requests to the backend at `http://backend:8000`, stripping the `/api` prefix. The `VITE_TRACKWATCH_API_BASE_URL` should be set to `/api` for Docker builds.
+In Docker mode, the frontend Nginx proxies `/api/*` requests to the backend at `http://backend:8000`, stripping the `/api` prefix. Browser runtime config must only expose public frontend flags such as `VITE_HIDE_PUBLIC_LOGIN`; Spotify OAuth credentials stay server-side.
 
 ### Background Tasks
 

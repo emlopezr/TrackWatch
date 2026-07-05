@@ -115,15 +115,7 @@ If deploying to a custom domain:
    https://your-domain.com/callback
    ```
 
-2. Update your `.env`:
-   ```env
-   VITE_SPOTIFY_REDIRECT_URI=https://your-domain.com/callback
-   ```
-
-3. Rebuild the frontend:
-   ```bash
-   docker-compose up -d --build frontend
-   ```
+2. Ensure your reverse proxy forwards `X-Forwarded-Proto` and `X-Forwarded-Host` so the backend can derive the public callback URL.
 
 ### Environment Variables Reference
 
@@ -133,7 +125,6 @@ If deploying to a custom domain:
 | `DATABASE_PASSWORD` | Yes | - | PostgreSQL password |
 | `SPOTIFY_CLIENT_ID` | Yes | - | From Spotify Developer Dashboard |
 | `SPOTIFY_CLIENT_SECRET` | Yes | - | From Spotify Developer Dashboard |
-| `VITE_SPOTIFY_REDIRECT_URI` | No | `http://127.0.0.1:80/callback` | OAuth callback URL |
 | `VITE_HIDE_PUBLIC_LOGIN` | No | `false` | Hide public login UI |
 | `BACKEND_PROXY_PASS` | No | `http://backend:8000` | Frontend Nginx upstream for `/api` |
 | `BACKEND_PROXY_HOST` | No | `backend` | Upstream host header and TLS SNI for `/api` proxy |

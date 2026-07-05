@@ -15,18 +15,6 @@ RUN pnpm install --frozen-lockfile || npm ci
 # Copy frontend source code
 COPY frontend/ .
 
-# Build arguments for environment variables
-ARG VITE_SPOTIFY_CLIENT_ID
-ARG VITE_SPOTIFY_CLIENT_SECRET
-ARG VITE_SPOTIFY_REDIRECT_URI
-ARG VITE_TRACKWATCH_API_BASE_URL
-
-# Set environment variables for build
-ENV VITE_SPOTIFY_CLIENT_ID=$VITE_SPOTIFY_CLIENT_ID
-ENV VITE_SPOTIFY_CLIENT_SECRET=$VITE_SPOTIFY_CLIENT_SECRET
-ENV VITE_SPOTIFY_REDIRECT_URI=$VITE_SPOTIFY_REDIRECT_URI
-ENV VITE_TRACKWATCH_API_BASE_URL=$VITE_TRACKWATCH_API_BASE_URL
-
 # Build the application
 RUN pnpm run build || npm run build
 
