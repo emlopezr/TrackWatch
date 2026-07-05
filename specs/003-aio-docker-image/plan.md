@@ -118,8 +118,8 @@ No violations to justify. All constitution gates pass.
 
 **Service: trackwatch**
 - Build context: `.` (repository root) with `Dockerfile.aio`
-- Build args: VITE_* variables for frontend build
-- Environment: All backend env vars (Django, DB, Spotify, Resend, Gunicorn, Scheduler) + VITE_* runtime vars for env.js generation
+- Build args: none required for frontend runtime configuration
+- Environment: Backend env vars (Django, DB, Spotify, Resend, Gunicorn, Scheduler) plus public-only frontend runtime flags for env.js generation
 - Database credentials default to `trackwatch`/`trackwatch`/`trackwatch` (internal PostgreSQL)
 - Port: `${PORT:-80}:80`
 - Restart: unless-stopped
@@ -195,7 +195,7 @@ Everything else is identical: gzip, security headers, SPA fallback, static asset
 6. Wait for PostgreSQL to be ready (`pg_isready` with retries)
 7. Run `python manage.py migrate --noinput`
 8. Run `python manage.py collectstatic --noinput`
-9. Generate `/usr/share/nginx/html/env.js` with runtime `window.__ENV__` from environment variables (SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, VITE_SPOTIFY_REDIRECT_URI, etc.)
+9. Generate `/usr/share/nginx/html/env.js` with runtime `window.__ENV__` from public frontend flags only
 10. `wait $SUPERVISORD_PID` (keep container running)
 
 **Working directory**: `/app` (set by Dockerfile WORKDIR)

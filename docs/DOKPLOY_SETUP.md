@@ -90,10 +90,6 @@ Create a new app:
 Environment:
 
 ```env
-VITE_SPOTIFY_CLIENT_ID=xxx
-VITE_SPOTIFY_CLIENT_SECRET=xxx
-VITE_SPOTIFY_REDIRECT_URI=https://trackwatch.emlopezr.com/callback
-VITE_TRACKWATCH_API_BASE_URL=/api
 VITE_HIDE_PUBLIC_LOGIN=true
 BACKEND_PROXY_PASS=https://trackwatch-api.emlopezr.com
 BACKEND_PROXY_HOST=trackwatch-api.emlopezr.com

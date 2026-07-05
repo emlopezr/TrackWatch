@@ -5,26 +5,30 @@ const toCamelCase = (str: string): string => {
     return str.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
 };
 
-const mapObjectToCamelCase = <T>(obj: any): T => {
+const isRecord = (value: unknown): value is Record<string, unknown> => {
+    return value !== null && typeof value === 'object' && !Array.isArray(value);
+};
+
+const mapObjectToCamelCase = <T>(obj: unknown): T => {
     if (Array.isArray(obj)) {
         return obj.map(mapObjectToCamelCase) as unknown as T;
     }
 
-    if (obj !== null && typeof obj === 'object') {
-        return Object.keys(obj).reduce((result, key) => {
+    if (isRecord(obj)) {
+        return Object.keys(obj).reduce<Record<string, unknown>>((result, key) => {
             const camelKey = toCamelCase(key);
             result[camelKey] = mapObjectToCamelCase(obj[key]);
             return result;
-        }, {} as any) as T;
+        }, {}) as T;
     }
 
     return obj as T;
 };
 
-export const mapTrackWatchUser = (data: any): TrackWatchUser => {
+export const mapTrackWatchUser = (data: unknown): TrackWatchUser => {
     return mapObjectToCamelCase<TrackWatchUser>(data);
 };
 
-export const mapTrackWatchArtist = (data: any): TrackWatchArtist => {
+export const mapTrackWatchArtist = (data: unknown): TrackWatchArtist => {
     return mapObjectToCamelCase<TrackWatchArtist>(data);
-}; 
+};
