@@ -49,6 +49,7 @@ services:
             RESEND_API_KEY: ${RESEND_API_KEY:-}
             ADMIN_EMAIL: ${ADMIN_EMAIL:-}
             EMAIL_DOMAIN: ${EMAIL_DOMAIN:-emlopezr.com}
+            FRONTEND_BASE_URL: ${FRONTEND_BASE_URL:-https://trackwatch.emlopezr.com}
 
             # Gunicorn configuration
             GUNICORN_WORKERS: ${GUNICORN_WORKERS:-2}

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager
+from django.utils import timezone
 
 class UserManager(BaseUserManager):
   def get_by_natural_key(self, email):
@@ -35,5 +36,6 @@ class UserManager(BaseUserManager):
       current_refresh_token=refresh_token,
       last_access_token=access_token,
       last_refresh_token=refresh_token,
+      spotify_authorized_at=timezone.now(),
       setting_blocked_explicit_content=spotify_dto.get('blocked_explicit_content', False)
     )

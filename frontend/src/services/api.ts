@@ -1,6 +1,9 @@
 import { TRACKWATCH_API_BASE_URL } from "../common/constants";
 
 const CSRF_METHODS = new Set(["POST", "PUT", "PATCH", "DELETE"]);
+const SPOTIFY_REAUTH_REQUIRED_CODE = "SPOTIFY_REAUTH_REQUIRED";
+
+let spotifyReauthRedirectInProgress = false;
 
 export const apiUrl = (path: string): string =>
   `${TRACKWATCH_API_BASE_URL}${path.startsWith("/") ? path : `/${path}`}`;
@@ -13,7 +16,26 @@ export const getCsrfToken = (): string => {
   return csrfCookie?.split("=")[1] ?? "";
 };
 
-export const apiFetch = (path: string, init: RequestInit = {}): Promise<Response> => {
+const getSpotifyLoginUrl = (): string => {
+  const redirectUri = `${window.location.origin}/callback`;
+  return apiUrl(`/auth/spotify/login?redirect_uri=${encodeURIComponent(redirectUri)}`);
+};
+
+const redirectToSpotifyLoginIfNeeded = async (response: Response): Promise<void> => {
+  if (response.status !== 401 || spotifyReauthRedirectInProgress) return;
+
+  try {
+    const error = await response.clone().json();
+    if (error.code !== SPOTIFY_REAUTH_REQUIRED_CODE) return;
+  } catch {
+    return;
+  }
+
+  spotifyReauthRedirectInProgress = true;
+  window.location.assign(getSpotifyLoginUrl());
+};
+
+export const apiFetch = async (path: string, init: RequestInit = {}): Promise<Response> => {
   const method = (init.method ?? "GET").toUpperCase();
   const headers = new Headers(init.headers ?? {});
 
@@ -21,9 +43,12 @@ export const apiFetch = (path: string, init: RequestInit = {}): Promise<Response
     headers.set("X-CSRFToken", getCsrfToken());
   }
 
-  return fetch(apiUrl(path), {
+  const response = await fetch(apiUrl(path), {
     credentials: "include",
     ...init,
     headers,
   });
+
+  await redirectToSpotifyLoginIfNeeded(response);
+  return response;
 };

@@ -7,6 +7,7 @@ from app.services.ghost_tracks_service import (
     scan_playlists_parallel,
     remove_tracks_from_playlists
 )
+from app.exceptions import SpotifyReauthorizationRequiredException
 from app.services.session_service import get_session_user, with_user_access_token
 
 
@@ -39,6 +40,8 @@ def get_playlists(request):
             lambda access_token: get_owned_playlists(access_token, user.id)
         )
         return Response({"playlists": playlists}, status=status.HTTP_200_OK)
+    except SpotifyReauthorizationRequiredException:
+        raise
     except Exception as e:
         return Response(
             {"error": str(e)},
@@ -92,6 +95,8 @@ def scan_ghost_tracks(request):
             lambda access_token: scan_playlists_parallel(access_token, playlist_infos, country_code)
         )
         return Response(result, status=status.HTTP_200_OK)
+    except SpotifyReauthorizationRequiredException:
+        raise
     except Exception as e:
         return Response(
             {"error": str(e)},
@@ -149,6 +154,8 @@ def remove_ghost_tracks(request):
             "totalRemoved": total_removed,
             "totalFailed": total_failed
         }, status=status.HTTP_200_OK)
+    except SpotifyReauthorizationRequiredException:
+        raise
     except Exception as e:
         return Response(
             {"error": str(e)},

@@ -1,15 +1,16 @@
 from app.models import User
-from app.exceptions import BadRequestException, NotFoundException, ErrorCode
+from app.exceptions import BadRequestException, NotFoundException, ErrorCode, SpotifyReauthorizationRequiredException
 from app.clients.spotify.spotify_user_api_client import get_spotify_user
 from app.clients.spotify.spotify_auth_api_client import refresh_access_token_with_retries
 from app.clients.spotify import get_followed_artists
 from .playlist_service import create_playlist_for_user, update_playlist_cover
 from .email_service import send_welcome_email
 from app.constants import Assets
+from django.utils import timezone
 
 def get_all_users():
   # Only return non-staff users that have automatic updates enabled
-  users = list(User.objects.filter(updates_enabled=True))
+  users = list(User.objects.filter(updates_enabled=True).exclude(current_refresh_token=""))
   return [user for user in users if not user.is_staff]
 
 def register_user(access_token: str, refresh_token: str):
@@ -24,7 +25,8 @@ def register_user(access_token: str, refresh_token: str):
     name=spotify_user.get('display_name') or spotify_user.get('name', ''),
     image_url=spotify_user.get('image_url', ''),
     current_access_token=access_token,
-    current_refresh_token=refresh_token
+    current_refresh_token=refresh_token,
+    spotify_authorized_at=timezone.now()
   )
 
   user.save()
@@ -44,7 +46,7 @@ def authenticate_spotify_user(access_token: str, refresh_token: str):
   try:
     user = User.objects.get(id=spotify_user['id'])
     sync_user_with_spotify(user, spotify_user)
-    user.update_tokens(access_token, refresh_token)
+    user.update_tokens_from_authorization(access_token, refresh_token)
   except User.DoesNotExist:
     user = User(
       id=spotify_user['id'],
@@ -52,7 +54,8 @@ def authenticate_spotify_user(access_token: str, refresh_token: str):
       name=spotify_user.get('display_name') or spotify_user.get('name', ''),
       image_url=spotify_user.get('image_url', ''),
       current_access_token=access_token,
-      current_refresh_token=refresh_token
+      current_refresh_token=refresh_token,
+      spotify_authorized_at=timezone.now()
     )
     user.save()
 
@@ -77,7 +80,12 @@ def get_current_user(access_token: str, refresh_token: str):
 
 def get_valid_access_token(user: User):
   refresh_token = user.current_refresh_token
-  new_tokens = refresh_access_token_with_retries(refresh_token)
+  try:
+    new_tokens = refresh_access_token_with_retries(refresh_token)
+  except SpotifyReauthorizationRequiredException:
+    user.clear_spotify_tokens()
+    raise
+
   user.update_tokens(new_tokens['access_token'], new_tokens['refresh_token'])
   return user
 

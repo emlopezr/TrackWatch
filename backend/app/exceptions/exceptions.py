@@ -9,6 +9,7 @@ class CustomException(Exception):
 
 class BadRequestException(CustomException): pass
 class UnauthorizedException(CustomException): pass
+class SpotifyReauthorizationRequiredException(UnauthorizedException): pass
 class ForbiddenException(CustomException): pass
 class NotFoundException(CustomException): pass
 class InternalServerErrorException(CustomException): pass
@@ -22,6 +23,7 @@ class ErrorCode:
   USER_INVALID_CREDENTIALS = ("USER_INVALID_CREDENTIALS", "Invalid user credentials")
   INVALID_REQUEST_BODY = ("INVALID_REQUEST_BODY", "Invalid request body")
   SPOTIFY_INVALID_ACCESS_TOKEN = ("SPOTIFY_INVALID_ACCESS_TOKEN", "Invalid Spotify access token")
+  SPOTIFY_REAUTH_REQUIRED = ("SPOTIFY_REAUTH_REQUIRED", "Spotify reauthorization required")
   SPOTIFY_FORBIDDEN_REQUEST = ("SPOTIFY_FORBIDDEN_REQUEST", "Spotify API request forbidden request")
   SPOTIFY_USER_NOT_FOUND = ("SPOTIFY_USER_NOT_FOUND", "Spotify user not found")
   INVALID_ADMIN_CREDENTIALS = ("INVALID_ADMIN_CREDENTIALS", "Invalid admin credentials")

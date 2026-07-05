@@ -17,6 +17,8 @@ class User(AbstractBaseUser, PermissionsMixin):
   current_refresh_token = models.TextField(blank=True)
   last_access_token = models.TextField(blank=True)
   last_refresh_token = models.TextField(blank=True)
+  spotify_authorized_at = models.DateTimeField(null=True, blank=True)
+  spotify_reauth_notified_at = models.DateTimeField(null=True, blank=True)
 
   setting_blocked_explicit_content = models.BooleanField(default=False)
   # Indicates whether TrackWatch should keep adding new releases automatically to the user's playlist
@@ -47,6 +49,31 @@ class User(AbstractBaseUser, PermissionsMixin):
     self.current_refresh_token = refresh_token
     self.save()
 
-    def get_full_name(self): return self.name
-    def get_short_name(self): return self.name
-    def __str__(self): return self.email
+  def update_tokens_from_authorization(self, access_token, refresh_token):
+    self.last_access_token = self.current_access_token
+    self.last_refresh_token = self.current_refresh_token
+    self.current_access_token = access_token
+    self.current_refresh_token = refresh_token
+    self.spotify_authorized_at = timezone.now()
+    self.spotify_reauth_notified_at = None
+    self.save()
+
+  def clear_spotify_tokens(self):
+    self.last_access_token = ""
+    self.last_refresh_token = ""
+    self.current_access_token = ""
+    self.current_refresh_token = ""
+    self.save(update_fields=[
+      "last_access_token",
+      "last_refresh_token",
+      "current_access_token",
+      "current_refresh_token",
+    ])
+
+  def mark_spotify_reauth_notified(self):
+    self.spotify_reauth_notified_at = timezone.now()
+    self.save(update_fields=["spotify_reauth_notified_at"])
+
+  def get_full_name(self): return self.name
+  def get_short_name(self): return self.name
+  def __str__(self): return self.email
