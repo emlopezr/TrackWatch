@@ -5,9 +5,13 @@ from urllib.parse import unquote, urlparse
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+def _csv_config(name, default):
+  return [value.strip() for value in config(name, default=default).split(",") if value.strip()]
+
 SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG", default=False, cast=bool)
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="*").split(",")
+ALLOWED_HOSTS = _csv_config("ALLOWED_HOSTS", "localhost,127.0.0.1,backend")
 
 INSTALLED_APPS = [
   "django.contrib.admin",
@@ -95,20 +99,20 @@ TEMPLATES = [
   },
 ]
 
-CORS_ALLOWED_ORIGINS = [
-  "http://localhost:5173",
-  "http://127.0.0.1:5173",
-  "https://trackwatch.emlopezr.com",
-]
+CORS_ALLOWED_ORIGINS = _csv_config(
+  "CORS_ALLOWED_ORIGINS",
+  "http://localhost:5173,http://127.0.0.1:5173,https://trackwatch.emlopezr.com",
+)
 
 CORS_ALLOW_HEADERS = ['accept', 'accept-encoding', 'authorization', 'content-type', 'dnt', 'origin', 'user-agent', 'x-csrftoken', 'x-requested-with', 'x-admin-key']
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_TRUSTED_ORIGINS = [
-  "http://localhost:5173",
-  "http://127.0.0.1:5173",
-  "https://trackwatch.emlopezr.com",
-]
+CSRF_TRUSTED_ORIGINS = _csv_config(
+  "CSRF_TRUSTED_ORIGINS",
+  "http://localhost:5173,http://127.0.0.1:5173,https://trackwatch.emlopezr.com",
+)
+
+FRONTEND_BASE_URL = config("FRONTEND_BASE_URL", default="https://trackwatch.emlopezr.com").rstrip("/")
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SESSION_COOKIE_HTTPONLY = True
@@ -116,6 +120,13 @@ SESSION_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_SECURE = not DEBUG
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = "same-origin"
+X_FRAME_OPTIONS = "DENY"
+SECURE_SSL_REDIRECT = config("SECURE_SSL_REDIRECT", default=False, cast=bool)
+SECURE_HSTS_SECONDS = config("SECURE_HSTS_SECONDS", default=0, cast=int)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = config("SECURE_HSTS_INCLUDE_SUBDOMAINS", default=False, cast=bool)
+SECURE_HSTS_PRELOAD = config("SECURE_HSTS_PRELOAD", default=False, cast=bool)
 
 WSGI_APPLICATION = "trackwatch.wsgi.application"
 

@@ -8,11 +8,7 @@ from app.services.user_service import get_valid_access_token
 
 
 def get_public_origin(request):
-  forwarded_proto = request.headers.get("X-Forwarded-Proto")
-  forwarded_host = request.headers.get("X-Forwarded-Host")
-  host = forwarded_host or request.get_host()
-  proto = forwarded_proto or request.scheme or "http"
-  return f"{proto}://{host}"
+  return settings.FRONTEND_BASE_URL
 
 
 def get_spotify_redirect_uri(request):
@@ -20,10 +16,7 @@ def get_spotify_redirect_uri(request):
 
 
 def get_allowed_redirect_origins(request):
-  return {
-    *getattr(settings, "CORS_ALLOWED_ORIGINS", []),
-    get_public_origin(request),
-  }
+  return set(getattr(settings, "CORS_ALLOWED_ORIGINS", []))
 
 
 def validate_spotify_redirect_uri(request, redirect_uri):
@@ -33,6 +26,7 @@ def validate_spotify_redirect_uri(request, redirect_uri):
   if (
     parsed.scheme not in {"http", "https"}
     or not parsed.netloc
+    or (parsed.scheme == "http" and parsed.hostname not in {"localhost", "127.0.0.1"})
     or parsed.path != "/callback"
     or parsed.params
     or parsed.query

@@ -1,10 +1,13 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import logging
 import time
 from app.clients.spotify.spotify_playlist_api_client import (
     get_user_playlists,
     get_playlist_tracks_with_market,
     remove_tracks_from_playlist
 )
+
+logger = logging.getLogger(__name__)
 
 
 def get_owned_playlists(token, user_id):
@@ -78,14 +81,15 @@ def scan_playlist_for_ghost_tracks(token, playlist_id, playlist_name, market):
             "scannedTracks": scanned,
             "error": None
         }
-    except Exception as e:
+    except Exception:
+        logger.warning("Unable to scan Spotify playlist %s", playlist_id)
         return {
             "playlistId": playlist_id,
             "playlistName": playlist_name,
             "ghostTracks": [],
             "totalTracks": 0,
             "scannedTracks": 0,
-            "error": str(e)
+            "error": "Unable to scan playlist"
         }
 
 

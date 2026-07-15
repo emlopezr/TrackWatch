@@ -53,8 +53,14 @@ def spotify_exchange(request):
   if not code or not state:
     raise BadRequestException(ErrorCode.INVALID_REQUEST_BODY)
 
-  if not session_state or state != session_state:
+  if (
+    not isinstance(state, str)
+    or not isinstance(session_state, str)
+    or not secrets.compare_digest(state, session_state)
+  ):
     raise UnauthorizedException(ErrorCode.USER_INVALID_CREDENTIALS)
+
+  request.session.pop(Spotify.OAUTH_STATE_KEY, None)
 
   response = spotify_auth_raw_request(
     method="POST",
@@ -78,7 +84,6 @@ def spotify_exchange(request):
 
   user, user_dict = authenticate_spotify_user(access_token, refresh_token)
   set_authenticated_session(request, user)
-  request.session.pop(Spotify.OAUTH_STATE_KEY, None)
   request.session.pop(Spotify.OAUTH_REDIRECT_URI_KEY, None)
   return JsonResponse(user_dict, status=200)
 
