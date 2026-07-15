@@ -27,6 +27,7 @@ class ErrorCode:
   SPOTIFY_FORBIDDEN_REQUEST = ("SPOTIFY_FORBIDDEN_REQUEST", "Spotify API request forbidden request")
   SPOTIFY_USER_NOT_FOUND = ("SPOTIFY_USER_NOT_FOUND", "Spotify user not found")
   INVALID_ADMIN_CREDENTIALS = ("INVALID_ADMIN_CREDENTIALS", "Invalid admin credentials")
+  PLAYLIST_ACCESS_DENIED = ("PLAYLIST_ACCESS_DENIED", "Playlist access denied")
 
 def exception_response_dto(status, code, message, details=""):
   return {

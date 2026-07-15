@@ -7,7 +7,7 @@ echo "=== TrackWatch All-in-One Container Starting ==="
 PG_DATA="/var/lib/postgresql/data"
 DB_NAME="${DATABASE_NAME:-trackwatch}"
 DB_USER="${DATABASE_USER:-trackwatch}"
-DB_PASS="${DATABASE_PASSWORD:-trackwatch}"
+DB_PASS="${DATABASE_PASSWORD:?Database password required}"
 PG_BINDIR="${PG_BINDIR:-$(pg_config --bindir)}"
 
 if [ -z "$PG_BINDIR" ] || [ ! -x "$PG_BINDIR/postgres" ]; then
@@ -21,18 +21,47 @@ echo "Using PostgreSQL binaries from: $PG_BINDIR"
 if [ ! -f "$PG_DATA/PG_VERSION" ]; then
     echo "Initializing PostgreSQL database..."
     chown -R postgres:postgres "$PG_DATA"
-    su - postgres -c "'$PG_BINDIR'/initdb -D '$PG_DATA'"
+    runuser -u postgres -- "$PG_BINDIR/initdb" -D "$PG_DATA" --auth-local=peer --auth-host=scram-sha-256
 
     # Start PostgreSQL temporarily to create user and database
-    su - postgres -c "'$PG_BINDIR'/pg_ctl -D '$PG_DATA' -w start -o '-c listen_addresses=127.0.0.1'"
+    runuser -u postgres -- "$PG_BINDIR/pg_ctl" -D "$PG_DATA" -w start -o "-c listen_addresses=127.0.0.1"
 
-    # Create user and database
-    su - postgres -c "psql -c \"CREATE USER $DB_USER WITH PASSWORD '$DB_PASS';\""  2>/dev/null || true
-    su - postgres -c "psql -c \"CREATE DATABASE $DB_NAME OWNER $DB_USER;\""  2>/dev/null || true
-    su - postgres -c "psql -c \"GRANT ALL PRIVILEGES ON DATABASE $DB_NAME TO $DB_USER;\""
+    # Create the role and database without interpolating credentials into shell or SQL.
+    runuser -u postgres -- env DB_NAME="$DB_NAME" DB_USER="$DB_USER" DB_PASS="$DB_PASS" python - <<'PY'
+import os
+
+import psycopg2
+from psycopg2 import sql
+
+database_name = os.environ["DB_NAME"]
+database_user = os.environ["DB_USER"]
+database_password = os.environ["DB_PASS"]
+
+connection = psycopg2.connect(dbname="postgres")
+try:
+    connection.autocommit = True
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT 1 FROM pg_roles WHERE rolname = %s", [database_user])
+        if cursor.fetchone() is None:
+            cursor.execute(
+                sql.SQL("CREATE ROLE {} LOGIN PASSWORD %s").format(sql.Identifier(database_user)),
+                [database_password],
+            )
+
+        cursor.execute("SELECT 1 FROM pg_database WHERE datname = %s", [database_name])
+        if cursor.fetchone() is None:
+            cursor.execute(
+                sql.SQL("CREATE DATABASE {} OWNER {}").format(
+                    sql.Identifier(database_name),
+                    sql.Identifier(database_user),
+                )
+            )
+finally:
+    connection.close()
+PY
 
     # Stop temporary PostgreSQL (supervisord will start it properly)
-    su - postgres -c "'$PG_BINDIR'/pg_ctl -D '$PG_DATA' -w stop"
+    runuser -u postgres -- "$PG_BINDIR/pg_ctl" -D "$PG_DATA" -w stop
     echo "PostgreSQL initialized successfully!"
 else
     echo "PostgreSQL data directory found, skipping initialization."
@@ -74,11 +103,11 @@ echo "PostgreSQL is ready!"
 
 # Run migrations
 echo "Running database migrations..."
-python manage.py migrate --noinput
+runuser -u trackwatch --preserve-environment -- python manage.py migrate --noinput
 
 # Collect static files
 echo "Collecting static files..."
-python manage.py collectstatic --noinput
+runuser -u trackwatch --preserve-environment -- python manage.py collectstatic --noinput
 
 # Generate runtime env.js for frontend (allows pre-built images to use env vars)
 echo "Generating frontend runtime configuration..."
@@ -90,6 +119,9 @@ window.__ENV__ = {
 ENVEOF
 
 echo "=== TrackWatch is running! ==="
+
+# Start application processes only after the database schema and runtime config are ready.
+supervisorctl -c /etc/supervisord.conf start nginx gunicorn scheduler
 
 # Wait for supervisord (it's already our main process)
 wait $SUPERVISORD_PID
