@@ -1,5 +1,6 @@
 import UserProvider from './context/UserProvider';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { RouterProvider } from './routing/Router';
+import { useLocation } from './routing/useRouter';
 import MainRoute from './routes/MainRoute/MainRoute';
 import CallbackRoute from './routes/CallbackRoute/CallbackRoute';
 import EulaPage from './pages/EulaPage/EulaPage';
@@ -7,19 +8,36 @@ import PrivacyPage from './pages/PrivacyPage/PrivacyPage';
 import InstallPage from './pages/InstallPage/InstallPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 
+const AppRoutes = () => {
+  const location = useLocation();
+  const pathname = location.pathname === '/'
+    ? '/'
+    : location.pathname.replace(/\/+$/, '');
+
+  switch (pathname) {
+    case '/':
+      return <MainRoute />;
+    case '/callback':
+      return <CallbackRoute />;
+    case '/eula':
+      return <EulaPage />;
+    case '/privacy':
+      return <PrivacyPage />;
+    case '/install':
+      return <InstallPage />;
+    case '/login':
+      return <LoginPage />;
+    default:
+      return null;
+  }
+};
+
 const App = () => {
   return (
     <UserProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<MainRoute />} />
-          <Route path="/callback" element={<CallbackRoute />} />
-          <Route path="/eula" element={<EulaPage />} />
-          <Route path="/privacy" element={<PrivacyPage />} />
-          <Route path="/install" element={<InstallPage />} />
-          <Route path="/login" element={<LoginPage />} />
-        </Routes>
-      </Router>
+      <RouterProvider>
+        <AppRoutes />
+      </RouterProvider>
     </UserProvider>
   );
 };

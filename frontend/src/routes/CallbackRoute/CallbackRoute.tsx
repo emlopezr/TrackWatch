@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from '../../routing/useRouter';
 import { exchangeSpotifyCode } from '../../services/trackwatch/trackwatchUsers';
 import { useUser } from '../../context/useUser';
 import Spinner from '../../components/Spinner/Spinner';
