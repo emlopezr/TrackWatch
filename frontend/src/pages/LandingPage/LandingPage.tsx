@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '../../routing/Router';
 import { getSpotifyAuthUrl } from '../../services/spotify/spotifyAuth';
 import { HIDE_PUBLIC_LOGIN } from '../../common/constants';
 import FeatureCard from '../../layout/FeatureCard/FeatureCard';

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '../../routing/Router';
 import trackWatchlogo from '../../assets/svg/logo.svg';
 import './InstallPage.css';
 
