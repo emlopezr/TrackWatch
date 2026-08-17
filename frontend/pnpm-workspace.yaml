@@ -3,7 +3,8 @@ allowBuilds:
 
 overrides:
   '@babel/core': 7.29.6
-  js-yaml: 4.3.0
+  js-yaml: 4.3.1
+  postcss>nanoid: 3.3.18
   on-headers: '>=1.1.0'
   '@eslint/plugin-kit': '>=0.3.4'
   minimatch@3: ^3.1.3
