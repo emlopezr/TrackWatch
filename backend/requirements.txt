@@ -5,7 +5,7 @@ charset-normalizer==3.4.2
 Django==5.2.16
 django-apscheduler==0.7.0
 django-cors-headers==4.7.0
-djangorestframework==3.16.0
+djangorestframework==3.17.2
 gunicorn==23.0.0
 idna==3.15
 packaging==25.0
